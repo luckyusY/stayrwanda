@@ -1,0 +1,565 @@
+StayRwanda.com — Full Website Documentation (Version 2.0)
+
+1. Executive Summary
+
+Project Name: StayRwanda
+Domain: StayRwanda.com
+Business Type: Property booking & rental marketplace
+Region: Rwanda (starting with Kigali, later nationwide)
+
+Overview
+
+StayRwanda is a digital marketplace connecting guests and property owners across Rwanda. The platform enables users to search, compare, book, and manage apartments, vacation rentals, guesthouses, and hotels.
+
+StayRwanda combines:
+
+* Apartment rentals
+* Short stays
+* Hotel booking
+* Long-term leasing
+* Property management
+
+Unlike global competitors, StayRwanda is designed specifically for the Rwandan market.
+
+⸻
+
+2. Business Goals
+
+Main objectives:
+
+Short-term Goals
+
+* Launch MVP in Kigali
+* Acquire 100+ verified listings
+* Get first 1,000 users
+* Build trusted local brand
+
+Long-term Goals
+
+* Expand across Rwanda
+* Launch mobile app
+* Add tours & transport
+* Become East Africa booking platform
+
+⸻
+
+3. Market Problem
+
+Current challenges in Rwanda:
+
+* Fake property listings
+* No centralized platform
+* Difficult payment methods
+* Hard to verify landlords
+* Poor customer support
+
+StayRwanda solves these problems.
+
+⸻
+
+4. Target Audience
+
+Guests
+
+* Tourists
+* Business travelers
+* NGOs
+* Expats
+* Students
+* Families
+
+Hosts
+
+* Apartment owners
+* Property managers
+* Hotels
+* Airbnb hosts
+* Guest houses
+
+⸻
+
+5. Platform Architecture
+
+Main systems:
+
+1. Frontend Website
+2. Backend API
+3. Database
+4. Payment Gateway
+5. Admin Panel
+6. Mobile App API
+
+Architecture:
+
+User → Frontend → Backend → Database
+Admin → Dashboard → Backend
+Host → Host Panel → Backend
+
+⸻
+
+6. User Roles
+
+Guest
+
+Can:
+
+* Register
+* Search
+* Book
+* Pay
+* Review
+
+Host
+
+Can:
+
+* Create listings
+* Upload photos
+* Manage calendar
+* Receive payments
+
+Admin
+
+Can:
+
+* Manage all users
+* Verify listings
+* Control payouts
+* Monitor fraud
+
+⸻
+
+7. Website Modules
+
+Module 1: Authentication
+
+Features:
+
+* Sign up
+* Login
+* Google login
+* Password reset
+* OTP verification
+
+Fields:
+
+* Name
+* Email
+* Phone
+* Password
+* Country
+
+⸻
+
+Module 2: Search Engine
+
+Search by:
+
+* City
+* Neighborhood
+* Price
+* Bedrooms
+* Bathrooms
+* Property type
+* Amenities
+
+Advanced filters:
+
+* Pool
+* WiFi
+* Parking
+* AC
+* Balcony
+* Furnished
+
+⸻
+
+Module 3: Property Listings
+
+Each listing includes:
+
+Basic Info
+
+* Title
+* Property type
+* Description
+
+Media
+
+* Images
+* Videos
+* 360 virtual tour
+
+Location
+
+* Province
+* District
+* Sector
+* Map coordinates
+
+Property Details
+
+* Bedrooms
+* Bathrooms
+* Kitchen
+* Parking
+
+Pricing
+
+* Per night
+* Per week
+* Per month
+
+⸻
+
+Module 4: Booking System
+
+Booking flow:
+
+1. Search property
+2. Select dates
+3. Check availability
+4. Confirm booking
+5. Payment
+6. Receive confirmation
+
+Status:
+
+* Pending
+* Confirmed
+* Cancelled
+* Completed
+
+⸻
+
+Module 5: Payment System
+
+Supported payments:
+
+* Mobile Money
+* Card
+* Bank transfer
+
+Possible integrations:
+
+* Flutterwave
+* Stripe
+* MTN MoMo
+* Airtel Money
+
+Commission model:
+5–15%
+
+⸻
+
+Module 6: Messaging
+
+Guest ↔ Host chat
+
+Features:
+
+* In-app chat
+* WhatsApp button
+* Call button
+* Notifications
+
+⸻
+
+Module 7: Reviews
+
+Guests can rate:
+
+* Cleanliness
+* Location
+* Value
+* Communication
+* Safety
+
+Rating:
+1–5 stars
+
+⸻
+
+8. Admin Dashboard
+
+Dashboard sections:
+
+* User management
+* Listing approval
+* Payment reports
+* Revenue analytics
+* Booking history
+* Fraud detection
+* Customer complaints
+
+KPIs:
+
+* Daily bookings
+* Monthly revenue
+* Conversion rate
+* Active users
+
+⸻
+
+9. Host Dashboard
+
+Features:
+
+* Add property
+* Edit listing
+* Manage bookings
+* Availability calendar
+* Revenue report
+* Withdraw earnings
+
+⸻
+
+10. Database Schema
+
+Tables:
+
+Users
+
+* id
+* name
+* email
+* phone
+* role
+
+Properties
+
+* id
+* owner_id
+* title
+* type
+* location
+* price
+
+Bookings
+
+* id
+* user_id
+* property_id
+* dates
+* payment_status
+
+Reviews
+
+* id
+* user_id
+* property_id
+* rating
+* comment
+
+Payments
+
+* id
+* amount
+* gateway
+* status
+
+⸻
+
+11. API Endpoints
+
+Authentication:
+
+* POST /register
+* POST /login
+* POST /logout
+
+Properties:
+
+* GET /properties
+* GET /property/{id}
+* POST /property
+
+Bookings:
+
+* POST /book
+* GET /booking/{id}
+
+Payments:
+
+* POST /payment/initiate
+* POST /payment/verify
+
+⸻
+
+12. UI/UX Documentation
+
+Pages:
+
+Homepage
+
+Sections:
+
+* Hero search
+* Categories
+* Featured properties
+* Testimonials
+* CTA
+
+Search Page
+
+Grid layout with filters.
+
+Property Page
+
+Contains:
+
+* Gallery
+* Description
+* Amenities
+* Booking widget
+* Map
+
+⸻
+
+13. Design System
+
+Colors:
+
+* Primary: Dark Blue
+* Secondary: Gold
+* Background: White
+* Accent: Light Gray
+
+Typography:
+
+* Heading: Poppins
+* Body: Inter
+
+Design style:
+
+* Premium
+* Clean
+* Modern
+* Luxury
+
+⸻
+
+14. SEO Documentation
+
+Primary keywords:
+
+* apartments in Kigali
+* apartments for rent in Kigali
+* Rwanda apartments
+* short stay Kigali
+
+SEO checklist:
+
+* Fast loading
+* Meta tags
+* Sitemap
+* Schema markup
+* Internal linking
+* Blog strategy
+
+⸻
+
+15. Security
+
+Security features:
+
+* SSL
+* Encrypted passwords
+* OTP verification
+* Fraud detection
+* Secure payments
+* Admin logs
+
+⸻
+
+16. Notifications
+
+Channels:
+
+* Email
+* SMS
+* Push notifications
+* WhatsApp alerts
+
+Events:
+
+* Booking confirmed
+* Payment successful
+* Host message
+* Cancellation
+
+⸻
+
+17. Analytics
+
+Track:
+
+* Traffic
+* Conversion
+* Bounce rate
+* Revenue
+* Listings performance
+
+Tools:
+
+* Google Analytics
+* Meta Pixel
+* Hotjar
+
+⸻
+
+18. Monetization
+
+Revenue sources:
+
+1. Booking commission
+2. Premium listing ads
+3. Subscription
+4. Sponsored placements
+
+Projected model:
+
+* 500 bookings/month
+* Avg commission: $15
+* Monthly revenue target: $7,500+
+
+⸻
+
+19. Roadmap
+
+Phase 1 (MVP)
+
+Website launch
+
+Phase 2
+
+iOS & Android app
+
+Phase 3
+
+AI recommendation engine
+
+Phase 4
+
+Flights + Car rental + Tours
+
+⸻
+
+20. Competitive Advantage
+
+Compared to global platforms:
+
+vs Booking:
+
+* More local
+* Better Rwanda inventory
+* Better support
+
+vs Airbnb:
+
+* Supports hotels + apartments
+* Local payment support
+* Host verification
+
+StayRwanda’s advantage:
+Rwanda-first trusted ecosystem
