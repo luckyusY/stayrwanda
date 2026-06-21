@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
@@ -54,9 +55,9 @@ export function AdminShell({
         />
         <div className="relative flex h-full w-64 flex-col bg-[#073b74] text-white md:h-screen md:w-auto md:sticky md:top-0">
           <div className="flex h-16 items-center justify-between px-5">
-            <Link href="/admin" className="text-xl font-bold tracking-tight">
-              StayRwanda<span className="text-[#f9b90f]">.</span>
-              <span className="ml-1 text-xs font-semibold text-white/70">admin</span>
+            <Link href="/admin" className="flex items-center gap-2">
+              <Image src="/brand/stayrwanda-logo.png" alt="StayRwanda" width={1093} height={607} className="h-12 w-auto brightness-0 invert" />
+              <span className="text-xs font-semibold uppercase tracking-wider text-white/70">admin</span>
             </Link>
             <button className="md:hidden" onClick={() => setOpen(false)} aria-label="Close menu">
               <X size={20} />

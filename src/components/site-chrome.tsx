@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { CalendarDays, ChevronDown, Globe2, MapPin, Menu, Search, Users, X } from "lucide-react";
@@ -14,13 +15,15 @@ const NAV = [
 
 export function Wordmark({ light = false }: { light?: boolean }) {
   return (
-    <Link href="/" className="flex items-baseline gap-0.5" aria-label="StayRwanda home">
-      <span
-        className={`font-serif text-2xl font-semibold tracking-wide ${light ? "text-white" : "text-[var(--ink)]"}`}
-      >
-        StayRwanda
-      </span>
-      <span className="text-2xl font-semibold text-[var(--gold)]">.</span>
+    <Link href="/" className="flex items-center" aria-label="StayRwanda home">
+      <Image
+        src="/brand/stayrwanda-logo.png"
+        alt="StayRwanda — Your Home in Rwanda"
+        width={1093}
+        height={607}
+        priority
+        className={`h-16 w-auto object-contain ${light ? "brightness-0 invert" : ""}`}
+      />
     </Link>
   );
 }

@@ -24,6 +24,7 @@ export const metadata: Metadata = {
   description: "Discover handpicked furnished apartments, residences and guesthouses across Rwanda. Reserve with confidence.",
   keywords: ["apartments in Kigali", "Rwanda apartments", "luxury stays Kigali", "furnished homes Rwanda"],
   openGraph: { title: "StayRwanda", description: "Timeless stays across Rwanda.", type: "website" },
+  icons: { icon: "/brand/stayrwanda-mark.png", apple: "/brand/stayrwanda-mark.png" },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
