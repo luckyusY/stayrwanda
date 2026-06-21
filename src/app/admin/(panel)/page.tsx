@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { AdminShell } from "@/components/admin-shell";
 import { StatusBadge } from "@/components/admin-ui";
+import { CountUp } from "@/components/count-up";
 import { dashboardStats } from "@/lib/data";
 
 export const dynamic = "force-dynamic";
@@ -51,7 +52,9 @@ export default async function AdminDashboard() {
                 <Icon size={18} />
               </span>
             </div>
-            <p className="mt-3 text-3xl font-extrabold">{value}</p>
+            <p className="mt-3 text-3xl font-extrabold">
+              <CountUp value={value} />
+            </p>
             <p className="mt-1 text-xs text-[#667085]">{sub}</p>
           </div>
         ))}

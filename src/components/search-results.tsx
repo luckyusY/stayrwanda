@@ -113,7 +113,7 @@ export function SearchResults({
               <Reveal
                 as="article"
                 key={property.slug}
-                className="grid min-w-0 gap-5 border border-[var(--line)] bg-white p-5 card-shadow sm:grid-cols-[240px_1fr]"
+                className="lift grid min-w-0 gap-5 border border-[var(--line)] bg-white p-5 card-shadow sm:grid-cols-[240px_1fr]"
               >
                 <div className="relative w-full min-w-0">
                   <PropertyImageSlider
@@ -157,9 +157,10 @@ export function SearchResults({
                       <strong className="mt-1 block font-serif text-xl text-[var(--ink)]">On request</strong>
                       <Link
                         href={`/stays/${property.slug}`}
-                        className="mt-3 inline-flex items-center bg-[var(--ink)] px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.16em] text-white hover:bg-[var(--ink-2)]"
+                        className="group/cta mt-3 inline-flex items-center gap-1.5 bg-[var(--ink)] px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.16em] text-white hover:bg-[var(--ink-2)]"
                       >
                         View stay
+                        <span className="transition-transform duration-300 group-hover/cta:translate-x-1">→</span>
                       </Link>
                     </div>
                   </div>

@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { CompactSearch, SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { StayHeroGallery, StayPhotoGrid } from "@/components/stay-gallery";
+import { StayReserveBar, StaySectionNav } from "@/components/stay-chrome";
 import { featuredProperties } from "@/lib/properties";
 import { getPropertyBySlug } from "@/lib/data";
 
@@ -56,24 +57,7 @@ export default async function StayPage({ params }: { params: Promise<{ slug: str
           <span className="text-[var(--ink)]">{property.title}</span>
         </nav>
 
-        <nav className="sticky top-20 z-30 grid grid-cols-3 border-y border-[var(--line)] bg-white text-center text-xs font-medium uppercase tracking-[0.12em] text-[var(--ink)] sm:grid-cols-6">
-          {[
-            ["Overview", "#overview"],
-            ["Rates", "#availability"],
-            ["Facilities", "#facilities"],
-            ["House rules", "#rules"],
-            ["Fine print", "#fine-print"],
-            ["Reviews", "#reviews"],
-          ].map(([label, href]) => (
-            <a
-              key={label}
-              href={href}
-              className="border-b-2 border-transparent px-2 py-4 hover:border-[var(--gold)] hover:text-[var(--gold-deep)]"
-            >
-              {label}
-            </a>
-          ))}
-        </nav>
+        <StaySectionNav />
 
         {/* Overview */}
         <section id="overview" className="scroll-mt-36 pt-8">
@@ -337,6 +321,7 @@ export default async function StayPage({ params }: { params: Promise<{ slug: str
           <StayPhotoGrid images={property.images} title={property.title} />
         </section>
       </div>
+      <StayReserveBar slug={property.slug} title={property.title} neighborhood={property.neighborhood} />
       <SiteFooter />
     </main>
   );
