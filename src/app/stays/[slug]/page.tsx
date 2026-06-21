@@ -1,23 +1,141 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, BadgeCheck, BedDouble, Check, Heart, Home, MapPin, Share2, ShieldCheck, Star, Users } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import {
+  ArrowLeft,
+  BadgeCheck,
+  Check,
+  ExternalLink,
+  Heart,
+  Home,
+  Images,
+  MapPin,
+  Share2,
+  ShieldCheck,
+  Users,
+} from "lucide-react";
 import { featuredProperties, getProperty } from "@/lib/properties";
 
-export function generateStaticParams() { return featuredProperties.map(({ slug }) => ({ slug })); }
+export function generateStaticParams() {
+  return featuredProperties.map(({ slug }) => ({ slug }));
+}
 
 export default async function StayPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const property = getProperty(slug);
   if (!property) notFound();
-  return <main className="min-h-screen bg-[#fbfaf7]">
-    <header className="border-b border-slate-200 bg-white"><div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 lg:px-8"><Link href="/" className="flex items-center gap-2 text-xl font-bold text-[#102a43]"><span className="grid size-9 place-items-center rounded-full bg-[#d9a441]"><Home size={18} /></span>StayRwanda.</Link><Link href="/" className="flex items-center gap-2 text-sm font-semibold text-slate-600"><ArrowLeft size={16} /> All stays</Link></div></header>
-    <div className="mx-auto max-w-7xl px-5 py-8 lg:px-8"><div className="flex flex-col justify-between gap-4 md:flex-row md:items-end"><div><p className="text-sm font-semibold text-[#b27a16]">{property.type} in {property.neighborhood}</p><h1 className="serif-display mt-2 text-4xl text-[#102a43] md:text-5xl">{property.title}</h1><div className="mt-3 flex flex-wrap items-center gap-3 text-sm"><span className="flex items-center gap-1 font-bold"><Star size={15} fill="#d9a441" className="text-[#d9a441]" /> {property.rating}</span><span className="text-slate-500">{property.reviews} reviews</span><span className="flex items-center gap-1 text-slate-500"><MapPin size={15} /> {property.location}</span></div></div><div className="flex gap-2"><button className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold"><Share2 size={16} /> Share</button><button className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold"><Heart size={16} /> Save</button></div></div>
-      <div className="mt-8 grid h-[520px] gap-2 overflow-hidden rounded-3xl md:grid-cols-2"><div className="relative"><Image src={property.images[0]} alt={property.title} fill priority className="object-cover" sizes="50vw" /></div><div className="hidden grid-cols-2 gap-2 md:grid">{[property.images[1], property.images[2], property.images[0], property.images[1]].map((image, index) => <div className="relative" key={`${image}-${index}`}><Image src={image} alt={`${property.title} view ${index + 2}`} fill className="object-cover" sizes="25vw" /></div>)}</div></div>
-      <div className="grid gap-12 py-12 lg:grid-cols-[1fr_380px]"><div><div className="flex items-start justify-between border-b border-slate-200 pb-8"><div><h2 className="text-2xl font-bold text-[#102a43]">Hosted by {property.host}</h2><p className="mt-2 text-slate-500">{property.guests} guests · {property.bedrooms} bedrooms · {property.beds} beds · {property.baths} baths</p></div><span className="grid size-12 place-items-center rounded-full bg-[#d9a441] font-bold text-[#102a43]">{property.host[0]}</span></div><div className="grid gap-6 border-b border-slate-200 py-8 sm:grid-cols-3"><Feature icon={BadgeCheck} title="Verified stay" copy="Reviewed by our local team" /><Feature icon={ShieldCheck} title="Book confidently" copy="Protected, secure booking" /><Feature icon={Users} title="Local support" copy="Help when you need it" /></div><p className="border-b border-slate-200 py-8 text-lg leading-8 text-slate-600">{property.description}</p><div className="py-8"><h2 className="text-2xl font-bold text-[#102a43]">What this place offers</h2><div className="mt-6 grid gap-4 sm:grid-cols-2">{property.amenities.map(item => <span key={item} className="flex items-center gap-3 text-slate-600"><Check size={18} className="text-[#b27a16]" />{item}</span>)}</div></div></div>
-        <aside className="h-fit rounded-3xl border border-slate-200 bg-white p-6 soft-shadow lg:sticky lg:top-6"><p><strong className="text-2xl text-[#102a43]">${property.price}</strong><span className="text-slate-500"> / night</span></p><div className="mt-5 overflow-hidden rounded-xl border border-slate-300"><div className="grid grid-cols-2"><label className="border-r border-slate-300 p-3"><span className="block text-[10px] font-bold uppercase">Check-in</span><input type="date" className="mt-1 w-full text-sm outline-none" /></label><label className="p-3"><span className="block text-[10px] font-bold uppercase">Check-out</span><input type="date" className="mt-1 w-full text-sm outline-none" /></label></div><div className="flex items-center gap-2 border-t border-slate-300 p-3 text-sm"><Users size={16} /><span>{property.guests} guests maximum</span></div></div><button className="mt-4 w-full rounded-xl bg-[#d9a441] py-3.5 font-bold text-[#102a43] hover:bg-[#e8ba5c]">Check availability</button><p className="mt-3 text-center text-xs text-slate-400">You won&apos;t be charged yet</p><div className="mt-5 space-y-3 border-t border-slate-100 pt-5 text-sm"><div className="flex justify-between text-slate-500"><span>${property.price} × 3 nights</span><span>${property.price * 3}</span></div><div className="flex justify-between text-slate-500"><span>Service fee</span><span>${Math.round(property.price * .36)}</span></div><div className="flex justify-between border-t border-slate-100 pt-3 font-bold text-[#102a43]"><span>Total</span><span>${Math.round(property.price * 3.36)}</span></div></div></aside></div>
-    </div>
-  </main>;
+
+  const previewImages = property.images.slice(1, 5);
+  const remainingImages = property.images.slice(5);
+
+  return (
+    <main className="min-h-screen bg-[#fbfaf7]">
+      <header className="border-b border-slate-200 bg-white">
+        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 lg:px-8">
+          <Link href="/" className="flex items-center gap-2 text-xl font-bold text-[#102a43]">
+            <span className="grid size-9 place-items-center rounded-full bg-[#d9a441]"><Home size={18} /></span>
+            StayRwanda.
+          </Link>
+          <Link href="/" className="flex items-center gap-2 text-sm font-semibold text-slate-600">
+            <ArrowLeft size={16} /> All stays
+          </Link>
+        </div>
+      </header>
+
+      <div className="mx-auto max-w-7xl px-5 py-8 lg:px-8">
+        <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
+          <div>
+            <p className="text-sm font-semibold text-[#b27a16]">{property.type} in {property.neighborhood}</p>
+            <h1 className="serif-display mt-2 text-4xl text-[#102a43] md:text-5xl">{property.title}</h1>
+            <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-slate-500">
+              <span className="flex items-center gap-1"><Images size={15} /> {property.photoCount} property photos</span>
+              <span className="flex items-center gap-1"><MapPin size={15} /> {property.location}</span>
+            </div>
+          </div>
+          <div className="flex gap-2">
+            <button className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold"><Share2 size={16} /> Share</button>
+            <button className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold"><Heart size={16} /> Save</button>
+          </div>
+        </div>
+
+        <div className="mt-8 grid h-[520px] gap-2 overflow-hidden rounded-3xl md:grid-cols-2">
+          <div className="relative">
+            <Image src={property.images[0]} alt={property.title} fill priority className="object-cover" sizes="50vw" />
+          </div>
+          <div className="hidden grid-cols-2 gap-2 md:grid">
+            {previewImages.map((image, index) => (
+              <div className="relative" key={image}>
+                <Image src={image} alt={`${property.title} view ${index + 2}`} fill className="object-cover" sizes="25vw" />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid gap-12 py-12 lg:grid-cols-[1fr_380px]">
+          <div>
+            <div className="flex items-start justify-between border-b border-slate-200 pb-8">
+              <div>
+                <h2 className="text-2xl font-bold text-[#102a43]">Hosted by {property.host}</h2>
+                <p className="mt-2 text-slate-500">Fully furnished · Complete property gallery</p>
+              </div>
+              <span className="grid size-12 place-items-center rounded-full bg-[#d9a441] font-bold text-[#102a43]">{property.host[0]}</span>
+            </div>
+
+            <div className="grid gap-6 border-b border-slate-200 py-8 sm:grid-cols-3">
+              <Feature icon={BadgeCheck} title="Photo documented" copy={`${property.photoCount} original property images`} />
+              <Feature icon={ShieldCheck} title="Request confidently" copy="Confirm rates and details before booking" />
+              <Feature icon={Users} title="Local support" copy="Help from a Rwanda-based team" />
+            </div>
+
+            <p className="border-b border-slate-200 py-8 text-lg leading-8 text-slate-600">{property.description}</p>
+
+            <div className="py-8">
+              <h2 className="text-2xl font-bold text-[#102a43]">What this place offers</h2>
+              <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                {property.amenities.map((item) => <span key={item} className="flex items-center gap-3 text-slate-600"><Check size={18} className="text-[#b27a16]" />{item}</span>)}
+              </div>
+              <a href={property.sourceUrl} target="_blank" rel="noreferrer" className="mt-8 inline-flex items-center gap-2 text-sm font-bold text-[#123b5d] underline decoration-[#d9a441] underline-offset-4">
+                View original property gallery <ExternalLink size={15} />
+              </a>
+            </div>
+          </div>
+
+          <aside className="h-fit rounded-3xl border border-slate-200 bg-white p-6 soft-shadow lg:sticky lg:top-6">
+            <p className="text-2xl font-bold text-[#102a43]">Request current rates</p>
+            <p className="mt-2 text-sm leading-6 text-slate-500">Rates and availability are confirmed directly for your dates.</p>
+            <div className="mt-5 overflow-hidden rounded-xl border border-slate-300">
+              <div className="grid grid-cols-2">
+                <label className="border-r border-slate-300 p-3"><span className="block text-[10px] font-bold uppercase">Check-in</span><input type="date" className="mt-1 w-full text-sm outline-none" /></label>
+                <label className="p-3"><span className="block text-[10px] font-bold uppercase">Check-out</span><input type="date" className="mt-1 w-full text-sm outline-none" /></label>
+              </div>
+              <div className="flex items-center gap-2 border-t border-slate-300 p-3 text-sm"><Users size={16} /><span>Add guest details with your request</span></div>
+            </div>
+            <button className="mt-4 w-full rounded-xl bg-[#d9a441] py-3.5 font-bold text-[#102a43] hover:bg-[#e8ba5c]">Request availability</button>
+            <p className="mt-3 text-center text-xs text-slate-400">No payment is taken at this stage</p>
+          </aside>
+        </div>
+
+        {remainingImages.length > 0 && (
+          <section className="border-t border-slate-200 py-12">
+            <div className="flex items-end justify-between gap-4">
+              <div><p className="text-xs font-bold uppercase tracking-[.2em] text-[#b27a16]">Full gallery</p><h2 className="serif-display mt-2 text-4xl text-[#102a43]">Explore every room</h2></div>
+              <span className="text-sm text-slate-500">{property.photoCount} photos</span>
+            </div>
+            <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {remainingImages.map((image, index) => (
+                <div key={image} className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-slate-100">
+                  <Image src={image} alt={`${property.title} gallery image ${index + 6}`} fill className="object-cover transition duration-500 hover:scale-105" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" />
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+      </div>
+    </main>
+  );
 }
 
-function Feature({ icon: Icon, title, copy }: { icon: typeof BedDouble; title: string; copy: string }) { return <div className="flex gap-3"><Icon className="mt-0.5 text-[#b27a16]" size={21} /><div><h3 className="font-bold text-[#102a43]">{title}</h3><p className="mt-1 text-xs leading-5 text-slate-500">{copy}</p></div></div>; }
+function Feature({ icon: Icon, title, copy }: { icon: LucideIcon; title: string; copy: string }) {
+  return <div className="flex gap-3"><Icon className="mt-0.5 text-[#b27a16]" size={21} /><div><h3 className="font-bold text-[#102a43]">{title}</h3><p className="mt-1 text-xs leading-5 text-slate-500">{copy}</p></div></div>;
+}

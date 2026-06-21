@@ -1,0 +1,264 @@
+{
+  "slug": "rebeccasapartment",
+  "folder": "rebeccas-apartment",
+  "label": "REBECCA'S APARTMENT",
+  "pageTitle": "KIGALI APARTMENTS by FULLY FURNISHED APARTMENTS",
+  "collectionName": "KIGALI APARTMENTS",
+  "sourceUrl": "https://fullyfurnishedapartment73.pixieset.com/kibagabagaapartments/rebeccasapartment/",
+  "photoCount": 36,
+  "importedAt": "2026-06-20T23:23:16.848Z",
+  "images": [
+    {
+      "filename": "01-eyeinstudio-1.jpg",
+      "localPath": "/images/properties/rebeccas-apartment/01-eyeinstudio-1.jpg",
+      "originalName": "EYEINSTUDIO(1).JPG",
+      "width": 3600,
+      "height": 2400
+    },
+    {
+      "filename": "02-eyeinstudio-8.jpg",
+      "localPath": "/images/properties/rebeccas-apartment/02-eyeinstudio-8.jpg",
+      "originalName": "EYEINSTUDIO(8).JPG",
+      "width": 2400,
+      "height": 3600
+    },
+    {
+      "filename": "03-eyeinstudio-9.jpg",
+      "localPath": "/images/properties/rebeccas-apartment/03-eyeinstudio-9.jpg",
+      "originalName": "EYEINSTUDIO(9).JPG",
+      "width": 3600,
+      "height": 2400
+    },
+    {
+      "filename": "04-eyeinstudio-10.jpg",
+      "localPath": "/images/properties/rebeccas-apartment/04-eyeinstudio-10.jpg",
+      "originalName": "EYEINSTUDIO(10).JPG",
+      "width": 3600,
+      "height": 2025
+    },
+    {
+      "filename": "05-eyeinstudio-11.jpg",
+      "localPath": "/images/properties/rebeccas-apartment/05-eyeinstudio-11.jpg",
+      "originalName": "EYEINSTUDIO(11).jpg",
+      "width": 3600,
+      "height": 2400
+    },
+    {
+      "filename": "06-eyeinstudio-12.jpg",
+      "localPath": "/images/properties/rebeccas-apartment/06-eyeinstudio-12.jpg",
+      "originalName": "EYEINSTUDIO(12).jpg",
+      "width": 3600,
+      "height": 2400
+    },
+    {
+      "filename": "07-eyeinstudio-13.jpg",
+      "localPath": "/images/properties/rebeccas-apartment/07-eyeinstudio-13.jpg",
+      "originalName": "EYEINSTUDIO(13).jpg",
+      "width": 3600,
+      "height": 2400
+    },
+    {
+      "filename": "08-eyeinstudio-14.jpg",
+      "localPath": "/images/properties/rebeccas-apartment/08-eyeinstudio-14.jpg",
+      "originalName": "EYEINSTUDIO(14).jpg",
+      "width": 3600,
+      "height": 2400
+    },
+    {
+      "filename": "09-eyeinstudio-15.jpg",
+      "localPath": "/images/properties/rebeccas-apartment/09-eyeinstudio-15.jpg",
+      "originalName": "EYEINSTUDIO(15).jpg",
+      "width": 3600,
+      "height": 2400
+    },
+    {
+      "filename": "10-eyeinstudio-16.jpg",
+      "localPath": "/images/properties/rebeccas-apartment/10-eyeinstudio-16.jpg",
+      "originalName": "EYEINSTUDIO(16).jpg",
+      "width": 2400,
+      "height": 3600
+    },
+    {
+      "filename": "11-eyeinstudio-17.jpg",
+      "localPath": "/images/properties/rebeccas-apartment/11-eyeinstudio-17.jpg",
+      "originalName": "EYEINSTUDIO(17).jpg",
+      "width": 2400,
+      "height": 3600
+    },
+    {
+      "filename": "12-eyeinstudio-18.jpg",
+      "localPath": "/images/properties/rebeccas-apartment/12-eyeinstudio-18.jpg",
+      "originalName": "EYEINSTUDIO(18).jpg",
+      "width": 2400,
+      "height": 3600
+    },
+    {
+      "filename": "13-eyeinstudio-19.jpg",
+      "localPath": "/images/properties/rebeccas-apartment/13-eyeinstudio-19.jpg",
+      "originalName": "EYEINSTUDIO(19).jpg",
+      "width": 2400,
+      "height": 3600
+    },
+    {
+      "filename": "14-eyeinstudio-20.jpg",
+      "localPath": "/images/properties/rebeccas-apartment/14-eyeinstudio-20.jpg",
+      "originalName": "EYEINSTUDIO(20).jpg",
+      "width": 3600,
+      "height": 2400
+    },
+    {
+      "filename": "15-eyeinstudio-21.jpg",
+      "localPath": "/images/properties/rebeccas-apartment/15-eyeinstudio-21.jpg",
+      "originalName": "EYEINSTUDIO(21).jpg",
+      "width": 3600,
+      "height": 2400
+    },
+    {
+      "filename": "16-eyeinstudio-22.jpg",
+      "localPath": "/images/properties/rebeccas-apartment/16-eyeinstudio-22.jpg",
+      "originalName": "EYEINSTUDIO(22).jpg",
+      "width": 2400,
+      "height": 3600
+    },
+    {
+      "filename": "17-eyeinstudio-23.jpg",
+      "localPath": "/images/properties/rebeccas-apartment/17-eyeinstudio-23.jpg",
+      "originalName": "EYEINSTUDIO(23).jpg",
+      "width": 2400,
+      "height": 3600
+    },
+    {
+      "filename": "18-eyeinstudio-24.jpg",
+      "localPath": "/images/properties/rebeccas-apartment/18-eyeinstudio-24.jpg",
+      "originalName": "EYEINSTUDIO(24).jpg",
+      "width": 2400,
+      "height": 3600
+    },
+    {
+      "filename": "19-eyeinstudio-25.jpg",
+      "localPath": "/images/properties/rebeccas-apartment/19-eyeinstudio-25.jpg",
+      "originalName": "EYEINSTUDIO(25).jpg",
+      "width": 3600,
+      "height": 2400
+    },
+    {
+      "filename": "20-eyeinstudio-26.jpg",
+      "localPath": "/images/properties/rebeccas-apartment/20-eyeinstudio-26.jpg",
+      "originalName": "EYEINSTUDIO(26).jpg",
+      "width": 2400,
+      "height": 3600
+    },
+    {
+      "filename": "21-eyeinstudio-27.jpg",
+      "localPath": "/images/properties/rebeccas-apartment/21-eyeinstudio-27.jpg",
+      "originalName": "EYEINSTUDIO(27).jpg",
+      "width": 2400,
+      "height": 3600
+    },
+    {
+      "filename": "22-eyeinstudio-28.jpg",
+      "localPath": "/images/properties/rebeccas-apartment/22-eyeinstudio-28.jpg",
+      "originalName": "EYEINSTUDIO(28).jpg",
+      "width": 3600,
+      "height": 2400
+    },
+    {
+      "filename": "23-eyeinstudio-29.jpg",
+      "localPath": "/images/properties/rebeccas-apartment/23-eyeinstudio-29.jpg",
+      "originalName": "EYEINSTUDIO(29).jpg",
+      "width": 3600,
+      "height": 2400
+    },
+    {
+      "filename": "24-eyeinstudio-30.jpg",
+      "localPath": "/images/properties/rebeccas-apartment/24-eyeinstudio-30.jpg",
+      "originalName": "EYEINSTUDIO(30).jpg",
+      "width": 3600,
+      "height": 2400
+    },
+    {
+      "filename": "25-eyeinstudio-31.jpg",
+      "localPath": "/images/properties/rebeccas-apartment/25-eyeinstudio-31.jpg",
+      "originalName": "EYEINSTUDIO(31).jpg",
+      "width": 2400,
+      "height": 3600
+    },
+    {
+      "filename": "26-eyeinstudio-32.jpg",
+      "localPath": "/images/properties/rebeccas-apartment/26-eyeinstudio-32.jpg",
+      "originalName": "EYEINSTUDIO(32).jpg",
+      "width": 2400,
+      "height": 3600
+    },
+    {
+      "filename": "27-eyeinstudio-33.jpg",
+      "localPath": "/images/properties/rebeccas-apartment/27-eyeinstudio-33.jpg",
+      "originalName": "EYEINSTUDIO(33).jpg",
+      "width": 3600,
+      "height": 2400
+    },
+    {
+      "filename": "28-eyeinstudio-34.jpg",
+      "localPath": "/images/properties/rebeccas-apartment/28-eyeinstudio-34.jpg",
+      "originalName": "EYEINSTUDIO(34).jpg",
+      "width": 2400,
+      "height": 3600
+    },
+    {
+      "filename": "29-eyeinstudio-35.jpg",
+      "localPath": "/images/properties/rebeccas-apartment/29-eyeinstudio-35.jpg",
+      "originalName": "EYEINSTUDIO(35).jpg",
+      "width": 3600,
+      "height": 2400
+    },
+    {
+      "filename": "30-eyeinstudio-36.jpg",
+      "localPath": "/images/properties/rebeccas-apartment/30-eyeinstudio-36.jpg",
+      "originalName": "EYEINSTUDIO(36).jpg",
+      "width": 3600,
+      "height": 2400
+    },
+    {
+      "filename": "31-eyeinstudio-37.jpg",
+      "localPath": "/images/properties/rebeccas-apartment/31-eyeinstudio-37.jpg",
+      "originalName": "EYEINSTUDIO(37).jpg",
+      "width": 3600,
+      "height": 2400
+    },
+    {
+      "filename": "32-eyeinstudio-38.jpg",
+      "localPath": "/images/properties/rebeccas-apartment/32-eyeinstudio-38.jpg",
+      "originalName": "EYEINSTUDIO(38).jpg",
+      "width": 3600,
+      "height": 2400
+    },
+    {
+      "filename": "33-eyeinstudio-39.jpg",
+      "localPath": "/images/properties/rebeccas-apartment/33-eyeinstudio-39.jpg",
+      "originalName": "EYEINSTUDIO(39).jpg",
+      "width": 3600,
+      "height": 2400
+    },
+    {
+      "filename": "34-eyeinstudio-40.jpg",
+      "localPath": "/images/properties/rebeccas-apartment/34-eyeinstudio-40.jpg",
+      "originalName": "EYEINSTUDIO(40).jpg",
+      "width": 2400,
+      "height": 3600
+    },
+    {
+      "filename": "35-eyeinstudio-41.jpg",
+      "localPath": "/images/properties/rebeccas-apartment/35-eyeinstudio-41.jpg",
+      "originalName": "EYEINSTUDIO(41).jpg",
+      "width": 3600,
+      "height": 2400
+    },
+    {
+      "filename": "36-eyeinstudio-42.jpg",
+      "localPath": "/images/properties/rebeccas-apartment/36-eyeinstudio-42.jpg",
+      "originalName": "EYEINSTUDIO(42).jpg",
+      "width": 2400,
+      "height": 3000
+    }
+  ]
+}
