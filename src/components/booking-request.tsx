@@ -3,8 +3,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { Check, ChevronLeft, Loader2, LockKeyhole, ShieldCheck } from "lucide-react";
+import { motion } from "framer-motion";
+import { Check, ChevronLeft, LockKeyhole, ShieldCheck } from "lucide-react";
 import type { Property } from "@/lib/properties";
+import { Button, ButtonLink } from "@/components/ui/button";
+import { FloatingField } from "@/components/ui/field";
+import { EASE } from "@/lib/motion";
 
 type Form = {
   firstName: string;
@@ -48,9 +52,7 @@ export function BookingRequest({ property }: { property: Property }) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  function update(key: keyof Form, value: string) {
-    setForm((prev) => ({ ...prev, [key]: value }));
-  }
+  const update = (key: keyof Form) => (value: string) => setForm((prev) => ({ ...prev, [key]: value }));
 
   async function submit() {
     setError("");
@@ -89,160 +91,149 @@ export function BookingRequest({ property }: { property: Property }) {
 
   if (reference) {
     return (
-      <div className="mx-auto max-w-2xl px-4 py-20 text-center">
-        <span className="mx-auto grid size-16 place-items-center rounded-full bg-[#e7f5ea] text-[#008234]">
+      <motion.div
+        className="mx-auto max-w-2xl px-4 py-24 text-center"
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: EASE }}
+      >
+        <span className="mx-auto grid size-16 place-items-center rounded-full bg-[var(--cream)] text-[var(--gold-deep)]">
           <Check size={32} />
         </span>
-        <h1 className="mt-5 text-3xl font-extrabold">Booking request sent</h1>
-        <p className="mt-3 text-[#595959]">
-          Your request for <strong>{property.title}</strong> has been received. The host will confirm
-          availability and the final rate shortly.
+        <p className="eyebrow mt-6">Request received</p>
+        <h1 className="mt-3 font-serif text-4xl font-semibold text-[var(--ink)]">Your booking request is sent</h1>
+        <p className="mt-4 text-[var(--muted)]">
+          Your request for <strong className="text-[var(--ink)]">{property.title}</strong> has been received.
+          The host will confirm availability and the final rate shortly.
         </p>
-        <p className="mx-auto mt-5 inline-block rounded-lg bg-[#f0f6ff] px-5 py-3 text-sm font-bold text-[#006ce4]">
-          Reference: {reference}
+        <p className="mx-auto mt-6 inline-block border border-[var(--line)] bg-[var(--cream)] px-6 py-3 text-sm font-semibold tracking-[0.14em] text-[var(--ink)]">
+          Reference · {reference}
         </p>
-        <div className="mt-6">
-          <Link href="/account/bookings" className="inline-block rounded bg-[#006ce4] px-5 py-3 font-bold text-white">
+        <div className="mt-8">
+          <ButtonLink href="/account/bookings" size="lg" withArrow>
             View booking requests
-          </Link>
+          </ButtonLink>
         </div>
-      </div>
+      </motion.div>
     );
   }
 
   const stayNights = nights(form.checkIn, form.checkOut);
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
-      <Link href={`/stays/${property.slug}`} className="inline-flex items-center gap-1 text-sm font-bold text-[#006ce4]">
-        <ChevronLeft size={17} /> Back to property
+    <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+      <Link
+        href={`/stays/${property.slug}`}
+        className="inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--gold-deep)] hover:text-[var(--ink)]"
+      >
+        <ChevronLeft size={16} /> Back to property
       </Link>
-      <div className="mt-5 grid gap-8 lg:grid-cols-[1fr_360px]">
+
+      <div className="mt-6 grid gap-10 lg:grid-cols-[1fr_380px]">
         <section>
-          <h1 className="text-3xl font-extrabold">Enter your details</h1>
-          <p className="mt-2 text-[#595959]">Almost done! The host will confirm availability and the final rate.</p>
+          <p className="eyebrow">Final step</p>
+          <h1 className="mt-3 font-serif text-4xl font-semibold text-[var(--ink)]">Enter your details</h1>
+          <p className="mt-3 text-[var(--muted)]">The host will confirm availability and the final rate.</p>
 
-          <div className="mt-6 rounded-lg border border-[#ddd] p-5">
-            <h2 className="text-xl font-bold">Your information</h2>
+          <div className="mt-8 border border-[var(--line)] bg-white p-6">
+            <h2 className="font-serif text-xl font-semibold text-[var(--ink)]">Your information</h2>
             <div className="mt-5 grid gap-4 sm:grid-cols-2">
-              <Field label="First name" placeholder="First name" value={form.firstName} onChange={(v) => update("firstName", v)} />
-              <Field label="Last name" placeholder="Last name" value={form.lastName} onChange={(v) => update("lastName", v)} />
-              <Field label="Email address" placeholder="name@example.com" type="email" value={form.email} onChange={(v) => update("email", v)} />
-              <Field label="Phone number" placeholder="+250" type="tel" value={form.phone} onChange={(v) => update("phone", v)} />
+              <FloatingField label="First name" value={form.firstName} onChange={update("firstName")} autoComplete="given-name" />
+              <FloatingField label="Last name" value={form.lastName} onChange={update("lastName")} autoComplete="family-name" />
+              <FloatingField label="Email address" type="email" value={form.email} onChange={update("email")} autoComplete="email" />
+              <FloatingField label="Phone number" type="tel" value={form.phone} onChange={update("phone")} autoComplete="tel" />
             </div>
           </div>
 
-          <div className="mt-5 rounded-lg border border-[#ddd] p-5">
-            <h2 className="text-xl font-bold">Your stay</h2>
+          <div className="mt-5 border border-[var(--line)] bg-white p-6">
+            <h2 className="font-serif text-xl font-semibold text-[var(--ink)]">Your stay</h2>
             <div className="mt-5 grid gap-4 sm:grid-cols-3">
-              <Field label="Check-in" type="date" value={form.checkIn} onChange={(v) => update("checkIn", v)} />
-              <Field label="Check-out" type="date" value={form.checkOut} onChange={(v) => update("checkOut", v)} />
-              <Field label="Guests" type="number" value={form.guests} onChange={(v) => update("guests", v)} />
+              <FloatingField label="Check-in" type="date" value={form.checkIn} onChange={update("checkIn")} />
+              <FloatingField label="Check-out" type="date" value={form.checkOut} onChange={update("checkOut")} />
+              <FloatingField label="Guests" type="number" value={form.guests} onChange={update("guests")} />
             </div>
-            <label className="mt-5 block text-sm font-bold">
-              Special requests <span className="font-normal text-[#595959]">(optional)</span>
-              <textarea
-                value={form.message}
-                onChange={(event) => update("message", event.target.value)}
-                className="mt-2 min-h-28 w-full rounded border border-[#868686] p-3 text-sm font-normal outline-none focus:border-[#006ce4]"
-                placeholder="Arrival time, accessibility needs or other requests"
-              />
-            </label>
+            <div className="mt-4">
+              <FloatingField label="Special requests (optional)" value={form.message} onChange={update("message")} multiline />
+            </div>
           </div>
 
-          <div className="mt-5 rounded-lg border border-[#ddd] p-5">
-            <h2 className="text-xl font-bold">Important information</h2>
-            <ul className="mt-4 space-y-3 text-sm">
-              <li className="flex gap-2"><Check size={18} className="text-[#008234]" /> No payment is collected for this request.</li>
-              <li className="flex gap-2"><Check size={18} className="text-[#008234]" /> The host confirms pricing and cancellation terms.</li>
-              <li className="flex gap-2"><LockKeyhole size={18} className="text-[#008234]" /> Your contact details remain private.</li>
+          <div className="mt-5 border border-[var(--line)] bg-[var(--cream)] p-6">
+            <h2 className="font-serif text-xl font-semibold text-[var(--ink)]">Good to know</h2>
+            <ul className="mt-4 space-y-3 text-sm text-[var(--muted)]">
+              <li className="flex gap-2"><Check size={18} className="shrink-0 text-[var(--gold-deep)]" /> No payment is collected for this request.</li>
+              <li className="flex gap-2"><Check size={18} className="shrink-0 text-[var(--gold-deep)]" /> The host confirms pricing and cancellation terms.</li>
+              <li className="flex gap-2"><LockKeyhole size={18} className="shrink-0 text-[var(--gold-deep)]" /> Your contact details remain private.</li>
             </ul>
           </div>
 
-          {error && <p className="mt-5 rounded-lg bg-[#fdeced] px-4 py-3 text-sm font-semibold text-[#c00]">{error}</p>}
+          {error && (
+            <motion.p
+              initial={{ opacity: 0, y: -4 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mt-5 border border-[#e3b4ae] bg-[#fbf0ee] px-4 py-3 text-sm font-medium text-[#b4453a]"
+            >
+              {error}
+            </motion.p>
+          )}
 
-          <button
-            onClick={submit}
-            disabled={loading}
-            className="mt-6 flex w-full items-center justify-center gap-2 rounded bg-[#006ce4] px-5 py-4 text-lg font-bold text-white hover:bg-[#0057b8] disabled:opacity-60 sm:w-auto"
-          >
-            {loading && <Loader2 size={20} className="animate-spin" />}
+          <Button onClick={submit} loading={loading} size="lg" withArrow className="mt-6">
             {loading ? "Sending…" : "Send booking request"}
-          </button>
+          </Button>
         </section>
 
-        <aside className="h-fit space-y-4 lg:sticky lg:top-5">
-          <div className="rounded-lg border border-[#ddd] p-4">
-            <div className="flex gap-3">
-              <div className="relative size-24 shrink-0 overflow-hidden rounded">
+        <aside className="h-fit space-y-4 lg:sticky lg:top-28">
+          <div className="border border-[var(--line)] bg-white p-4">
+            <div className="flex gap-4">
+              <div className="relative size-24 shrink-0 overflow-hidden">
                 <Image src={property.image} alt={property.title} fill className="object-cover" sizes="96px" />
               </div>
               <div>
-                <span className="text-xs text-[#595959]">{property.type}</span>
-                <h2 className="mt-1 font-bold">{property.title}</h2>
-                <p className="mt-1 text-xs">{property.neighborhood}, Kigali</p>
+                <span className="text-[0.65rem] uppercase tracking-[0.16em] text-[var(--muted)]">{property.type}</span>
+                <h2 className="mt-1 font-serif text-lg font-semibold text-[var(--ink)]">{property.title}</h2>
+                <p className="mt-1 text-xs text-[var(--muted)]">{property.neighborhood}, Kigali</p>
               </div>
             </div>
           </div>
-          <div className="rounded-lg border border-[#ddd] p-4">
-            <h3 className="font-bold">Your booking details</h3>
+
+          <div className="border border-[var(--line)] bg-white p-5">
+            <h3 className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--ink)]">Your booking</h3>
             <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
               <div>
-                <span className="text-xs text-[#595959]">Check-in</span>
-                <strong className="mt-1 block">{prettyDate(form.checkIn)}</strong>
+                <span className="text-[0.65rem] uppercase tracking-[0.14em] text-[var(--muted)]">Check-in</span>
+                <strong className="mt-1 block font-medium text-[var(--ink)]">{prettyDate(form.checkIn)}</strong>
               </div>
-              <div className="border-l pl-4">
-                <span className="text-xs text-[#595959]">Check-out</span>
-                <strong className="mt-1 block">{prettyDate(form.checkOut)}</strong>
+              <div className="border-l border-[var(--line)] pl-4">
+                <span className="text-[0.65rem] uppercase tracking-[0.14em] text-[var(--muted)]">Check-out</span>
+                <strong className="mt-1 block font-medium text-[var(--ink)]">{prettyDate(form.checkOut)}</strong>
               </div>
             </div>
-            <p className="mt-4 border-t pt-4 text-sm">
+            <p className="mt-4 border-t border-[var(--line)] pt-4 text-sm text-[var(--muted)]">
               {stayNights > 0 ? `${stayNights} night${stayNights === 1 ? "" : "s"} · ` : ""}
               {form.guests || 2} guest{Number(form.guests) === 1 ? "" : "s"}
             </p>
           </div>
-          <div className="rounded-lg border border-[#ddd] p-4">
-            <h3 className="font-bold">Price</h3>
+
+          <div className="border border-[var(--line)] bg-white p-5">
+            <h3 className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--ink)]">Price</h3>
             <div className="mt-3 flex items-end justify-between">
-              <span className="text-sm">Property rate</span>
-              <strong className="text-xl">To be confirmed</strong>
+              <span className="text-sm text-[var(--muted)]">Property rate</span>
+              <strong className="font-serif text-xl text-[var(--ink)]">On request</strong>
             </div>
-            <p className="mt-3 text-xs text-[#595959]">The property will provide a complete price before you commit.</p>
+            <p className="mt-3 text-xs text-[var(--muted)]">
+              The property will provide a complete price before you commit.
+            </p>
           </div>
-          <div className="rounded-lg bg-[#ebf3ff] p-4 text-sm">
-            <p className="flex gap-2 font-bold"><ShieldCheck size={19} /> Safe booking request</p>
-            <p className="mt-2 text-[#474747]">StayRwanda keeps the request clear and gives you a local support contact.</p>
+
+          <div className="border border-[var(--line)] bg-[var(--cream)] p-5 text-sm">
+            <p className="flex items-center gap-2 font-semibold text-[var(--ink)]">
+              <ShieldCheck size={19} className="text-[var(--gold-deep)]" /> Safe booking request
+            </p>
+            <p className="mt-2 text-[var(--muted)]">
+              StayRwanda keeps the request clear and gives you a local support contact.
+            </p>
           </div>
         </aside>
       </div>
     </div>
-  );
-}
-
-function Field({
-  label,
-  placeholder,
-  type = "text",
-  value,
-  onChange,
-}: {
-  label: string;
-  placeholder?: string;
-  type?: string;
-  value: string;
-  onChange: (value: string) => void;
-}) {
-  return (
-    <label className="block text-sm font-bold">
-      {label}
-      <input
-        type={type}
-        placeholder={placeholder}
-        value={value}
-        min={type === "number" ? 1 : undefined}
-        onChange={(event) => onChange(event.target.value)}
-        className="mt-2 min-h-11 w-full rounded border border-[#868686] px-3 font-normal outline-none focus:border-[#006ce4]"
-      />
-    </label>
   );
 }
