@@ -32,7 +32,10 @@ export type Property = {
 type Gallery = typeof kagaramaGallery;
 
 function galleryImages(gallery: Gallery) {
-  return gallery.images.map((image) => image.localPath);
+  return gallery.images.map((image) => {
+    const cloud = (image as { cloudinaryUrl?: string }).cloudinaryUrl;
+    return cloud || image.localPath;
+  });
 }
 
 function propertyFromGallery(

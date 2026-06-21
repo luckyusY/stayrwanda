@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
@@ -12,7 +11,6 @@ import {
   CookingPot,
   ExternalLink,
   Heart,
-  Images,
   MapPin,
   Share2,
   ShieldCheck,
@@ -21,6 +19,7 @@ import {
   Wifi,
 } from "lucide-react";
 import { CompactSearch, SiteFooter, SiteHeader } from "@/components/site-chrome";
+import { StayHeroGallery, StayPhotoGrid } from "@/components/stay-gallery";
 import { featuredProperties } from "@/lib/properties";
 import { getPropertyBySlug } from "@/lib/data";
 
@@ -38,7 +37,6 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 export default async function StayPage({ params }: { params: Promise<{ slug: string }> }) {
   const property = await getPropertyBySlug((await params).slug);
   if (!property) notFound();
-  const heroImages = property.images.slice(0, 5);
 
   return (
     <main className="min-h-screen bg-white text-[var(--foreground)]">
@@ -109,29 +107,7 @@ export default async function StayPage({ params }: { params: Promise<{ slug: str
             </div>
           </div>
 
-          <div className="relative mt-7 grid h-[520px] grid-cols-2 gap-1.5 overflow-hidden md:grid-cols-4">
-            {heroImages.map((image, index) => (
-              <div
-                key={image}
-                className={`relative overflow-hidden ${index === 0 ? "col-span-2 row-span-2" : ""}`}
-              >
-                <Image
-                  src={image}
-                  alt={`${property.title} photo ${index + 1}`}
-                  fill
-                  priority={index === 0}
-                  className="object-cover transition duration-500 hover:brightness-95"
-                  sizes={index === 0 ? "50vw" : "25vw"}
-                />
-              </div>
-            ))}
-            <a
-              href="#gallery"
-              className="absolute bottom-4 right-4 flex items-center gap-2 bg-white px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--ink)] shadow"
-            >
-              <Images size={16} /> All {property.photoCount} photos
-            </a>
-          </div>
+          <StayHeroGallery images={property.images} title={property.title} photoCount={property.photoCount} />
 
           <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_320px]">
             <div>
@@ -358,19 +334,7 @@ export default async function StayPage({ params }: { params: Promise<{ slug: str
               {property.photoCount} photos
             </span>
           </div>
-          <div className="mt-6 grid gap-2 sm:grid-cols-2 md:grid-cols-3">
-            {property.images.map((image, index) => (
-              <div key={image} className="relative aspect-[4/3] overflow-hidden">
-                <Image
-                  src={image}
-                  alt={`${property.title} photo ${index + 1}`}
-                  fill
-                  className="object-cover transition duration-500 hover:scale-105"
-                  sizes="(max-width:640px) 100vw, 33vw"
-                />
-              </div>
-            ))}
-          </div>
+          <StayPhotoGrid images={property.images} title={property.title} />
         </section>
       </div>
       <SiteFooter />

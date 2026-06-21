@@ -58,13 +58,22 @@ async function ensureSeeded(db: Db) {
   );
 }
 
+// Authoritative image arrays for the bundled catalogue (now Cloudinary URLs).
+// Overlaid onto DB documents so seed listings always serve optimised images,
+// even if the database was first seeded with the old local paths.
+const seedImages = new Map(
+  featuredProperties.map((p) => [p.slug, { image: p.image, images: p.images, photoCount: p.photoCount }]),
+);
+
 function normalizeProperty(doc: Record<string, unknown>): StoredProperty {
   const rest = { ...doc };
   delete rest._id;
-  return {
+  const property = {
     ...(rest as unknown as StoredProperty),
     status: (rest.status as PropertyStatus) || "active",
   };
+  const seed = seedImages.get(property.slug);
+  return seed ? { ...property, ...seed } : property;
 }
 
 /** Admin view: every listing regardless of status, seed fallback when offline. */

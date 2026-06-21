@@ -13,252 +13,324 @@
       "localPath": "/images/properties/rebeccas-apartment/01-eyeinstudio-1.jpg",
       "originalName": "EYEINSTUDIO(1).JPG",
       "width": 3600,
-      "height": 2400
+      "height": 2400,
+      "cloudinaryUrl": "https://res.cloudinary.com/dzbu1g1b8/image/upload/v1782073646/stayrwanda/properties/rebeccas-apartment/01-eyeinstudio-1.jpg",
+      "cloudinaryId": "stayrwanda/properties/rebeccas-apartment/01-eyeinstudio-1"
     },
     {
       "filename": "02-eyeinstudio-8.jpg",
       "localPath": "/images/properties/rebeccas-apartment/02-eyeinstudio-8.jpg",
       "originalName": "EYEINSTUDIO(8).JPG",
       "width": 2400,
-      "height": 3600
+      "height": 3600,
+      "cloudinaryUrl": "https://res.cloudinary.com/dzbu1g1b8/image/upload/v1782073651/stayrwanda/properties/rebeccas-apartment/02-eyeinstudio-8.jpg",
+      "cloudinaryId": "stayrwanda/properties/rebeccas-apartment/02-eyeinstudio-8"
     },
     {
       "filename": "03-eyeinstudio-9.jpg",
       "localPath": "/images/properties/rebeccas-apartment/03-eyeinstudio-9.jpg",
       "originalName": "EYEINSTUDIO(9).JPG",
       "width": 3600,
-      "height": 2400
+      "height": 2400,
+      "cloudinaryUrl": "https://res.cloudinary.com/dzbu1g1b8/image/upload/v1782073656/stayrwanda/properties/rebeccas-apartment/03-eyeinstudio-9.jpg",
+      "cloudinaryId": "stayrwanda/properties/rebeccas-apartment/03-eyeinstudio-9"
     },
     {
       "filename": "04-eyeinstudio-10.jpg",
       "localPath": "/images/properties/rebeccas-apartment/04-eyeinstudio-10.jpg",
       "originalName": "EYEINSTUDIO(10).JPG",
       "width": 3600,
-      "height": 2025
+      "height": 2025,
+      "cloudinaryUrl": "https://res.cloudinary.com/dzbu1g1b8/image/upload/v1782073661/stayrwanda/properties/rebeccas-apartment/04-eyeinstudio-10.jpg",
+      "cloudinaryId": "stayrwanda/properties/rebeccas-apartment/04-eyeinstudio-10"
     },
     {
       "filename": "05-eyeinstudio-11.jpg",
       "localPath": "/images/properties/rebeccas-apartment/05-eyeinstudio-11.jpg",
       "originalName": "EYEINSTUDIO(11).jpg",
       "width": 3600,
-      "height": 2400
+      "height": 2400,
+      "cloudinaryUrl": "https://res.cloudinary.com/dzbu1g1b8/image/upload/v1782073666/stayrwanda/properties/rebeccas-apartment/05-eyeinstudio-11.jpg",
+      "cloudinaryId": "stayrwanda/properties/rebeccas-apartment/05-eyeinstudio-11"
     },
     {
       "filename": "06-eyeinstudio-12.jpg",
       "localPath": "/images/properties/rebeccas-apartment/06-eyeinstudio-12.jpg",
       "originalName": "EYEINSTUDIO(12).jpg",
       "width": 3600,
-      "height": 2400
+      "height": 2400,
+      "cloudinaryUrl": "https://res.cloudinary.com/dzbu1g1b8/image/upload/v1782073671/stayrwanda/properties/rebeccas-apartment/06-eyeinstudio-12.jpg",
+      "cloudinaryId": "stayrwanda/properties/rebeccas-apartment/06-eyeinstudio-12"
     },
     {
       "filename": "07-eyeinstudio-13.jpg",
       "localPath": "/images/properties/rebeccas-apartment/07-eyeinstudio-13.jpg",
       "originalName": "EYEINSTUDIO(13).jpg",
       "width": 3600,
-      "height": 2400
+      "height": 2400,
+      "cloudinaryUrl": "https://res.cloudinary.com/dzbu1g1b8/image/upload/v1782073677/stayrwanda/properties/rebeccas-apartment/07-eyeinstudio-13.jpg",
+      "cloudinaryId": "stayrwanda/properties/rebeccas-apartment/07-eyeinstudio-13"
     },
     {
       "filename": "08-eyeinstudio-14.jpg",
       "localPath": "/images/properties/rebeccas-apartment/08-eyeinstudio-14.jpg",
       "originalName": "EYEINSTUDIO(14).jpg",
       "width": 3600,
-      "height": 2400
+      "height": 2400,
+      "cloudinaryUrl": "https://res.cloudinary.com/dzbu1g1b8/image/upload/v1782073681/stayrwanda/properties/rebeccas-apartment/08-eyeinstudio-14.jpg",
+      "cloudinaryId": "stayrwanda/properties/rebeccas-apartment/08-eyeinstudio-14"
     },
     {
       "filename": "09-eyeinstudio-15.jpg",
       "localPath": "/images/properties/rebeccas-apartment/09-eyeinstudio-15.jpg",
       "originalName": "EYEINSTUDIO(15).jpg",
       "width": 3600,
-      "height": 2400
+      "height": 2400,
+      "cloudinaryUrl": "https://res.cloudinary.com/dzbu1g1b8/image/upload/v1782073685/stayrwanda/properties/rebeccas-apartment/09-eyeinstudio-15.jpg",
+      "cloudinaryId": "stayrwanda/properties/rebeccas-apartment/09-eyeinstudio-15"
     },
     {
       "filename": "10-eyeinstudio-16.jpg",
       "localPath": "/images/properties/rebeccas-apartment/10-eyeinstudio-16.jpg",
       "originalName": "EYEINSTUDIO(16).jpg",
       "width": 2400,
-      "height": 3600
+      "height": 3600,
+      "cloudinaryUrl": "https://res.cloudinary.com/dzbu1g1b8/image/upload/v1782073691/stayrwanda/properties/rebeccas-apartment/10-eyeinstudio-16.jpg",
+      "cloudinaryId": "stayrwanda/properties/rebeccas-apartment/10-eyeinstudio-16"
     },
     {
       "filename": "11-eyeinstudio-17.jpg",
       "localPath": "/images/properties/rebeccas-apartment/11-eyeinstudio-17.jpg",
       "originalName": "EYEINSTUDIO(17).jpg",
       "width": 2400,
-      "height": 3600
+      "height": 3600,
+      "cloudinaryUrl": "https://res.cloudinary.com/dzbu1g1b8/image/upload/v1782073700/stayrwanda/properties/rebeccas-apartment/11-eyeinstudio-17.jpg",
+      "cloudinaryId": "stayrwanda/properties/rebeccas-apartment/11-eyeinstudio-17"
     },
     {
       "filename": "12-eyeinstudio-18.jpg",
       "localPath": "/images/properties/rebeccas-apartment/12-eyeinstudio-18.jpg",
       "originalName": "EYEINSTUDIO(18).jpg",
       "width": 2400,
-      "height": 3600
+      "height": 3600,
+      "cloudinaryUrl": "https://res.cloudinary.com/dzbu1g1b8/image/upload/v1782073707/stayrwanda/properties/rebeccas-apartment/12-eyeinstudio-18.jpg",
+      "cloudinaryId": "stayrwanda/properties/rebeccas-apartment/12-eyeinstudio-18"
     },
     {
       "filename": "13-eyeinstudio-19.jpg",
       "localPath": "/images/properties/rebeccas-apartment/13-eyeinstudio-19.jpg",
       "originalName": "EYEINSTUDIO(19).jpg",
       "width": 2400,
-      "height": 3600
+      "height": 3600,
+      "cloudinaryUrl": "https://res.cloudinary.com/dzbu1g1b8/image/upload/v1782073711/stayrwanda/properties/rebeccas-apartment/13-eyeinstudio-19.jpg",
+      "cloudinaryId": "stayrwanda/properties/rebeccas-apartment/13-eyeinstudio-19"
     },
     {
       "filename": "14-eyeinstudio-20.jpg",
       "localPath": "/images/properties/rebeccas-apartment/14-eyeinstudio-20.jpg",
       "originalName": "EYEINSTUDIO(20).jpg",
       "width": 3600,
-      "height": 2400
+      "height": 2400,
+      "cloudinaryUrl": "https://res.cloudinary.com/dzbu1g1b8/image/upload/v1782073714/stayrwanda/properties/rebeccas-apartment/14-eyeinstudio-20.jpg",
+      "cloudinaryId": "stayrwanda/properties/rebeccas-apartment/14-eyeinstudio-20"
     },
     {
       "filename": "15-eyeinstudio-21.jpg",
       "localPath": "/images/properties/rebeccas-apartment/15-eyeinstudio-21.jpg",
       "originalName": "EYEINSTUDIO(21).jpg",
       "width": 3600,
-      "height": 2400
+      "height": 2400,
+      "cloudinaryUrl": "https://res.cloudinary.com/dzbu1g1b8/image/upload/v1782073717/stayrwanda/properties/rebeccas-apartment/15-eyeinstudio-21.jpg",
+      "cloudinaryId": "stayrwanda/properties/rebeccas-apartment/15-eyeinstudio-21"
     },
     {
       "filename": "16-eyeinstudio-22.jpg",
       "localPath": "/images/properties/rebeccas-apartment/16-eyeinstudio-22.jpg",
       "originalName": "EYEINSTUDIO(22).jpg",
       "width": 2400,
-      "height": 3600
+      "height": 3600,
+      "cloudinaryUrl": "https://res.cloudinary.com/dzbu1g1b8/image/upload/v1782073722/stayrwanda/properties/rebeccas-apartment/16-eyeinstudio-22.jpg",
+      "cloudinaryId": "stayrwanda/properties/rebeccas-apartment/16-eyeinstudio-22"
     },
     {
       "filename": "17-eyeinstudio-23.jpg",
       "localPath": "/images/properties/rebeccas-apartment/17-eyeinstudio-23.jpg",
       "originalName": "EYEINSTUDIO(23).jpg",
       "width": 2400,
-      "height": 3600
+      "height": 3600,
+      "cloudinaryUrl": "https://res.cloudinary.com/dzbu1g1b8/image/upload/v1782073728/stayrwanda/properties/rebeccas-apartment/17-eyeinstudio-23.jpg",
+      "cloudinaryId": "stayrwanda/properties/rebeccas-apartment/17-eyeinstudio-23"
     },
     {
       "filename": "18-eyeinstudio-24.jpg",
       "localPath": "/images/properties/rebeccas-apartment/18-eyeinstudio-24.jpg",
       "originalName": "EYEINSTUDIO(24).jpg",
       "width": 2400,
-      "height": 3600
+      "height": 3600,
+      "cloudinaryUrl": "https://res.cloudinary.com/dzbu1g1b8/image/upload/v1782073734/stayrwanda/properties/rebeccas-apartment/18-eyeinstudio-24.jpg",
+      "cloudinaryId": "stayrwanda/properties/rebeccas-apartment/18-eyeinstudio-24"
     },
     {
       "filename": "19-eyeinstudio-25.jpg",
       "localPath": "/images/properties/rebeccas-apartment/19-eyeinstudio-25.jpg",
       "originalName": "EYEINSTUDIO(25).jpg",
       "width": 3600,
-      "height": 2400
+      "height": 2400,
+      "cloudinaryUrl": "https://res.cloudinary.com/dzbu1g1b8/image/upload/v1782073740/stayrwanda/properties/rebeccas-apartment/19-eyeinstudio-25.jpg",
+      "cloudinaryId": "stayrwanda/properties/rebeccas-apartment/19-eyeinstudio-25"
     },
     {
       "filename": "20-eyeinstudio-26.jpg",
       "localPath": "/images/properties/rebeccas-apartment/20-eyeinstudio-26.jpg",
       "originalName": "EYEINSTUDIO(26).jpg",
       "width": 2400,
-      "height": 3600
+      "height": 3600,
+      "cloudinaryUrl": "https://res.cloudinary.com/dzbu1g1b8/image/upload/v1782073749/stayrwanda/properties/rebeccas-apartment/20-eyeinstudio-26.jpg",
+      "cloudinaryId": "stayrwanda/properties/rebeccas-apartment/20-eyeinstudio-26"
     },
     {
       "filename": "21-eyeinstudio-27.jpg",
       "localPath": "/images/properties/rebeccas-apartment/21-eyeinstudio-27.jpg",
       "originalName": "EYEINSTUDIO(27).jpg",
       "width": 2400,
-      "height": 3600
+      "height": 3600,
+      "cloudinaryUrl": "https://res.cloudinary.com/dzbu1g1b8/image/upload/v1782073754/stayrwanda/properties/rebeccas-apartment/21-eyeinstudio-27.jpg",
+      "cloudinaryId": "stayrwanda/properties/rebeccas-apartment/21-eyeinstudio-27"
     },
     {
       "filename": "22-eyeinstudio-28.jpg",
       "localPath": "/images/properties/rebeccas-apartment/22-eyeinstudio-28.jpg",
       "originalName": "EYEINSTUDIO(28).jpg",
       "width": 3600,
-      "height": 2400
+      "height": 2400,
+      "cloudinaryUrl": "https://res.cloudinary.com/dzbu1g1b8/image/upload/v1782073759/stayrwanda/properties/rebeccas-apartment/22-eyeinstudio-28.jpg",
+      "cloudinaryId": "stayrwanda/properties/rebeccas-apartment/22-eyeinstudio-28"
     },
     {
       "filename": "23-eyeinstudio-29.jpg",
       "localPath": "/images/properties/rebeccas-apartment/23-eyeinstudio-29.jpg",
       "originalName": "EYEINSTUDIO(29).jpg",
       "width": 3600,
-      "height": 2400
+      "height": 2400,
+      "cloudinaryUrl": "https://res.cloudinary.com/dzbu1g1b8/image/upload/v1782073763/stayrwanda/properties/rebeccas-apartment/23-eyeinstudio-29.jpg",
+      "cloudinaryId": "stayrwanda/properties/rebeccas-apartment/23-eyeinstudio-29"
     },
     {
       "filename": "24-eyeinstudio-30.jpg",
       "localPath": "/images/properties/rebeccas-apartment/24-eyeinstudio-30.jpg",
       "originalName": "EYEINSTUDIO(30).jpg",
       "width": 3600,
-      "height": 2400
+      "height": 2400,
+      "cloudinaryUrl": "https://res.cloudinary.com/dzbu1g1b8/image/upload/v1782073767/stayrwanda/properties/rebeccas-apartment/24-eyeinstudio-30.jpg",
+      "cloudinaryId": "stayrwanda/properties/rebeccas-apartment/24-eyeinstudio-30"
     },
     {
       "filename": "25-eyeinstudio-31.jpg",
       "localPath": "/images/properties/rebeccas-apartment/25-eyeinstudio-31.jpg",
       "originalName": "EYEINSTUDIO(31).jpg",
       "width": 2400,
-      "height": 3600
+      "height": 3600,
+      "cloudinaryUrl": "https://res.cloudinary.com/dzbu1g1b8/image/upload/v1782073775/stayrwanda/properties/rebeccas-apartment/25-eyeinstudio-31.jpg",
+      "cloudinaryId": "stayrwanda/properties/rebeccas-apartment/25-eyeinstudio-31"
     },
     {
       "filename": "26-eyeinstudio-32.jpg",
       "localPath": "/images/properties/rebeccas-apartment/26-eyeinstudio-32.jpg",
       "originalName": "EYEINSTUDIO(32).jpg",
       "width": 2400,
-      "height": 3600
+      "height": 3600,
+      "cloudinaryUrl": "https://res.cloudinary.com/dzbu1g1b8/image/upload/v1782073780/stayrwanda/properties/rebeccas-apartment/26-eyeinstudio-32.jpg",
+      "cloudinaryId": "stayrwanda/properties/rebeccas-apartment/26-eyeinstudio-32"
     },
     {
       "filename": "27-eyeinstudio-33.jpg",
       "localPath": "/images/properties/rebeccas-apartment/27-eyeinstudio-33.jpg",
       "originalName": "EYEINSTUDIO(33).jpg",
       "width": 3600,
-      "height": 2400
+      "height": 2400,
+      "cloudinaryUrl": "https://res.cloudinary.com/dzbu1g1b8/image/upload/v1782073784/stayrwanda/properties/rebeccas-apartment/27-eyeinstudio-33.jpg",
+      "cloudinaryId": "stayrwanda/properties/rebeccas-apartment/27-eyeinstudio-33"
     },
     {
       "filename": "28-eyeinstudio-34.jpg",
       "localPath": "/images/properties/rebeccas-apartment/28-eyeinstudio-34.jpg",
       "originalName": "EYEINSTUDIO(34).jpg",
       "width": 2400,
-      "height": 3600
+      "height": 3600,
+      "cloudinaryUrl": "https://res.cloudinary.com/dzbu1g1b8/image/upload/v1782073790/stayrwanda/properties/rebeccas-apartment/28-eyeinstudio-34.jpg",
+      "cloudinaryId": "stayrwanda/properties/rebeccas-apartment/28-eyeinstudio-34"
     },
     {
       "filename": "29-eyeinstudio-35.jpg",
       "localPath": "/images/properties/rebeccas-apartment/29-eyeinstudio-35.jpg",
       "originalName": "EYEINSTUDIO(35).jpg",
       "width": 3600,
-      "height": 2400
+      "height": 2400,
+      "cloudinaryUrl": "https://res.cloudinary.com/dzbu1g1b8/image/upload/v1782073793/stayrwanda/properties/rebeccas-apartment/29-eyeinstudio-35.jpg",
+      "cloudinaryId": "stayrwanda/properties/rebeccas-apartment/29-eyeinstudio-35"
     },
     {
       "filename": "30-eyeinstudio-36.jpg",
       "localPath": "/images/properties/rebeccas-apartment/30-eyeinstudio-36.jpg",
       "originalName": "EYEINSTUDIO(36).jpg",
       "width": 3600,
-      "height": 2400
+      "height": 2400,
+      "cloudinaryUrl": "https://res.cloudinary.com/dzbu1g1b8/image/upload/v1782073798/stayrwanda/properties/rebeccas-apartment/30-eyeinstudio-36.jpg",
+      "cloudinaryId": "stayrwanda/properties/rebeccas-apartment/30-eyeinstudio-36"
     },
     {
       "filename": "31-eyeinstudio-37.jpg",
       "localPath": "/images/properties/rebeccas-apartment/31-eyeinstudio-37.jpg",
       "originalName": "EYEINSTUDIO(37).jpg",
       "width": 3600,
-      "height": 2400
+      "height": 2400,
+      "cloudinaryUrl": "https://res.cloudinary.com/dzbu1g1b8/image/upload/v1782073803/stayrwanda/properties/rebeccas-apartment/31-eyeinstudio-37.jpg",
+      "cloudinaryId": "stayrwanda/properties/rebeccas-apartment/31-eyeinstudio-37"
     },
     {
       "filename": "32-eyeinstudio-38.jpg",
       "localPath": "/images/properties/rebeccas-apartment/32-eyeinstudio-38.jpg",
       "originalName": "EYEINSTUDIO(38).jpg",
       "width": 3600,
-      "height": 2400
+      "height": 2400,
+      "cloudinaryUrl": "https://res.cloudinary.com/dzbu1g1b8/image/upload/v1782073807/stayrwanda/properties/rebeccas-apartment/32-eyeinstudio-38.jpg",
+      "cloudinaryId": "stayrwanda/properties/rebeccas-apartment/32-eyeinstudio-38"
     },
     {
       "filename": "33-eyeinstudio-39.jpg",
       "localPath": "/images/properties/rebeccas-apartment/33-eyeinstudio-39.jpg",
       "originalName": "EYEINSTUDIO(39).jpg",
       "width": 3600,
-      "height": 2400
+      "height": 2400,
+      "cloudinaryUrl": "https://res.cloudinary.com/dzbu1g1b8/image/upload/v1782073812/stayrwanda/properties/rebeccas-apartment/33-eyeinstudio-39.jpg",
+      "cloudinaryId": "stayrwanda/properties/rebeccas-apartment/33-eyeinstudio-39"
     },
     {
       "filename": "34-eyeinstudio-40.jpg",
       "localPath": "/images/properties/rebeccas-apartment/34-eyeinstudio-40.jpg",
       "originalName": "EYEINSTUDIO(40).jpg",
       "width": 2400,
-      "height": 3600
+      "height": 3600,
+      "cloudinaryUrl": "https://res.cloudinary.com/dzbu1g1b8/image/upload/v1782073820/stayrwanda/properties/rebeccas-apartment/34-eyeinstudio-40.jpg",
+      "cloudinaryId": "stayrwanda/properties/rebeccas-apartment/34-eyeinstudio-40"
     },
     {
       "filename": "35-eyeinstudio-41.jpg",
       "localPath": "/images/properties/rebeccas-apartment/35-eyeinstudio-41.jpg",
       "originalName": "EYEINSTUDIO(41).jpg",
       "width": 3600,
-      "height": 2400
+      "height": 2400,
+      "cloudinaryUrl": "https://res.cloudinary.com/dzbu1g1b8/image/upload/v1782073827/stayrwanda/properties/rebeccas-apartment/35-eyeinstudio-41.jpg",
+      "cloudinaryId": "stayrwanda/properties/rebeccas-apartment/35-eyeinstudio-41"
     },
     {
       "filename": "36-eyeinstudio-42.jpg",
       "localPath": "/images/properties/rebeccas-apartment/36-eyeinstudio-42.jpg",
       "originalName": "EYEINSTUDIO(42).jpg",
       "width": 2400,
-      "height": 3000
+      "height": 3000,
+      "cloudinaryUrl": "https://res.cloudinary.com/dzbu1g1b8/image/upload/v1782073837/stayrwanda/properties/rebeccas-apartment/36-eyeinstudio-42.jpg",
+      "cloudinaryId": "stayrwanda/properties/rebeccas-apartment/36-eyeinstudio-42"
     }
   ]
 }

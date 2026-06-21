@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -21,6 +20,7 @@ import {
   Users,
 } from "lucide-react";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
+import { SmartImage } from "@/components/smart-image";
 import { PropertyImageSlider } from "@/components/property-image-slider";
 import { Reveal } from "@/components/reveal";
 import type { Property } from "@/lib/properties";
@@ -83,7 +83,7 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
         <SiteHeader variant="transparent" />
         <div className="hero-veil relative h-[88vh] min-h-[620px] w-full overflow-hidden">
           <div ref={heroImageRef} className="absolute inset-0 -bottom-24 will-change-transform">
-            <Image
+            <SmartImage
               src={hero.image}
               alt="A handpicked Rwandan residence"
               fill
@@ -307,7 +307,7 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
                 onClick={() => chooseDestination(destination)}
                 className="group relative aspect-[3/4] overflow-hidden text-left image-shade"
               >
-                <Image
+                <SmartImage
                   src={property.image}
                   alt={destination}
                   fill
@@ -382,7 +382,7 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
               }}
               className="group relative aspect-[4/5] overflow-hidden text-left image-shade"
             >
-              <Image
+              <SmartImage
                 src={item.image ?? properties[0].image}
                 alt={item.label}
                 fill

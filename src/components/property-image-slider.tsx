@@ -1,12 +1,12 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { A11y, Keyboard, Pagination } from "swiper/modules";
 import type { Swiper as SwiperClass } from "swiper";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { SmartImage } from "@/components/smart-image";
 import "swiper/css";
 import "swiper/css/pagination";
 
@@ -47,7 +47,7 @@ export function PropertyImageSlider({
     return (
       <Link href={href} className={`relative block w-full ${aspect} overflow-hidden bg-[var(--cream-2)]`}>
         {slides[0] && (
-          <Image
+          <SmartImage
             src={slides[0]}
             alt={alt}
             fill
@@ -74,7 +74,7 @@ export function PropertyImageSlider({
         {slides.map((src, i) => (
           <SwiperSlide key={src}>
             <Link href={href} className="relative block h-full w-full">
-              <Image
+              <SmartImage
                 src={src}
                 alt={`${alt} — photo ${i + 1}`}
                 fill
