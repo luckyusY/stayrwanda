@@ -4,17 +4,20 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Bath, BedDouble, CalendarDays, Check, ChevronRight, CircleParking, CookingPot, ExternalLink, Heart, Images, MapPin, Share2, ShieldCheck, Star, Trees, Users, Wifi } from "lucide-react";
 import { CompactSearch, SiteFooter, SiteHeader } from "@/components/site-chrome";
-import { featuredProperties, getProperty } from "@/lib/properties";
+import { featuredProperties } from "@/lib/properties";
+import { getPropertyBySlug } from "@/lib/data";
+
+export const dynamic = "force-dynamic";
 
 export function generateStaticParams() { return featuredProperties.map(({ slug }) => ({ slug })); }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const property = getProperty((await params).slug);
+  const property = await getPropertyBySlug((await params).slug);
   return property ? { title: property.title, description: property.description } : {};
 }
 
 export default async function StayPage({ params }: { params: Promise<{ slug: string }> }) {
-  const property = getProperty((await params).slug);
+  const property = await getPropertyBySlug((await params).slug);
   if (!property) notFound();
   const heroImages = property.images.slice(0, 5);
 
