@@ -3,7 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   CalendarDays,
   ChevronDown,
@@ -19,6 +21,8 @@ import {
   Users,
 } from "lucide-react";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
+import { PropertyImageSlider } from "@/components/property-image-slider";
+import { Reveal } from "@/components/reveal";
 import type { Property } from "@/lib/properties";
 
 const stayTypes = ["All stays", "Furnished apartment", "Serviced apartment", "Furnished home"];
@@ -33,6 +37,23 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
   const [children, setChildren] = useState(0);
   const [rooms, setRooms] = useState(1);
   const [favourites, setFavourites] = useState<string[]>([]);
+  const heroImageRef = useRef<HTMLDivElement>(null);
+
+  // Subtle GSAP parallax on the hero image as the page scrolls.
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const el = heroImageRef.current;
+    if (!el) return;
+    gsap.registerPlugin(ScrollTrigger);
+    const ctx = gsap.context(() => {
+      gsap.to(el, {
+        yPercent: 16,
+        ease: "none",
+        scrollTrigger: { trigger: el, start: "top top", end: "bottom top", scrub: true },
+      });
+    });
+    return () => ctx.revert();
+  }, []);
 
   const filtered = useMemo(
     () =>
@@ -61,14 +82,16 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
       <section className="relative">
         <SiteHeader variant="transparent" />
         <div className="hero-veil relative h-[88vh] min-h-[620px] w-full overflow-hidden">
-          <Image
-            src={hero.image}
-            alt="A handpicked Rwandan residence"
-            fill
-            priority
-            className="object-cover"
-            sizes="100vw"
-          />
+          <div ref={heroImageRef} className="absolute inset-0 -bottom-24 will-change-transform">
+            <Image
+              src={hero.image}
+              alt="A handpicked Rwandan residence"
+              fill
+              priority
+              className="object-cover"
+              sizes="100vw"
+            />
+          </div>
         </div>
 
         <div className="absolute inset-x-0 top-[34%] z-30 -translate-y-1/2">
@@ -160,7 +183,7 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
       </section>
 
       {/* -------------------------------------------------------- Brand intro */}
-      <section className="mx-auto max-w-3xl px-4 py-20 text-center sm:px-6">
+      <Reveal as="section" className="mx-auto max-w-3xl px-4 py-20 text-center sm:px-6">
         <p className="eyebrow">A different kind of stay</p>
         <div className="mx-auto mt-4 rule-gold" />
         <h2 className="mt-6 font-serif text-3xl font-semibold leading-snug text-[var(--ink)] sm:text-4xl">
@@ -170,7 +193,7 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
           StayRwanda is a Rwanda-first collection of furnished homes, with local hosts and local support
           from the first message to checkout.
         </p>
-      </section>
+      </Reveal>
 
       {/* --------------------------------------------------- Featured stays */}
       <section id="properties" className="bg-[var(--parchment)] py-20">
@@ -195,23 +218,20 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
 
           <div className="mt-10 grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
             {filtered.map((property) => (
-              <article key={property.slug} className="group bg-white card-shadow">
-                <div className="relative aspect-[4/3] overflow-hidden">
-                  <Link href={`/stays/${property.slug}`}>
-                    <Image
-                      src={property.image}
-                      alt={property.title}
-                      fill
-                      className="object-cover transition duration-700 group-hover:scale-105"
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    />
-                  </Link>
-                  <span className="absolute left-4 top-4 bg-white/90 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-[var(--ink)]">
+              <Reveal as="article" key={property.slug} className="group min-w-0 bg-white card-shadow">
+                <div className="relative w-full min-w-0">
+                  <PropertyImageSlider
+                    images={property.images?.length ? property.images : [property.image]}
+                    alt={property.title}
+                    href={`/stays/${property.slug}`}
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  />
+                  <span className="pointer-events-none absolute left-4 top-4 z-30 bg-white/90 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-[var(--ink)]">
                     {property.type}
                   </span>
                   <button
                     onClick={() => toggleFavourite(property.slug)}
-                    className="absolute right-4 top-4 grid size-9 place-items-center rounded-full bg-white/90 shadow"
+                    className="absolute right-4 top-4 z-30 grid size-9 place-items-center rounded-full bg-white/90 shadow"
                     aria-label={`Save ${property.title}`}
                   >
                     <Heart
@@ -244,7 +264,7 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
                     </Link>
                   </div>
                 </div>
-              </article>
+              </Reveal>
             ))}
           </div>
 

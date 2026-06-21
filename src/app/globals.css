@@ -29,6 +29,12 @@
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
+
+/* Lenis smooth scroll — disable native smoothing while Lenis is driving */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
 body {
   margin: 0;
   overflow-x: hidden;

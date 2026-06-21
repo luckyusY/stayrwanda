@@ -1,9 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Check, ChevronDown, Heart, MapPin, SlidersHorizontal } from "lucide-react";
+import { PropertyImageSlider } from "@/components/property-image-slider";
+import { Reveal } from "@/components/reveal";
 import type { Property } from "@/lib/properties";
 
 export function SearchResults({
@@ -109,14 +110,20 @@ export function SearchResults({
 
           <div className="mt-5 space-y-6">
             {results.map((property) => (
-              <article
+              <Reveal
+                as="article"
                 key={property.slug}
-                className="grid gap-5 border border-[var(--line)] bg-white p-5 card-shadow sm:grid-cols-[240px_1fr]"
+                className="grid min-w-0 gap-5 border border-[var(--line)] bg-white p-5 card-shadow sm:grid-cols-[240px_1fr]"
               >
-                <div className="relative aspect-[4/3] overflow-hidden sm:aspect-auto sm:min-h-56">
-                  <Image src={property.image} alt={property.title} fill className="object-cover" sizes="240px" />
+                <div className="relative w-full min-w-0">
+                  <PropertyImageSlider
+                    images={property.images?.length ? property.images : [property.image]}
+                    alt={property.title}
+                    href={`/stays/${property.slug}`}
+                    sizes="(max-width: 640px) 100vw, 240px"
+                  />
                   <button
-                    className="absolute right-3 top-3 grid size-9 place-items-center rounded-full bg-white/90 shadow"
+                    className="absolute right-3 top-3 z-30 grid size-9 place-items-center rounded-full bg-white/90 shadow"
                     aria-label="Save property"
                   >
                     <Heart size={18} className="text-[var(--ink)]" />
@@ -157,7 +164,7 @@ export function SearchResults({
                     </div>
                   </div>
                 </div>
-              </article>
+              </Reveal>
             ))}
           </div>
 
