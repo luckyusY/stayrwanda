@@ -1,20 +1,30 @@
 @import "tailwindcss";
 
 :root {
-  --ink: #102a43;
-  --navy: #123b5d;
-  --gold: #d9a441;
-  --cream: #f7f5ef;
-  --mist: #edf3f5;
+  /* Classic hospitality palette */
+  --ink: #14223a;        /* deep navy — headers, footers */
+  --ink-2: #1d3052;      /* lifted navy */
+  --navy: #21385c;
+  --gold: #b08d57;       /* warm brushed gold — primary accent */
+  --gold-deep: #9a7944;
+  --cream: #f6f1e7;      /* warm sand canvas */
+  --cream-2: #efe7d7;
+  --parchment: #faf7f0;
+  --line: #e4dcc9;       /* hairline on cream */
+  --mist: #eef1f4;
   --background: #ffffff;
-  --foreground: #1a1a1a;
+  --foreground: #1f2430;
+  --muted: #6b6256;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: "Geist", "Geist Fallback", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "Geist Mono", "Geist Mono Fallback", ui-monospace, monospace;
+  --color-ink: var(--ink);
+  --color-gold: var(--gold);
+  --color-cream: var(--cream);
+  --font-sans: var(--font-sans-display), "Jost", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-serif), Georgia, "Times New Roman", serif;
 }
 
 * { box-sizing: border-box; }
@@ -24,29 +34,58 @@ body {
   overflow-x: hidden;
   background: var(--background);
   color: var(--foreground);
-  font-family: "Geist", ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-sans-display), "Jost", ui-sans-serif, system-ui, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.01em;
 }
 button, a, input, select { -webkit-tap-highlight-color: transparent; }
-button, a { transition: all 180ms ease; }
-::selection { background: #f9b90f66; }
+button, a { transition: all 200ms ease; }
+::selection { background: #b08d5733; }
 
-.serif-display { font-family: Georgia, "Times New Roman", serif; }
+/* Display serif for editorial headings */
+.font-serif, .serif-display {
+  font-family: var(--font-serif), Georgia, serif;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+/* Refined small-caps eyebrow used above section titles */
+.eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--gold-deep);
+}
+
+/* Thin gold rule */
+.rule-gold { height: 1px; width: 60px; background: var(--gold); }
+
 .hide-scrollbar::-webkit-scrollbar { display: none; }
 .hide-scrollbar { scrollbar-width: none; }
-.soft-shadow { box-shadow: 0 18px 50px rgba(19, 46, 67, .09); }
+.soft-shadow { box-shadow: 0 24px 60px rgba(20, 34, 58, .12); }
+.card-shadow { box-shadow: 0 10px 30px rgba(20, 34, 58, .08); }
+
 .image-shade::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(8,25,37,.02), rgba(8,25,37,.48));
+  background: linear-gradient(180deg, rgba(12,22,40,.05) 0%, rgba(12,22,40,.55) 100%);
+  pointer-events: none;
+}
+.hero-veil::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(12,22,40,.55) 0%, rgba(12,22,40,.30) 40%, rgba(12,22,40,.62) 100%);
   pointer-events: none;
 }
 
 @keyframes rise {
-  from { opacity: 0; transform: translateY(14px); }
+  from { opacity: 0; transform: translateY(16px); }
   to { opacity: 1; transform: translateY(0); }
 }
-.animate-rise { animation: rise .65s ease both; }
+.animate-rise { animation: rise .7s ease both; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; }

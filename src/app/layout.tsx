@@ -1,21 +1,33 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Cormorant_Garamond, Jost } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
-const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
+// Classic hospitality pairing: an elegant serif for display headings and a
+// refined, wide humanist sans for everything else.
+const serif = Cormorant_Garamond({
+  variable: "--font-serif",
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  display: "swap",
+});
+const sans = Jost({
+  variable: "--font-sans-display",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://stayrwanda.com"),
-  title: { default: "StayRwanda — Find your place in Rwanda", template: "%s | StayRwanda" },
-  description: "Verified apartments, guesthouses and stays across Rwanda. Book local with confidence.",
-  keywords: ["apartments in Kigali", "Rwanda apartments", "short stay Kigali"],
-  openGraph: { title: "StayRwanda", description: "Stay local. Feel at home.", type: "website" },
+  title: { default: "StayRwanda — Timeless stays across Rwanda", template: "%s | StayRwanda" },
+  description: "Discover handpicked furnished apartments, residences and guesthouses across Rwanda. Reserve with confidence.",
+  keywords: ["apartments in Kigali", "Rwanda apartments", "luxury stays Kigali", "furnished homes Rwanda"],
+  openGraph: { title: "StayRwanda", description: "Timeless stays across Rwanda.", type: "website" },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html lang="en" className={`${serif.variable} ${sans.variable}`}>
       <body>{children}</body>
     </html>
   );
