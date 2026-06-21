@@ -15,6 +15,13 @@
   --background: #ffffff;
   --foreground: #1f2430;
   --muted: #6b6256;
+
+  /* Motion system — luxury easing curves and durations */
+  --ease-lux: cubic-bezier(0.22, 1, 0.36, 1);     /* decel, editorial */
+  --ease-in-out-lux: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 220ms;
+  --dur: 420ms;
+  --dur-slow: 720ms;
 }
 
 @theme inline {
@@ -45,8 +52,23 @@ body {
   letter-spacing: 0.01em;
 }
 button, a, input, select { -webkit-tap-highlight-color: transparent; }
-button, a { transition: all 200ms ease; }
+button, a { transition: color var(--dur-fast) var(--ease-lux), background-color var(--dur-fast) var(--ease-lux), border-color var(--dur-fast) var(--ease-lux), transform var(--dur-fast) var(--ease-lux), box-shadow var(--dur-fast) var(--ease-lux); }
 ::selection { background: #b08d5733; }
+
+/* Refined focus ring — gold, keyboard-only */
+:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--gold); border-radius: 2px; }
+
+/* Reusable hover lift for cards / tiles */
+.lift { transition: transform var(--dur) var(--ease-lux), box-shadow var(--dur) var(--ease-lux); }
+.lift:hover { transform: translateY(-6px); box-shadow: 0 28px 60px rgba(20, 34, 58, .16); }
+
+/* Frosted header once scrolled */
+.header-frost {
+  background: color-mix(in srgb, var(--background) 82%, transparent);
+  backdrop-filter: saturate(140%) blur(12px);
+  -webkit-backdrop-filter: saturate(140%) blur(12px);
+  border-bottom: 1px solid var(--line);
+}
 
 /* Display serif for editorial headings */
 .font-serif, .serif-display {
@@ -92,6 +114,25 @@ button, a { transition: all 200ms ease; }
   to { opacity: 1; transform: translateY(0); }
 }
 .animate-rise { animation: rise .7s ease both; }
+
+/* Slow cinematic zoom for hero imagery */
+@keyframes ken-burns {
+  from { transform: scale(1); }
+  to { transform: scale(1.12); }
+}
+.ken-burns { animation: ken-burns 18s var(--ease-in-out-lux) both; }
+
+/* Scroll cue — gentle vertical drift */
+@keyframes scroll-cue {
+  0%, 100% { transform: translateY(0); opacity: .85; }
+  50% { transform: translateY(7px); opacity: .35; }
+}
+.animate-scroll-cue { animation: scroll-cue 2s var(--ease-in-out-lux) infinite; }
+
+/* Gold shimmer sweep for primary CTAs */
+@keyframes sheen {
+  to { transform: translateX(220%) skewX(-18deg); }
+}
 
 /* Image loading skeleton — warm shimmer that matches the sand palette */
 .sr-skeleton {

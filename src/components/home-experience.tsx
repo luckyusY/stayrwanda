@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { AnimatePresence, motion } from "framer-motion";
+import { EASE, maskUp, softSpring } from "@/lib/motion";
 import {
   CalendarDays,
   ChevronDown,
@@ -88,30 +90,70 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
               alt="A handpicked Rwandan residence"
               fill
               priority
-              className="object-cover"
+              className="object-cover ken-burns"
               sizes="100vw"
             />
           </div>
         </div>
 
-        <div className="absolute inset-x-0 top-[34%] z-30 -translate-y-1/2">
+        <motion.div
+          className="absolute inset-x-0 top-[34%] z-30 -translate-y-1/2"
+          initial="hidden"
+          animate="show"
+          variants={{ show: { transition: { staggerChildren: 0.14, delayChildren: 0.15 } } }}
+        >
           <div className="mx-auto max-w-6xl px-4 text-center text-white sm:px-6">
-            <p className="eyebrow !text-[var(--gold)] animate-rise">Furnished stays · Rwanda</p>
-            <h1 className="mx-auto mt-4 max-w-3xl font-serif text-5xl font-semibold leading-[1.05] tracking-tight animate-rise sm:text-6xl md:text-7xl">
-              Stay somewhere
-              <br className="hidden sm:block" /> worth remembering
+            <motion.p
+              className="eyebrow !text-[var(--gold)]"
+              variants={{ hidden: { opacity: 0, y: 14 }, show: { opacity: 1, y: 0 } }}
+              transition={{ duration: 0.7, ease: EASE }}
+            >
+              Furnished stays · Rwanda
+            </motion.p>
+            <h1 className="mx-auto mt-4 max-w-3xl font-serif text-5xl font-semibold leading-[1.05] tracking-tight sm:text-6xl md:text-7xl">
+              {["Stay somewhere", "worth remembering"].map((line, i) => (
+                <span key={i} className="block overflow-hidden pb-1">
+                  <motion.span className="block" variants={maskUp}>
+                    {line}
+                  </motion.span>
+                </span>
+              ))}
             </h1>
-            <p className="mx-auto mt-5 max-w-xl text-base text-white/85 animate-rise sm:text-lg">
+            <motion.p
+              className="mx-auto mt-5 max-w-xl text-base text-white/85 sm:text-lg"
+              variants={{ hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0 } }}
+              transition={{ duration: 0.7, ease: EASE }}
+            >
               A curated collection of apartments, residences and guesthouses across Kigali and beyond.
-            </p>
+            </motion.p>
           </div>
-        </div>
+        </motion.div>
+
+        {/* Scroll cue */}
+        <motion.a
+          href="#properties"
+          aria-label="Scroll to explore"
+          className="absolute bottom-[120px] left-1/2 z-30 hidden -translate-x-1/2 flex-col items-center gap-2 text-white/70 sm:flex"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.1, duration: 0.8, ease: EASE }}
+        >
+          <span className="text-[0.6rem] uppercase tracking-[0.3em]">Explore</span>
+          <span className="grid h-10 w-6 items-start justify-center rounded-full border border-white/40 pt-1.5">
+            <span className="animate-scroll-cue block h-1.5 w-1.5 rounded-full bg-white/80" />
+          </span>
+        </motion.a>
 
         {/* Floating booking bar */}
-        <div className="relative z-30 mx-auto -mt-24 max-w-5xl px-4 sm:px-6">
+        <motion.div
+          className="relative z-30 mx-auto -mt-24 max-w-5xl px-4 sm:px-6"
+          initial={{ opacity: 0, y: 28 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.55, duration: 0.8, ease: EASE }}
+        >
           <div className="soft-shadow border border-[var(--line)] bg-white p-2">
             <div className="grid grid-cols-[minmax(0,1fr)] gap-px bg-[var(--line)] md:grid-cols-[1.3fr_1.2fr_1fr_auto]">
-              <label className="flex min-h-16 items-center gap-3 bg-white px-5">
+              <label className="flex min-h-16 items-center gap-3 bg-white px-5 transition-colors focus-within:bg-[var(--parchment)]">
                 <MapPin size={20} className="shrink-0 text-[var(--gold-deep)]" />
                 <span className="min-w-0 flex-1">
                   <span className="block text-[0.65rem] uppercase tracking-[0.18em] text-[var(--muted)]">
@@ -126,7 +168,7 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
                 </span>
               </label>
 
-              <div className="flex min-h-16 min-w-0 items-center gap-3 bg-white px-5">
+              <div className="flex min-h-16 min-w-0 items-center gap-3 bg-white px-5 transition-colors focus-within:bg-[var(--parchment)]">
                 <CalendarDays size={20} className="shrink-0 text-[var(--gold-deep)]" />
                 <span className="min-w-0 flex-1">
                   <span className="block text-[0.65rem] uppercase tracking-[0.18em] text-[var(--muted)]">
@@ -143,7 +185,8 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
               <div className="relative">
                 <button
                   onClick={() => setGuestOpen(!guestOpen)}
-                  className="flex min-h-16 w-full items-center gap-3 bg-white px-5 text-left"
+                  aria-expanded={guestOpen}
+                  className="flex min-h-16 w-full items-center gap-3 bg-white px-5 text-left transition-colors hover:bg-[var(--parchment)]"
                 >
                   <Users size={20} className="shrink-0 text-[var(--gold-deep)]" />
                   <span className="min-w-0 flex-1">
@@ -154,21 +197,35 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
                       {adults} adults · {children} children · {rooms} room
                     </span>
                   </span>
-                  <ChevronDown size={16} className="text-[var(--muted)]" />
+                  <ChevronDown
+                    size={16}
+                    className={`text-[var(--muted)] transition-transform duration-300 ${guestOpen ? "rotate-180" : ""}`}
+                  />
                 </button>
-                {guestOpen && (
-                  <div className="absolute right-0 top-[calc(100%+10px)] z-50 w-full min-w-72 border border-[var(--line)] bg-white p-5 text-[var(--foreground)] soft-shadow">
-                    <Counter label="Adults" value={adults} min={1} setValue={setAdults} />
-                    <Counter label="Children" value={children} min={0} setValue={setChildren} />
-                    <Counter label="Rooms" value={rooms} min={1} setValue={setRooms} />
-                    <button
-                      onClick={() => setGuestOpen(false)}
-                      className="mt-2 w-full border border-[var(--gold)] py-2.5 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--gold-deep)]"
-                    >
-                      Done
-                    </button>
-                  </div>
-                )}
+                <AnimatePresence>
+                  {guestOpen && (
+                    <>
+                      <div className="fixed inset-0 z-40" onClick={() => setGuestOpen(false)} aria-hidden />
+                      <motion.div
+                        className="absolute right-0 top-[calc(100%+10px)] z-50 w-full min-w-72 border border-[var(--line)] bg-white p-5 text-[var(--foreground)] soft-shadow"
+                        initial={{ opacity: 0, y: -8, scale: 0.98 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -8, scale: 0.98 }}
+                        transition={softSpring}
+                      >
+                        <Counter label="Adults" value={adults} min={1} setValue={setAdults} />
+                        <Counter label="Children" value={children} min={0} setValue={setChildren} />
+                        <Counter label="Rooms" value={rooms} min={1} setValue={setRooms} />
+                        <button
+                          onClick={() => setGuestOpen(false)}
+                          className="mt-2 w-full border border-[var(--gold)] py-2.5 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--gold-deep)] hover:bg-[var(--gold)] hover:text-white"
+                        >
+                          Done
+                        </button>
+                      </motion.div>
+                    </>
+                  )}
+                </AnimatePresence>
               </div>
 
               <button
@@ -179,7 +236,7 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
               </button>
             </div>
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {/* -------------------------------------------------------- Brand intro */}
@@ -218,8 +275,9 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
 
           <div className="mt-10 grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
             {filtered.map((property) => (
-              <Reveal as="article" key={property.slug} className="group min-w-0 bg-white card-shadow">
-                <div className="relative w-full min-w-0">
+              <Reveal as="article" key={property.slug} className="lift group min-w-0 bg-white card-shadow">
+                <div className="relative w-full min-w-0 overflow-hidden">
+                  <span className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-0.5 origin-left scale-x-0 bg-[var(--gold)] transition-transform duration-500 group-hover:scale-x-100" />
                   <PropertyImageSlider
                     images={property.images?.length ? property.images : [property.image]}
                     alt={property.title}
@@ -258,9 +316,10 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
                     </span>
                     <Link
                       href={`/stays/${property.slug}`}
-                      className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--gold-deep)] hover:text-[var(--ink)]"
+                      className="group/cta inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--gold-deep)] hover:text-[var(--ink)]"
                     >
-                      View stay →
+                      View stay
+                      <span className="transition-transform duration-300 group-hover/cta:translate-x-1">→</span>
                     </Link>
                   </div>
                 </div>

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Cormorant_Garamond, Jost } from "next/font/google";
 import "./globals.css";
 import { SmoothScroll } from "@/components/smooth-scroll";
+import { ScrollProgress } from "@/components/scroll-progress";
 
 // Classic hospitality pairing: an elegant serif for display headings and a
 // refined, wide humanist sans for everything else.
@@ -31,6 +32,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" className={`${serif.variable} ${sans.variable}`}>
       <body>
+        <ScrollProgress />
         <SmoothScroll>{children}</SmoothScroll>
       </body>
     </html>

@@ -2,8 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { CalendarDays, ChevronDown, Globe2, MapPin, Menu, Search, Users, X } from "lucide-react";
+import { EASE, softSpring } from "@/lib/motion";
 
 const NAV = [
   { label: "Stays", href: "/search" },
@@ -13,7 +16,7 @@ const NAV = [
   { label: "List your property", href: "/list-property" },
 ] as const;
 
-export function Wordmark({ light = false }: { light?: boolean }) {
+export function Wordmark({ light = false, imgClass = "h-16" }: { light?: boolean; imgClass?: string }) {
   return (
     <Link href="/" className="flex items-center" aria-label="StayRwanda home">
       <Image
@@ -22,7 +25,7 @@ export function Wordmark({ light = false }: { light?: boolean }) {
         width={1093}
         height={607}
         priority
-        className={`h-16 w-auto object-contain ${light ? "brightness-0 invert" : ""}`}
+        className={`${imgClass} w-auto object-contain transition-[height,filter] duration-300 ${light ? "brightness-0 invert" : ""}`}
       />
     </Link>
   );
@@ -35,46 +38,82 @@ export function SiteHeader({
   variant?: "solid" | "transparent";
 }) {
   const [open, setOpen] = useState(false);
-  const transparent = variant === "transparent";
+  const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Lock body scroll while the mobile drawer is open.
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
+  const onLight = variant === "transparent" && !scrolled; // white logo/text over the hero image
+  // Only the home (transparent) header shrinks — inner pages keep a fixed
+  // height so their sticky sub-navigation stays aligned.
+  const compact = variant === "transparent" && scrolled;
+
+  // Highlight the first nav item that matches the current route (ignores query).
+  const activeIndex = NAV.findIndex(
+    (item) => pathname !== "/" && item.href.split("?")[0] === pathname,
+  );
 
   return (
     <header
       className={
-        transparent
-          ? "absolute inset-x-0 top-0 z-40"
-          : "sticky top-0 z-40 border-b border-[var(--line)] bg-white"
+        variant === "transparent"
+          ? `${scrolled ? "fixed header-frost shadow-[0_8px_30px_rgba(20,34,58,0.06)]" : "absolute"} inset-x-0 top-0 z-50`
+          : "sticky top-0 z-50 header-frost"
       }
     >
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <div className="flex h-20 items-center justify-between gap-4">
-          <Wordmark light={transparent} />
+        <div
+          className={`flex items-center justify-between gap-4 transition-[height] duration-300 ${
+            compact ? "h-16" : "h-20"
+          }`}
+        >
+          <Wordmark light={onLight} imgClass={compact ? "h-12" : "h-16"} />
 
           <nav className="hidden items-center gap-7 lg:flex">
-            {NAV.map((item) => (
+            {NAV.map((item, i) => (
               <Link
                 key={item.label}
                 href={item.href}
-                className={`relative text-sm font-medium tracking-wide after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-0 after:bg-[var(--gold)] after:transition-all hover:after:w-full ${
-                  transparent ? "text-white/90 hover:text-white" : "text-[var(--ink)] hover:text-[var(--gold-deep)]"
+                aria-current={i === activeIndex ? "page" : undefined}
+                className={`group relative text-sm font-medium tracking-wide ${
+                  onLight ? "text-white/90 hover:text-white" : "text-[var(--ink)] hover:text-[var(--gold-deep)]"
                 }`}
               >
                 {item.label}
+                <span
+                  className={`absolute -bottom-1.5 left-0 h-px bg-[var(--gold)] transition-all duration-300 group-hover:w-full ${
+                    i === activeIndex ? "w-full" : "w-0"
+                  }`}
+                />
               </Link>
             ))}
           </nav>
 
           <div className="hidden items-center gap-3 md:flex">
             <button
-              className={`flex items-center gap-1.5 text-sm font-medium ${
-                transparent ? "text-white/90" : "text-[var(--ink)]"
+              className={`flex items-center gap-1.5 text-sm font-medium transition-colors ${
+                onLight ? "text-white/90 hover:text-white" : "text-[var(--ink)] hover:text-[var(--gold-deep)]"
               }`}
             >
               <Globe2 size={17} /> RWF
             </button>
             <Link
               href="/sign-in"
-              className={`border px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] transition ${
-                transparent
+              className={`border px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] ${
+                onLight
                   ? "border-white/70 text-white hover:bg-white hover:text-[var(--ink)]"
                   : "border-[var(--gold)] text-[var(--gold-deep)] hover:bg-[var(--gold)] hover:text-white"
               }`}
@@ -84,38 +123,76 @@ export function SiteHeader({
           </div>
 
           <button
-            onClick={() => setOpen(!open)}
-            className={`grid size-11 place-items-center lg:hidden ${transparent ? "text-white" : "text-[var(--ink)]"}`}
-            aria-label="Menu"
+            onClick={() => setOpen(true)}
+            className={`grid size-11 place-items-center lg:hidden ${onLight ? "text-white" : "text-[var(--ink)]"}`}
+            aria-label="Open menu"
           >
-            {open ? <X /> : <Menu />}
+            <Menu />
           </button>
         </div>
       </div>
 
-      {open && (
-        <div className="border-t border-[var(--line)] bg-white lg:hidden">
-          <nav className="mx-auto grid max-w-6xl gap-1 px-4 py-4 sm:px-6">
-            {NAV.map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                onClick={() => setOpen(false)}
-                className="px-2 py-3 text-sm font-medium text-[var(--ink)] hover:text-[var(--gold-deep)]"
-              >
-                {item.label}
-              </Link>
-            ))}
-            <Link
-              href="/sign-in"
-              onClick={() => setOpen(false)}
-              className="mt-2 border border-[var(--gold)] px-4 py-3 text-center text-xs font-semibold uppercase tracking-[0.18em] text-[var(--gold-deep)]"
+      {/* Mobile drawer */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            className="fixed inset-0 z-50 lg:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3, ease: EASE }}
+          >
+            <div className="absolute inset-0 bg-[var(--ink)]/50 backdrop-blur-sm" onClick={() => setOpen(false)} />
+            <motion.nav
+              className="absolute right-0 top-0 flex h-full w-80 max-w-[85%] flex-col bg-white p-6"
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={softSpring}
             >
-              Sign in
-            </Link>
-          </nav>
-        </div>
-      )}
+              <div className="mb-8 flex items-center justify-between">
+                <Wordmark imgClass="h-12" />
+                <button
+                  onClick={() => setOpen(false)}
+                  className="grid size-10 place-items-center text-[var(--ink)]"
+                  aria-label="Close menu"
+                >
+                  <X />
+                </button>
+              </div>
+              <motion.ul
+                className="flex flex-col"
+                initial="hidden"
+                animate="show"
+                variants={{ show: { transition: { staggerChildren: 0.06, delayChildren: 0.1 } } }}
+              >
+                {NAV.map((item) => (
+                  <motion.li
+                    key={item.label}
+                    variants={{ hidden: { opacity: 0, x: 24 }, show: { opacity: 1, x: 0 } }}
+                    transition={{ duration: 0.5, ease: EASE }}
+                  >
+                    <Link
+                      href={item.href}
+                      onClick={() => setOpen(false)}
+                      className="block border-b border-[var(--line)] py-4 font-serif text-2xl text-[var(--ink)] transition-colors hover:text-[var(--gold-deep)]"
+                    >
+                      {item.label}
+                    </Link>
+                  </motion.li>
+                ))}
+              </motion.ul>
+              <Link
+                href="/sign-in"
+                onClick={() => setOpen(false)}
+                className="mt-auto bg-[var(--ink)] px-4 py-4 text-center text-xs font-semibold uppercase tracking-[0.18em] text-white"
+              >
+                Sign in
+              </Link>
+            </motion.nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }
