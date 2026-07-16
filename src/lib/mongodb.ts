@@ -8,7 +8,9 @@ const globalForMongo = globalThis as unknown as {
 
 export async function getDb() {
   const uri = process.env.MONGODB_URI;
-  if (!uri) throw new Error("MONGODB_URI is not configured");
+  if (!uri || (!uri.startsWith("mongodb://") && !uri.startsWith("mongodb+srv://"))) {
+    throw new Error("MONGODB_URI is not configured or invalid");
+  }
   if (globalForMongo.mongoDb) return globalForMongo.mongoDb;
 
   if (!globalForMongo.mongoConnection) {

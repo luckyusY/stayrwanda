@@ -17,7 +17,8 @@ export async function listPublishedHotels(category?: Hotel["category"]): Promise
     }).sort({ publishedAt: -1, name: 1 }).toArray();
     if (rows.length) return rows.map((row) => clean<Hotel>(row));
   } catch (error) {
-    if (process.env.NODE_ENV === "production" && process.env.MONGODB_URI) throw error;
+    const isConfigured = process.env.MONGODB_URI?.startsWith("mongodb://") || process.env.MONGODB_URI?.startsWith("mongodb+srv://");
+    if (process.env.NODE_ENV === "production" && isConfigured) throw error;
   }
   return featuredProperties.map((property, index) => ({
     id: `seed-${index}`,
