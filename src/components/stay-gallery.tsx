@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { Images } from "lucide-react";
 import { SmartImage } from "@/components/smart-image";
-import { Lightbox } from "@/components/lightbox";
+import dynamic from "next/dynamic";
+const Lightbox = dynamic(() => import("@/components/lightbox").then((module) => module.Lightbox), { ssr: false });
 
 /** Hero collage (up to 5 tiles) that opens the full zoomable gallery on click. */
 export function StayHeroGallery({

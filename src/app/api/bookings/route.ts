@@ -1,51 +1,25 @@
 import { NextResponse } from "next/server";
-import { isAdminAuthed } from "@/lib/admin-auth";
-import { createBooking, listBookings } from "@/lib/data";
+import { currentIdentity, requireIdentity } from "@/lib/auth";
+import { createInventoryBackedBooking } from "@/lib/booking-service";
+import { getDb } from "@/lib/mongodb";
 
 export async function GET() {
-  if (!(await isAdminAuthed())) return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
-  const bookings = await listBookings();
-  return NextResponse.json({ bookings });
+  const identity = await requireIdentity();
+  const db = await getDb();
+  const bookings = identity.platformAdmin
+    ? await db.collection("bookings").find({}).sort({ createdAt: -1 }).limit(100).toArray()
+    : await db.collection("bookings").find({ userId: identity.userId }).sort({ createdAt: -1 }).limit(100).toArray();
+  return NextResponse.json({ bookings: bookings.map((booking) => { const safe = { ...booking }; delete safe.publicAccessTokenHash; return { ...safe, _id: String(booking._id) }; }) });
 }
 
 export async function POST(request: Request) {
-  let body: Record<string, unknown>;
   try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid request." }, { status: 400 });
-  }
-
-  const guestName = String(body.guestName ?? "").trim();
-  const email = String(body.email ?? "").trim();
-  const checkIn = String(body.checkIn ?? "").trim();
-  const checkOut = String(body.checkOut ?? "").trim();
-  const propertySlug = String(body.propertySlug ?? "").trim();
-
-  if (!guestName || !email || !checkIn || !checkOut || !propertySlug) {
-    return NextResponse.json(
-      { error: "Name, email, dates and property are required." },
-      { status: 400 },
-    );
-  }
-  if (new Date(checkOut) <= new Date(checkIn)) {
-    return NextResponse.json({ error: "Check-out must be after check-in." }, { status: 400 });
-  }
-
-  try {
-    const booking = await createBooking({
-      propertySlug,
-      propertyTitle: String(body.propertyTitle ?? propertySlug),
-      guestName,
-      email,
-      phone: String(body.phone ?? ""),
-      checkIn,
-      checkOut,
-      guests: Number(body.guests) || 1,
-      message: String(body.message ?? ""),
-    });
-    return NextResponse.json({ booking }, { status: 201 });
-  } catch {
-    return NextResponse.json({ error: "Unable to submit booking request." }, { status: 500 });
+    const key = request.headers.get("idempotency-key") || "";
+    const booking = await createInventoryBackedBooking(await request.json(), key, await currentIdentity());
+    return NextResponse.json({ booking }, { status: booking && "replayed" in booking ? 200 : 201 });
+  } catch (error) {
+    const code = error instanceof Error ? error.message : "UNKNOWN";
+    const status = code === "SOLD_OUT" ? 409 : code === "NOT_FOUND" ? 404 : 400;
+    return NextResponse.json({ error: code === "SOLD_OUT" ? "Those dates are no longer available." : "Unable to create booking request.", code }, { status });
   }
 }
