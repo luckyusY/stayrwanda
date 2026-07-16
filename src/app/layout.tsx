@@ -1,23 +1,10 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Jost } from "next/font/google";
 import "./globals.css";
-import { SmoothScroll } from "@/components/smooth-scroll";
 import { ScrollProgress } from "@/components/scroll-progress";
+import { ClerkProvider } from "@clerk/nextjs";
+import { clerkConfigured } from "@/lib/env";
+import { CurrencyProvider } from "@/components/currency-provider";
 
-// Classic hospitality pairing: an elegant serif for display headings and a
-// refined, wide humanist sans for everything else.
-const serif = Cormorant_Garamond({
-  variable: "--font-serif",
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
-  display: "swap",
-});
-const sans = Jost({
-  variable: "--font-sans-display",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://stayrwanda.com"),
@@ -29,12 +16,10 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const content = <CurrencyProvider><ScrollProgress />{children}</CurrencyProvider>;
   return (
-    <html lang="en" className={`${serif.variable} ${sans.variable}`}>
-      <body>
-        <ScrollProgress />
-        <SmoothScroll>{children}</SmoothScroll>
-      </body>
+    <html lang="en">
+      <body>{clerkConfigured ? <ClerkProvider>{content}</ClerkProvider> : content}</body>
     </html>
   );
 }

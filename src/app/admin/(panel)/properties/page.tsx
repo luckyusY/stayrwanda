@@ -1,15 +1,2 @@
-import { AdminShell } from "@/components/admin-shell";
-import { AdminProperties } from "@/components/admin-properties";
-import { listProperties } from "@/lib/data";
-
-export const dynamic = "force-dynamic";
-export const metadata = { title: "Properties" };
-
-export default async function AdminPropertiesPage() {
-  const properties = await listProperties();
-  return (
-    <AdminShell title="Properties" subtitle="Approve, publish and manage your listings">
-      <AdminProperties properties={properties} />
-    </AdminShell>
-  );
-}
+import { AdminShell } from "@/components/admin-shell";import { AdminHotels } from "@/components/admin-hotels";import { getDb } from "@/lib/mongodb";
+export const dynamic="force-dynamic";export default async function AdminProperties(){const db=await getDb();const[hotels,orgs]=await Promise.all([db.collection("hotels").find({}).sort({submittedAt:-1,updatedAt:-1}).toArray(),db.collection("organizations").find({}).toArray()]);const names=new Map(orgs.map(o=>[String(o._id),o.name]));const rows=hotels.map(h=>({...h,id:String(h._id),organizationName:names.get(h.organizationId)}));return <AdminShell title="Hotels & review" subtitle="Review tenant profiles and control publication"><AdminHotels hotels={rows}/></AdminShell>}

@@ -1,15 +1,2 @@
-import { AdminShell } from "@/components/admin-shell";
-import { AdminBookings } from "@/components/admin-bookings";
-import { listBookings } from "@/lib/data";
-
-export const dynamic = "force-dynamic";
-export const metadata = { title: "Reservations" };
-
-export default async function AdminBookingsPage() {
-  const bookings = await listBookings();
-  return (
-    <AdminShell title="Reservations" subtitle="Confirm, complete and manage guest requests">
-      <AdminBookings bookings={bookings} />
-    </AdminShell>
-  );
-}
+import Link from "next/link";import { AdminShell } from "@/components/admin-shell";import { HostReservations } from "@/components/host-reservations";import { getDb } from "@/lib/mongodb";
+export const dynamic="force-dynamic";export default async function AdminBookings(){const db=await getDb();const rows=(await db.collection("bookings").find({}).sort({createdAt:-1}).limit(500).toArray()).map(b=>({...b,id:String(b._id)}));return <AdminShell title="Reservations" subtitle="Platform-wide request and allocation operations"><div className="mb-4 text-right"><Link href="/api/admin/export/bookings" className="rounded-lg border bg-white px-4 py-2 text-sm font-bold text-[#006ce4]">Export CSV</Link></div><HostReservations bookings={rows}/></AdminShell>}

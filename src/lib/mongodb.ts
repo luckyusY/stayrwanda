@@ -12,3 +12,8 @@ export async function getDb() {
   }
   return globalForMongo.mongoDb!;
 }
+
+export async function getMongoClient() {
+  await getDb();
+  return globalForMongo.mongoClient!;
+}

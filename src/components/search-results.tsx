@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { Check, ChevronDown, Heart, MapPin, SlidersHorizontal } from "lucide-react";
+import { Check, ChevronDown, MapPin, SlidersHorizontal } from "lucide-react";
+import { FavoriteButton } from "@/components/favorite-button";
 import { PropertyImageSlider } from "@/components/property-image-slider";
 import { Reveal } from "@/components/reveal";
 import type { Property } from "@/lib/properties";
@@ -122,12 +123,7 @@ export function SearchResults({
                     href={`/stays/${property.slug}`}
                     sizes="(max-width: 640px) 100vw, 240px"
                   />
-                  <button
-                    className="absolute right-3 top-3 z-30 grid size-9 place-items-center rounded-full bg-white/90 shadow"
-                    aria-label="Save property"
-                  >
-                    <Heart size={18} className="text-[var(--ink)]" />
-                  </button>
+                  <FavoriteButton hotelSlug={property.slug} className="absolute right-3 top-3 z-30 grid size-9 place-items-center rounded-full bg-white/90 text-[var(--ink)] shadow" />
                 </div>
                 <div className="flex min-w-0 flex-col sm:flex-row sm:justify-between sm:gap-6">
                   <div className="min-w-0 flex-1">

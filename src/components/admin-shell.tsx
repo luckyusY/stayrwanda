@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import {
   CalendarCheck,
@@ -12,13 +12,18 @@ import {
   LogOut,
   Menu,
   Building2,
+  History,
+  Users,
   X,
 } from "lucide-react";
+import { SignOutButton } from "@clerk/nextjs";
 
 const NAV = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/admin/properties", label: "Properties", icon: Building2 },
+  { href: "/admin/organizations", label: "Organizations", icon: Users },
+  { href: "/admin/properties", label: "Hotels & review", icon: Building2 },
   { href: "/admin/bookings", label: "Reservations", icon: CalendarCheck },
+  { href: "/admin/audit", label: "Audit log", icon: History },
 ] as const;
 
 export function AdminShell({
@@ -31,14 +36,7 @@ export function AdminShell({
   subtitle?: string;
 }) {
   const pathname = usePathname();
-  const router = useRouter();
   const [open, setOpen] = useState(false);
-
-  async function signOut() {
-    await fetch("/api/admin/session", { method: "DELETE" });
-    router.replace("/admin/login");
-    router.refresh();
-  }
 
   const isActive = (href: string) =>
     href === "/admin" ? pathname === "/admin" : pathname.startsWith(href);
@@ -87,12 +85,7 @@ export function AdminShell({
             >
               <Home size={19} /> View live site <ExternalLink size={14} className="opacity-60" />
             </Link>
-            <button
-              onClick={signOut}
-              className="mt-1 flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-semibold text-white/80 hover:bg-white/10 hover:text-white"
-            >
-              <LogOut size={19} /> Sign out
-            </button>
+            <SignOutButton><button className="mt-1 flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-semibold text-white/80 hover:bg-white/10 hover:text-white"><LogOut size={19} /> Sign out</button></SignOutButton>
           </div>
         </div>
       </aside>

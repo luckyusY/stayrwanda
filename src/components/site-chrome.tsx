@@ -7,12 +7,14 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { CalendarDays, ChevronDown, Globe2, MapPin, Menu, Search, Users, X } from "lucide-react";
 import { EASE, softSpring } from "@/lib/motion";
+import { CurrencyControl } from "@/components/currency-provider";
 
 const NAV = [
-  { label: "Stays", href: "/search" },
-  { label: "Residences", href: "/search?type=Furnished+home" },
-  { label: "Destinations", href: "/search" },
-  { label: "Offers", href: "/help" },
+  { label: "Stays", href: "/stays" },
+  { label: "Residences", href: "/residences" },
+  { label: "Hotels", href: "/hotels" },
+  { label: "Destinations", href: "/destinations" },
+  { label: "Offers", href: "/offers" },
   { label: "List your property", href: "/list-property" },
 ] as const;
 
@@ -62,9 +64,7 @@ export function SiteHeader({
   const compact = variant === "transparent" && scrolled;
 
   // Highlight the first nav item that matches the current route (ignores query).
-  const activeIndex = NAV.findIndex(
-    (item) => pathname !== "/" && item.href.split("?")[0] === pathname,
-  );
+  const activeIndex = NAV.findIndex((item) => pathname !== "/" && (pathname === item.href || pathname.startsWith(`${item.href}/`)));
 
   return (
     <header
@@ -108,7 +108,7 @@ export function SiteHeader({
                 onLight ? "text-white/90 hover:text-white" : "text-[var(--ink)] hover:text-[var(--gold-deep)]"
               }`}
             >
-              <Globe2 size={17} /> RWF
+              <Globe2 size={17} /> <CurrencyControl light={onLight} />
             </button>
             <Link
               href="/sign-in"
@@ -236,11 +236,11 @@ export function CompactSearch({ destination = "Kigali" }: { destination?: string
 
 export function SiteFooter() {
   const columns = [
-    ["Destinations", ["Kigali", "Kibagabaga", "Kimironko", "Kagarama"]],
-    ["Accommodation", ["Apartments", "Furnished residences", "Serviced stays", "Monthly rentals"]],
-    ["Support", ["Help centre", "Safety", "Cancellation", "Contact us"]],
-    ["Partners", ["List your property", "Partner help", "Property resources", "Transport"]],
-    ["About", ["About StayRwanda", "How we work", "Careers", "Terms & privacy"]],
+    ["Destinations", [["Kigali", "/destinations/kigali"], ["Kibagabaga", "/destinations/kibagabaga"], ["Kimironko", "/destinations/kimironko"], ["Kagarama", "/destinations/kagarama"]]],
+    ["Accommodation", [["All stays", "/stays"], ["Furnished residences", "/residences"], ["Hotels", "/hotels"], ["Offers", "/offers"]]],
+    ["Support", [["Help centre", "/help"], ["Safety", "/safety"], ["Cancellation", "/cancellation"], ["Contact us", "/contact"]]],
+    ["Partners", [["List your property", "/list-property"], ["Partner help", "/partner-help"], ["Property resources", "/property-resources"], ["Host dashboard", "/host"]]],
+    ["About", [["About StayRwanda", "/about"], ["How we work", "/about#how"], ["Privacy", "/privacy"], ["Terms", "/terms"]]],
   ] as const;
 
   return (
@@ -284,13 +284,13 @@ export function SiteFooter() {
               <div key={title}>
                 <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--gold)]">{title}</h3>
                 <ul className="mt-4 space-y-2.5">
-                  {links.map((item) => (
-                    <li key={item}>
+                  {links.map(([label, href]) => (
+                    <li key={label}>
                       <Link
-                        href={item === "List your property" ? "/list-property" : "/help"}
+                        href={href}
                         className="text-white/70 hover:text-white"
                       >
-                        {item}
+                        {label}
                       </Link>
                     </li>
                   ))}

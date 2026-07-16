@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from "react";
  * the image finishes decoding, then fades it in. The parent must be
  * `position: relative` (these images use `fill`).
  */
-export function SmartImage({ className = "", onLoad, ...props }: ImageProps) {
+export function SmartImage({ className = "", onLoad, alt, ...props }: ImageProps) {
   const [loaded, setLoaded] = useState(false);
   const ref = useRef<HTMLImageElement>(null);
 
@@ -21,6 +21,7 @@ export function SmartImage({ className = "", onLoad, ...props }: ImageProps) {
     <>
       {!loaded && <span className="sr-skeleton absolute inset-0 z-0" aria-hidden="true" />}
       <Image
+        alt={alt}
         ref={ref}
         {...props}
         onLoad={(event) => {

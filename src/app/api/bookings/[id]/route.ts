@@ -1,22 +1,24 @@
 import { NextResponse } from "next/server";
-import { isAdminAuthed } from "@/lib/admin-auth";
-import { updateBookingStatus, type BookingStatus } from "@/lib/data";
+import { currentIdentity, requireMembership } from "@/lib/auth";
+import { transitionBooking } from "@/lib/booking-service";
+import { bookingStatusSchema } from "@/lib/schemas";
+import { getDb } from "@/lib/mongodb";
+import { ObjectId } from "mongodb";
 
-const STATUSES: BookingStatus[] = ["pending", "confirmed", "cancelled", "completed"];
-
-export async function PATCH(request: Request, ctx: RouteContext<"/api/bookings/[id]">) {
-  if (!(await isAdminAuthed())) return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+export async function PATCH(request: Request, ctx: { params: Promise<{ id: string }> }) {
   const { id } = await ctx.params;
-  let status: string;
   try {
-    status = String((await request.json()).status ?? "");
-  } catch {
-    return NextResponse.json({ error: "Invalid request." }, { status: 400 });
+    const input = bookingStatusSchema.parse(await request.json());
+    const db = await getDb();
+    const booking = ObjectId.isValid(id) ? await db.collection("bookings").findOne({ _id: new ObjectId(id) }) : null;
+    if (!booking) return NextResponse.json({ error: "Not found." }, { status: 404 });
+    const identity = await currentIdentity();
+    if (!identity) return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+    if (!identity.platformAdmin) await requireMembership(booking.organizationId, ["organization_owner", "organization_manager", "reservations_agent"]);
+    await transitionBooking(id, input.status, identity, input.note);
+    return NextResponse.json({ ok: true, status: input.status });
+  } catch (error) {
+    const code = error instanceof Error ? error.message : "";
+    return NextResponse.json({ error: "Unable to update booking.", code }, { status: code === "FORBIDDEN" ? 403 : 400 });
   }
-  if (!STATUSES.includes(status as BookingStatus)) {
-    return NextResponse.json({ error: "Invalid status." }, { status: 400 });
-  }
-  const ok = await updateBookingStatus(id, status as BookingStatus);
-  if (!ok) return NextResponse.json({ error: "Not found or database unavailable." }, { status: 404 });
-  return NextResponse.json({ ok: true, status });
 }

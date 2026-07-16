@@ -1,0 +1,2 @@
+import { NextResponse } from "next/server";import { getDb } from "@/lib/mongodb";
+export async function GET(){try{const db=await getDb();const row=await db.collection("exchangeRates").findOne({base:"USD",quote:"RWF",active:true},{sort:{effectiveAt:-1}});return NextResponse.json({rwfPerUsd:Number(row?.rate||1400),effectiveAt:row?.effectiveAt||null})}catch{return NextResponse.json({rwfPerUsd:1400,source:"development-fallback"})}}
