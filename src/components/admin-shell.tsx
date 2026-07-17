@@ -43,7 +43,7 @@ export function AdminShell({
     href === "/admin" ? pathname === "/admin" : pathname.startsWith(href);
 
   return (
-    <div className="workspace-3d min-h-screen bg-[#f2f4f7] text-[#1a1a1a] md:grid md:grid-cols-[248px_1fr]">
+    <div className="workspace-3d min-h-screen bg-[var(--parchment)] text-[var(--ink)] md:grid md:grid-cols-[248px_1fr]">
       {/* Sidebar */}
       <aside
         className={`${open ? "block" : "hidden"} fixed inset-0 z-40 md:static md:block`}
@@ -52,11 +52,11 @@ export function AdminShell({
           className="absolute inset-0 bg-black/40 md:hidden"
           onClick={() => setOpen(false)}
         />
-        <div className="relative flex h-full w-64 flex-col bg-[#073b74] text-white shadow-[0_18px_48px_rgba(5,25,50,.28)] md:h-screen md:w-auto md:sticky md:top-0">
+        <div className="surface-3d-dark relative flex h-full w-64 flex-col !rounded-none border-y-0 border-l-0 text-white md:sticky md:top-0 md:h-screen md:w-auto">
           <div className="flex h-16 items-center justify-between px-5">
             <Link href="/admin" className="flex items-center gap-2">
               <Image src="/brand/stayrwanda-logo.png" alt="StayRwanda" width={1093} height={607} className="h-12 w-auto brightness-0 invert" />
-              <span className="text-xs font-semibold uppercase tracking-wider text-white/70">admin</span>
+              <span className="text-xs font-semibold uppercase tracking-wider text-[var(--gold)]">admin</span>
             </Link>
             <button className="md:hidden" onClick={() => setOpen(false)} aria-label="Close menu">
               <X size={20} />
@@ -72,7 +72,7 @@ export function AdminShell({
                   onClick={() => setOpen(false)}
                   className={`relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-semibold transition-colors ${
                     active
-                      ? "text-[#073b74]"
+                      ? "text-[var(--ink)]"
                       : "text-white/80 hover:bg-white/10 hover:text-white"
                   }`}
                 >

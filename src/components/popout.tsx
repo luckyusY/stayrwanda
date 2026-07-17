@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
 import { EASE, softSpring } from "@/lib/motion";
@@ -17,17 +18,47 @@ interface PopoutProps {
   wrapperClassName?: string;
   title?: string;
   align?: "left" | "right" | "center";
+  /** Show StayRwanda logo in dialog/sheet header. Default true for dialog/sheet. */
+  showLogo?: boolean;
+  footer?: React.ReactNode;
+  /** Hide the built-in header chrome (for custom full layouts). */
+  hideHeader?: boolean;
 }
 
-export function Popout({ variant, trigger, isOpen: controlledIsOpen, onClose, children, className = "", wrapperClassName = "relative inline-block", title, align = "right" }: PopoutProps) {
+function BrandMark({ className = "h-8" }: { className?: string }) {
+  return (
+    <Image
+      src="/brand/stayrwanda-logo.png"
+      alt="StayRwanda"
+      width={1093}
+      height={607}
+      className={`${className} w-auto object-contain`}
+    />
+  );
+}
+
+export function Popout({
+  variant,
+  trigger,
+  isOpen: controlledIsOpen,
+  onClose,
+  children,
+  className = "",
+  wrapperClassName = "relative inline-block",
+  title,
+  align = "right",
+  showLogo = true,
+  footer,
+  hideHeader = false,
+}: PopoutProps) {
   const [uncontrolledIsOpen, setUncontrolledIsOpen] = useState(false);
   const isControlled = controlledIsOpen !== undefined;
   const open = isControlled ? controlledIsOpen : uncontrolledIsOpen;
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     if (!isControlled) setUncontrolledIsOpen(false);
     onClose?.();
-  };
+  }, [isControlled, onClose]);
 
   const handleToggle = () => {
     if (open) handleClose();
@@ -41,10 +72,9 @@ export function Popout({ variant, trigger, isOpen: controlledIsOpen, onClose, ch
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape" && open) handleClose();
     };
-    
+
     const handleClickOutside = (e: MouseEvent) => {
       if (open && containerRef.current && !containerRef.current.contains(e.target as Node)) {
-        // If clicking outside the whole container (including trigger), close it
         handleClose();
       }
     };
@@ -52,7 +82,6 @@ export function Popout({ variant, trigger, isOpen: controlledIsOpen, onClose, ch
     if (open) {
       document.addEventListener("keydown", handleKeyDown);
       document.addEventListener("mousedown", handleClickOutside);
-      // Lock body scroll for sheet and dialog
       if (variant !== "dropdown") {
         document.body.style.overflow = "hidden";
       }
@@ -67,10 +96,11 @@ export function Popout({ variant, trigger, isOpen: controlledIsOpen, onClose, ch
     };
   }, [open, variant, handleClose]);
 
-  // Focus trap on open
   useEffect(() => {
     if (open && panelRef.current) {
-      const focusable = panelRef.current.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+      const focusable = panelRef.current.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+      );
       if (focusable.length) {
         (focusable[0] as HTMLElement).focus();
       } else {
@@ -79,12 +109,31 @@ export function Popout({ variant, trigger, isOpen: controlledIsOpen, onClose, ch
     }
   }, [open]);
 
-  // Dropdown renders inline with its trigger
+  const header = !hideHeader && (
+    <div className="sticky top-0 z-10 flex items-center gap-3 border-b border-[var(--line)] bg-[var(--parchment)] px-4 py-3.5">
+      {showLogo && <BrandMark className="h-8 shrink-0" />}
+      {title ? (
+        <h2 className="min-w-0 flex-1 font-serif text-lg font-semibold text-[var(--ink)] sm:text-xl">
+          {title}
+        </h2>
+      ) : (
+        <div className="flex-1" />
+      )}
+      <button
+        onClick={handleClose}
+        aria-label="Close"
+        className="grid size-9 shrink-0 place-items-center rounded-full border border-[var(--gold-mid)] bg-white text-[var(--ink)] transition-colors hover:bg-[var(--gold-pale)] hover:text-[var(--gold-deep)]"
+      >
+        <X size={18} />
+      </button>
+    </div>
+  );
+
   if (variant === "dropdown") {
     const alignmentClasses = {
       left: "left-0",
       right: "right-0",
-      center: "left-1/2 -translate-x-1/2"
+      center: "left-1/2 -translate-x-1/2",
     };
 
     return (
@@ -116,7 +165,6 @@ export function Popout({ variant, trigger, isOpen: controlledIsOpen, onClose, ch
     );
   }
 
-  // Sheet and Dialog render via portals or fixed overlays
   return (
     <>
       {trigger && (
@@ -135,7 +183,7 @@ export function Popout({ variant, trigger, isOpen: controlledIsOpen, onClose, ch
               transition={{ duration: 0.3, ease: EASE }}
               onClick={handleClose}
             />
-            
+
             {variant === "sheet" && (
               <motion.div
                 ref={panelRef}
@@ -149,15 +197,11 @@ export function Popout({ variant, trigger, isOpen: controlledIsOpen, onClose, ch
                 exit={{ x: "100%" }}
                 transition={softSpring}
               >
-                <div className="sticky top-0 z-10 flex items-center justify-between border-b border-[var(--line)] bg-white/90 p-4 backdrop-blur">
-                  <h2 className="font-serif text-xl font-semibold text-[var(--ink)]">{title}</h2>
-                  <button onClick={handleClose} aria-label="Close panel" className="grid size-9 place-items-center rounded-full border border-[var(--gold-mid)] text-[var(--ink)] transition-colors hover:bg-[var(--gold-pale)] hover:text-[var(--gold-deep)]">
-                    <X size={18} />
-                  </button>
-                </div>
-                <div className="flex-1 overflow-y-auto">
-                  {children}
-                </div>
+                {header}
+                <div className="flex-1 overflow-y-auto">{children}</div>
+                {footer && (
+                  <div className="sticky bottom-0 border-t border-[var(--line)] bg-white p-4">{footer}</div>
+                )}
               </motion.div>
             )}
 
@@ -169,16 +213,18 @@ export function Popout({ variant, trigger, isOpen: controlledIsOpen, onClose, ch
                   aria-modal="true"
                   aria-label={title || "Dialog window"}
                   tabIndex={-1}
-                  className={`popout-panel relative overflow-hidden ${className}`}
+                  className={`popout-panel relative flex max-h-[min(90vh,860px)] flex-col overflow-hidden ${className}`}
                   initial={{ opacity: 0, scale: 0.95, y: 20 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95, y: 20 }}
                   transition={softSpring}
+                  onClick={(e) => e.stopPropagation()}
                 >
-                  <button onClick={handleClose} aria-label="Close dialog" className="absolute right-4 top-4 z-10 grid size-9 place-items-center rounded-full border border-[var(--gold-mid)] bg-white/90 text-[var(--ink)] transition-colors hover:bg-[var(--gold-pale)] hover:text-[var(--gold-deep)]">
-                    <X size={18} />
-                  </button>
-                  {children}
+                  {header}
+                  <div className="min-h-0 flex-1 overflow-y-auto">{children}</div>
+                  {footer && (
+                    <div className="sticky bottom-0 border-t border-[var(--line)] bg-white p-4">{footer}</div>
+                  )}
                 </motion.div>
               </div>
             )}

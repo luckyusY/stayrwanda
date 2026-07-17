@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
 import { ScrollProgress } from "@/components/scroll-progress";
 import { ClerkProvider } from "@clerk/nextjs";
@@ -8,6 +9,20 @@ import { MagneticCursor } from "@/components/magnetic-cursor";
 import { ToastProvider } from "@/components/toast";
 import { NewsletterModal } from "@/components/newsletter-modal";
 
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["300", "400", "600", "700"],
+  style: ["normal", "italic"],
+  variable: "--font-cormorant",
+  display: "swap",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-inter",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://stayrwanda.com"),
@@ -30,13 +45,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     </CurrencyProvider>
   );
   return (
-    <html lang="en">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-      </head>
-      <body>{clerkConfigured ? <ClerkProvider>{content}</ClerkProvider> : content}</body>
+    <html lang="en" className={`${cormorant.variable} ${inter.variable}`}>
+      <body className={inter.className}>{clerkConfigured ? <ClerkProvider>{content}</ClerkProvider> : content}</body>
     </html>
   );
 }

@@ -77,8 +77,23 @@ export function CurrencyControl({ light = false }: { light?: boolean }) {
       isOpen={open}
       onClose={() => setOpen(false)}
       trigger={
-        <div className={`flex items-center gap-1.5 px-2 text-sm font-medium transition-colors ${light ? "text-white/90 hover:text-white" : "text-[var(--ink)] hover:text-[var(--gold-deep)]"}`}>
-          <Globe2 size={17} /> {currency}
+        <div
+          className={`flex min-w-[4.25rem] flex-col items-center gap-0.5 rounded-lg px-2 py-1.5 transition-colors ${
+            light
+              ? "text-white/90 hover:bg-white/10 hover:text-white"
+              : "text-[var(--ink)] hover:bg-[var(--parchment)] hover:text-[var(--gold-deep)]"
+          }`}
+          aria-label={`${currency} currency`}
+        >
+          <Globe2 size={16} className="shrink-0 opacity-90" />
+          <span className="text-[11px] font-semibold leading-none tracking-wide">{currency}</span>
+          <span
+            className={`text-[9px] font-medium uppercase tracking-[0.12em] leading-none ${
+              light ? "text-white/55" : "text-[var(--muted)]"
+            }`}
+          >
+            Currency
+          </span>
         </div>
       }
       align="right"

@@ -61,22 +61,27 @@ export function SearchResults({
             <label className="mt-4 block text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
               Destination
             </label>
-            <div className="field-3d mt-1.5 flex items-center gap-2 px-3">
-              <MapPin size={17} className="text-[var(--gold-deep)]" />
+            <div className="search-field-well mt-1.5 flex items-center gap-2 px-3 py-1">
+              <MapPin size={17} className="shrink-0 text-[var(--gold-deep)]" />
               <input
                 value={destination}
                 onChange={(event) => setDestination(event.target.value)}
-                className="min-h-11 min-w-0 flex-1 bg-transparent text-sm outline-none"
+                placeholder="Kigali, Kibagabaga…"
+                className="search-field-input min-h-11"
               />
             </div>
             <label className="mt-4 block text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
               Check-in
             </label>
-            <input type="date" className="field-3d mt-1.5 min-h-11 w-full px-3 text-sm outline-none" />
+            <span className="search-field-well mt-1.5 block px-3 py-2.5">
+              <input type="date" className="search-field-input min-h-6" />
+            </span>
             <label className="mt-4 block text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
               Check-out
             </label>
-            <input type="date" className="field-3d mt-1.5 min-h-11 w-full px-3 text-sm outline-none" />
+            <span className="search-field-well mt-1.5 block px-3 py-2.5">
+              <input type="date" className="search-field-input min-h-6" />
+            </span>
           </div>
 
           <div className="surface-3d mt-5 overflow-hidden rounded-xl shadow-md bg-white">

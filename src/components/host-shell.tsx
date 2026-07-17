@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { BarChart3, BedDouble, Building2, CalendarDays, ClipboardList, History, Menu, Settings, Tags, UserRound, Users, X, TrendingUp, AlertCircle } from "lucide-react";
+import { BarChart3, BedDouble, Building2, CalendarDays, ClipboardList, History, Menu, Settings, Tags, UserRound, Users, X } from "lucide-react";
 import { motion } from "framer-motion";
 
 const nav = [
@@ -35,17 +35,13 @@ export function HostShell({ children, organizationName = "Hospitality workspace"
           <nav className="space-y-1">
             {nav.map(([href, label, Icon]) => {
               const active = path === href || (href !== "/host" && path.startsWith(`${href}/`));
-              
-              // Mock alerts
-              const isOverviewAlert = href === "/host" && true;
-              const isReservationsAlert = href === "/host/reservations" && true;
 
               return (
                 <Link
                   key={href}
                   href={href}
                   onClick={() => setOpen(false)}
-                  className={`group relative flex items-center justify-between gap-3 rounded-[var(--radius-control)] px-3 py-2.5 text-sm transition-colors ${
+                  className={`group relative flex items-center gap-3 rounded-[var(--radius-control)] px-3 py-2.5 text-sm transition-colors ${
                     active ? "text-[var(--ink)] font-semibold" : "text-white/75 hover:bg-white/5 hover:text-white"
                   }`}
                 >
@@ -57,20 +53,8 @@ export function HostShell({ children, organizationName = "Hospitality workspace"
                       style={{ zIndex: 0 }}
                     />
                   )}
-                  <div className="flex items-center gap-3">
-                    <Icon size={18} className={`relative z-10 transition-transform group-hover:scale-110 ${active ? "text-[var(--gold-deep)]" : ""}`} />
-                    <span className="relative z-10">{label}</span>
-                  </div>
-                  {isOverviewAlert && (
-                    <span title="Revenue up 12% this week" className="relative z-10 grid size-5 place-items-center rounded-full bg-emerald-500/20 text-emerald-400">
-                      <TrendingUp size={12} />
-                    </span>
-                  )}
-                  {isReservationsAlert && (
-                    <span title="2 pending actions" className="relative z-10 grid size-5 place-items-center rounded-full bg-red-500/20 text-red-400">
-                      <AlertCircle size={12} />
-                    </span>
-                  )}
+                  <Icon size={18} className={`relative z-10 transition-transform group-hover:scale-110 ${active ? "text-[var(--gold-deep)]" : ""}`} />
+                  <span className="relative z-10">{label}</span>
                 </Link>
               );
             })}

@@ -31,7 +31,8 @@ export function NewsletterModal() {
       variant="dialog"
       isOpen={open}
       onClose={() => setOpen(false)}
-      className="w-[95vw] max-w-[800px] bg-white p-0 overflow-hidden rounded-2xl shadow-2xl"
+      title="Newsletter"
+      className="w-[95vw] max-w-[800px] overflow-hidden rounded-2xl bg-white shadow-2xl"
     >
       <div className="grid md:grid-cols-2 h-full">
         <div className="relative hidden md:block h-full min-h-[440px]">

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Popout } from "./popout";
 import { PropertyImageSlider } from "./property-image-slider";
-import { CheckCircle2, MapPin, ShieldCheck, Star } from "lucide-react";
+import { CheckCircle2, MapPin, ShieldCheck } from "lucide-react";
 import type { Property } from "@/lib/properties";
 import { useCurrency } from "@/components/currency-provider";
 
@@ -49,16 +49,14 @@ export function PropertyQuickView({
               </div>
 
               <div className="flex items-center gap-3 border-y border-[var(--line)] py-4">
-                <div className="grid size-12 place-items-center rounded-full bg-[var(--gold-pale)] text-[var(--gold-deep)] font-serif font-bold text-xl shadow-inner border border-[var(--gold)]/20">4.9</div>
+                <div className="grid size-12 place-items-center rounded-full border border-[var(--gold)]/20 bg-[var(--gold-pale)] font-serif text-sm font-bold uppercase tracking-wider text-[var(--gold-deep)] shadow-inner">
+                  New
+                </div>
                 <div>
-                  <div className="flex gap-0.5 text-[var(--gold)]">
-                    <Star size={14} className="fill-current" />
-                    <Star size={14} className="fill-current" />
-                    <Star size={14} className="fill-current" />
-                    <Star size={14} className="fill-current" />
-                    <Star size={14} className="fill-current opacity-40" />
-                  </div>
-                  <span className="text-xs text-[var(--muted)] font-medium mt-0.5 block">Exceptional · 24 reviews</span>
+                  <p className="text-sm font-semibold text-[var(--ink)]">Recently listed</p>
+                  <span className="mt-0.5 block text-xs font-medium text-[var(--muted)]">
+                    Verified StayRwanda residence
+                  </span>
                 </div>
               </div>
 

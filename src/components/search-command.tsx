@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { Popout } from "./popout";
 import { Search, MapPin, History, ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -44,17 +43,20 @@ export function SearchCommand({
       isOpen={open}
       onClose={() => setOpen(false)}
       trigger={trigger}
-      className="w-[95vw] max-w-[600px] bg-white rounded-2xl shadow-[0_20px_40px_rgba(0,0,0,0.12)] border border-[var(--line)] overflow-hidden"
+      title="Search"
+      className="w-[95vw] max-w-[600px] rounded-2xl border border-[var(--line)] bg-white shadow-[0_20px_40px_rgba(0,0,0,0.12)]"
     >
-      <form onSubmit={handleSearch} className="flex items-center gap-3 border-b border-[var(--line)] px-6 py-5 bg-[#fdfcfb]">
-        <Search size={22} className="text-[var(--gold-deep)] shrink-0" />
-        <input 
-          autoFocus
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Where to in Rwanda?"
-          className="w-full bg-transparent text-xl font-serif text-[var(--ink)] outline-none placeholder:text-[var(--muted)] placeholder:font-sans"
-        />
+      <form onSubmit={handleSearch} className="flex items-center gap-3 border-b border-[var(--line)] bg-white px-6 py-5">
+        <Search size={22} className="shrink-0 text-[var(--gold-deep)]" />
+        <div className="search-field-well min-w-0 flex-1 px-3 py-2">
+          <input
+            autoFocus
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Where to in Rwanda? e.g. Kigali, Kibagabaga"
+            className="search-field-input font-serif text-lg"
+          />
+        </div>
         <button type="submit" className="hidden" />
       </form>
 

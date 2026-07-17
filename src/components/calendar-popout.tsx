@@ -44,13 +44,13 @@ export function CalendarPopout({
       isOpen={open}
       onClose={() => setOpen(false)}
       trigger={<div onClick={() => setOpen(true)} className="w-full">{children}</div>}
-      className="w-[90vw] max-w-[680px] bg-white p-6 md:p-8 rounded-xl shadow-2xl"
+      title="Select dates"
+      className="w-[90vw] max-w-[680px] rounded-xl bg-white shadow-2xl"
       wrapperClassName="relative w-full"
     >
-      <div className="mb-6 flex items-center justify-between">
+      <div className="flex items-center justify-between border-b border-[var(--line)] px-6 py-4 md:px-8">
         <div>
-          <h2 className="font-serif text-2xl font-semibold text-[var(--ink)]">Select dates</h2>
-          <p className="text-sm text-[var(--muted)] mt-1">
+          <p className="text-sm text-[var(--muted)]">
             {step === "in" ? "Select your check-in date" : "Select your check-out date"}
           </p>
         </div>
@@ -64,7 +64,7 @@ export function CalendarPopout({
         </div>
       </div>
 
-      <div className="grid gap-8 md:grid-cols-2">
+      <div className="grid gap-8 px-6 py-5 md:grid-cols-2 md:px-8">
         {/* Month 1 */}
         <div>
           <h3 className="mb-4 text-center font-medium text-[var(--ink)]">October 2026</h3>
@@ -143,9 +143,9 @@ export function CalendarPopout({
         </div>
       </div>
 
-      <div className="mt-8 flex justify-end gap-3 border-t border-[var(--line)] pt-4">
-        <button onClick={() => { onChange("", ""); setStep("in"); }} className="px-4 py-2 text-xs font-semibold uppercase tracking-wider text-[var(--ink)] hover:bg-[var(--parchment)] rounded transition-colors">Clear dates</button>
-        <button onClick={() => setOpen(false)} className="bg-[var(--ink)] text-white px-6 py-2 text-xs font-semibold uppercase tracking-wider hover:bg-[var(--ink-2)] transition-colors shadow-md">Apply</button>
+      <div className="flex justify-end gap-3 border-t border-[var(--line)] px-6 py-4 md:px-8">
+        <button onClick={() => { onChange("", ""); setStep("in"); }} className="rounded px-4 py-2 text-xs font-semibold uppercase tracking-wider text-[var(--ink)] transition-colors hover:bg-[var(--parchment)]">Clear dates</button>
+        <button onClick={() => setOpen(false)} className="bg-[var(--ink)] px-6 py-2 text-xs font-semibold uppercase tracking-wider text-white shadow-md transition-colors hover:bg-[var(--ink-2)]">Apply</button>
       </div>
     </Popout>
   );

@@ -31,15 +31,15 @@ export function AdminLoginForm() {
 
   return (
     <form onSubmit={submit} className="mt-7 space-y-4">
-      <label className="block text-sm font-bold">
+      <label className="block text-sm font-semibold text-[var(--ink)]">
         Password
-        <div className="mt-2 flex items-center rounded-lg border border-[#868686] px-3 focus-within:border-[#006ce4]">
-          <LockKeyhole size={18} className="text-[#667085]" />
+        <div className="search-field-well mt-2 flex items-center px-3 focus-within:!border-[var(--gold)]">
+          <LockKeyhole size={18} className="text-[var(--gold-deep)]" />
           <input
             type="password"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
-            className="min-h-11 w-full px-2 font-normal outline-none"
+            className="search-field-input min-h-11 px-2"
             placeholder="Enter admin password"
             autoFocus
             required
@@ -47,12 +47,14 @@ export function AdminLoginForm() {
         </div>
       </label>
       {error && (
-        <p className="rounded-lg bg-[#fdeced] px-3 py-2 text-sm font-semibold text-[#c00]">{error}</p>
+        <p className="surface-3d-error rounded-[var(--radius-control)] border px-3 py-2 text-sm font-semibold text-[#b4453a]">
+          {error}
+        </p>
       )}
       <button
         type="submit"
         disabled={loading}
-        className="flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-[#006ce4] font-bold text-white hover:bg-[#0057b8] disabled:opacity-60"
+        className="button-3d flex min-h-12 w-full items-center justify-center gap-2 bg-[var(--ink)] text-xs font-semibold uppercase tracking-[0.16em] text-white hover:bg-[var(--ink-2)] disabled:opacity-60"
       >
         {loading && <Loader2 size={18} className="animate-spin" />}
         {loading ? "Signing in…" : "Sign in"}

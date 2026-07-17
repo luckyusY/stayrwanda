@@ -16,12 +16,22 @@ export function AccountPopout({ light = false }: { light?: boolean }) {
   const trigger = (
     <div
       onClick={() => setOpen(!open)}
-      className={`grid size-9 place-items-center rounded-full transition-colors ${
-        light ? "text-white hover:bg-white/10" : "text-[var(--ink)] hover:bg-[var(--parchment)]"
+      className={`flex min-w-[4.25rem] flex-col items-center gap-0.5 rounded-lg px-2 py-1.5 transition-colors ${
+        light
+          ? "text-white/90 hover:bg-white/10 hover:text-white"
+          : "text-[var(--ink)] hover:bg-[var(--parchment)] hover:text-[var(--gold-deep)]"
       }`}
-      aria-label="Account menu"
+      aria-label={isLoggedIn ? "Account menu, profile" : "Account menu, sign in"}
     >
-      <UserCircle2 size={20} className="icon-premium" />
+      <UserCircle2 size={16} className="shrink-0 opacity-90" />
+      <span className="text-[11px] font-semibold leading-none tracking-wide">Account</span>
+      <span
+        className={`text-[9px] font-medium uppercase tracking-[0.12em] leading-none ${
+          light ? "text-white/55" : "text-[var(--muted)]"
+        }`}
+      >
+        {isLoggedIn ? "Profile" : "Sign in"}
+      </span>
     </div>
   );
 

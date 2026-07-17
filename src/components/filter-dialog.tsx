@@ -74,19 +74,26 @@ export function FilterDialog({
       isOpen={open}
       onClose={() => setOpen(false)}
       trigger={trigger}
-      className="w-[95vw] max-w-[480px] bg-white flex flex-col max-h-[90vh] rounded-2xl overflow-hidden p-0 shadow-2xl"
+      title="Filters"
+      className="flex max-h-[90vh] w-[95vw] max-w-[480px] flex-col rounded-2xl bg-white shadow-2xl"
+      footer={
+        <div className="flex items-center justify-between gap-3">
+          <button
+            onClick={onClear}
+            className="text-xs font-semibold uppercase tracking-wider text-[var(--ink)] hover:underline"
+          >
+            Clear all
+          </button>
+          <button
+            onClick={() => setOpen(false)}
+            className="button-3d bg-[var(--ink)] px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.16em] text-white shadow-md hover:bg-[var(--ink-2)]"
+          >
+            Show {resultCount} stays
+          </button>
+        </div>
+      }
     >
-      <div className="flex items-center justify-between p-5 border-b border-[var(--line)] bg-[var(--parchment)] shrink-0">
-        <h2 className="font-serif text-2xl font-semibold text-[var(--ink)]">Filters</h2>
-        <button 
-          onClick={() => setOpen(false)} 
-          className="text-xs font-semibold text-[var(--gold-deep)] hover:text-[var(--ink)] transition-colors uppercase tracking-wider"
-        >
-          Close
-        </button>
-      </div>
-
-      <div className="flex-1 overflow-y-auto bg-white pb-6">
+      <div className="bg-white pb-2">
         <FilterGroup
           title="Property type"
           options={["Furnished apartment", "Serviced apartment", "Furnished home"]}
@@ -106,21 +113,6 @@ export function FilterDialog({
           toggle={() => {}}
         />
       </div>
-
-      <div className="shrink-0 border-t border-[var(--line)] bg-white p-5 shadow-[0_-10px_20px_rgba(0,0,0,0.03)] flex items-center justify-between">
-        <button 
-          onClick={onClear} 
-          className="text-xs font-semibold uppercase tracking-wider text-[var(--ink)] hover:underline"
-        >
-          Clear all
-        </button>
-        <button 
-          onClick={() => setOpen(false)}
-          className="button-3d bg-[var(--ink)] px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.16em] text-white hover:bg-[var(--ink-2)] shadow-md"
-        >
-          Show {resultCount} stays
-        </button>
-      </div>
     </Popout>
-  )
+  );
 }

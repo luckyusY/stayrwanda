@@ -1,8 +1,18 @@
 @import "tailwindcss";
 
 :root {
-  --font-serif: Georgia, "Times New Roman", serif;
-  --font-sans-display: "Segoe UI", Arial, sans-serif;
+  /* Typography — mapped to next/font CSS vars when available */
+  --font-serif: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  --font-body: var(--font-inter), Inter, ui-sans-serif, system-ui, sans-serif;
+  --font-sans-display: var(--font-body);
+
+  /* Motion */
+  --dur-fast: 180ms;
+  --dur: 320ms;
+  --dur-slow: 600ms;
+  --ease-lux: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out-lux: cubic-bezier(0.65, 0, 0.35, 1);
+
   /* Classic hospitality palette */
   --ink: #14223a;        /* deep navy — headers, footers */
   --ink-2: #1d3052;      /* lifted navy */
@@ -90,13 +100,24 @@ body {
   overflow-x: hidden;
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans-display), "Jost", ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-body);
   font-weight: 400;
   letter-spacing: 0.01em;
 }
 button, a, input, select { -webkit-tap-highlight-color: transparent; }
 button, a { transition: color var(--dur-fast) var(--ease-lux), background-color var(--dur-fast) var(--ease-lux), border-color var(--dur-fast) var(--ease-lux), transform var(--dur-fast) var(--ease-lux), box-shadow var(--dur-fast) var(--ease-lux); }
 input, select, textarea { transition: border-color var(--dur-fast) var(--ease-lux), box-shadow var(--dur-fast) var(--ease-lux), background-color var(--dur-fast) var(--ease-lux); }
+input::placeholder,
+textarea::placeholder {
+  color: var(--muted);
+  opacity: 1;
+}
+input[type="date"],
+input[type="datetime-local"] {
+  color: var(--ink);
+  color-scheme: light;
+  cursor: text;
+}
 ::selection { background: #b08d5733; }
 
 /* Refined focus ring — gold, keyboard-only */
@@ -115,10 +136,39 @@ input, select, textarea { transition: border-color var(--dur-fast) var(--ease-lu
 }
 
 /* Display serif for editorial headings */
-.font-serif, .serif-display {
-  font-family: var(--font-serif), Georgia, serif;
+.font-serif, .serif-display, .font-display {
+  font-family: var(--font-serif);
   font-weight: 600;
   letter-spacing: 0;
+}
+
+/* Typeable search cell — clear editable affordance */
+.search-field-well {
+  border: 1px solid var(--control-border);
+  border-radius: var(--radius-control);
+  background: linear-gradient(180deg, #fbfaf7 0%, #fff 40%);
+  box-shadow: var(--depth-control);
+  transition: border-color var(--dur-fast) var(--ease-lux), box-shadow var(--dur-fast) var(--ease-lux);
+}
+.search-field-well:focus-within {
+  border-color: var(--gold);
+  box-shadow: inset 0 1px 2px rgba(20, 34, 58, .05), var(--focus-glow);
+}
+.search-field-input {
+  width: 100%;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: text;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--ink);
+}
+.search-field-input::placeholder {
+  color: var(--muted);
+  font-weight: 400;
+  opacity: 1;
 }
 
 /* Refined small-caps eyebrow used above section titles */

@@ -178,35 +178,41 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.6, ease: EASE }}
         >
-          <div className="surface-3d-floating p-1.5 border-t-2 border-t-[var(--gold)]">
-            <div className="grid grid-cols-[minmax(0,1fr)] gap-px bg-[var(--line)] md:grid-cols-[1.3fr_1.2fr_1fr_auto]">
-              <label className="flex min-h-16 items-center gap-3 bg-white px-5 transition-colors focus-within:bg-[var(--parchment)]">
+          <div className="surface-3d-floating border-t-2 border-t-[var(--gold)] p-2">
+            <div className="grid grid-cols-1 gap-2 md:grid-cols-[1.3fr_1.2fr_1fr_auto]">
+              <label className="flex min-h-16 items-center gap-3 rounded-[var(--radius-control)] bg-white px-4 py-2">
                 <MapPin size={20} className="shrink-0 text-[var(--gold-deep)]" />
                 <span className="min-w-0 flex-1">
                   <span className="block text-[0.65rem] uppercase tracking-[0.18em] text-[var(--muted)]">
                     Destination
                   </span>
-                  <input
-                    value={query}
-                    onChange={(event) => setQuery(event.target.value)}
-                    placeholder="Where are you going?"
-                    className="w-full text-sm font-medium outline-none placeholder:font-normal placeholder:text-[var(--muted)] bg-transparent"
-                  />
+                  <span className="search-field-well mt-1 block px-2.5 py-1.5">
+                    <input
+                      value={query}
+                      onChange={(event) => setQuery(event.target.value)}
+                      placeholder="Kigali, Kibagabaga…"
+                      className="search-field-input"
+                    />
+                  </span>
                 </span>
               </label>
 
-              <div className="flex min-h-16 min-w-0 items-center gap-3 bg-white px-5 transition-colors focus-within:bg-[var(--parchment)]">
+              <div className="flex min-h-16 min-w-0 items-center gap-3 rounded-[var(--radius-control)] bg-white px-4 py-2">
                 <CalendarDays size={20} className="shrink-0 text-[var(--gold-deep)]" />
-                <span className="min-w-0 flex-1">
-                  <span className="block text-[0.65rem] uppercase tracking-[0.18em] text-[var(--muted)]">
-                    Dates
-                  </span>
-                  <span className="flex items-center gap-2">
-                    <input type="date" className="w-[104px] min-w-0 text-xs font-medium outline-none bg-transparent" />
-                    <span className="text-[var(--muted)]">—</span>
-                    <input type="date" className="w-[104px] min-w-0 text-xs font-medium outline-none bg-transparent" />
-                  </span>
-                </span>
+                <div className="grid min-w-0 flex-1 grid-cols-2 gap-2">
+                  <label className="min-w-0">
+                    <span className="block text-[0.65rem] uppercase tracking-[0.18em] text-[var(--muted)]">Check-in</span>
+                    <span className="search-field-well mt-1 block px-2 py-1.5">
+                      <input type="date" className="search-field-input text-xs" />
+                    </span>
+                  </label>
+                  <label className="min-w-0">
+                    <span className="block text-[0.65rem] uppercase tracking-[0.18em] text-[var(--muted)]">Check-out</span>
+                    <span className="search-field-well mt-1 block px-2 py-1.5">
+                      <input type="date" className="search-field-input text-xs" />
+                    </span>
+                  </label>
+                </div>
               </div>
 
               <Popout
@@ -220,21 +226,23 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
                   <div
                     onClick={() => setGuestOpen(!guestOpen)}
                     aria-expanded={guestOpen}
-                    className="flex min-h-16 w-full items-center gap-3 bg-white px-5 text-left transition-colors hover:bg-[var(--parchment)] cursor-pointer"
+                    className="flex min-h-16 w-full cursor-pointer items-center gap-3 rounded-[var(--radius-control)] bg-white px-4 py-2 text-left"
                   >
                     <Users size={20} className="shrink-0 text-[var(--gold-deep)]" />
                     <span className="min-w-0 flex-1">
                       <span className="block text-[0.65rem] uppercase tracking-[0.18em] text-[var(--muted)]">
                         Guests
                       </span>
-                      <span className="block truncate text-sm font-medium">
-                        {adults} adults · {children} children · {rooms} room
+                      <span className="search-field-well mt-1 flex items-center justify-between px-2.5 py-1.5 text-sm font-medium text-[var(--ink)]">
+                        <span className="truncate">
+                          {adults} adults · {children} children · {rooms} room
+                        </span>
+                        <ChevronDown
+                          size={16}
+                          className={`ml-1 shrink-0 text-[var(--muted)] transition-transform duration-300 ${guestOpen ? "rotate-180" : ""}`}
+                        />
                       </span>
                     </span>
-                    <ChevronDown
-                      size={16}
-                      className={`text-[var(--muted)] transition-transform duration-300 ${guestOpen ? "rotate-180" : ""}`}
-                    />
                   </div>
                 }
               >
@@ -251,7 +259,7 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
 
               <button
                 onClick={runSearch}
-                className="button-3d flex min-h-16 items-center justify-center gap-2 bg-[var(--ink)] px-9 text-xs font-semibold uppercase tracking-[0.2em] text-white hover:bg-[var(--ink-2)]"
+                className="button-3d flex min-h-16 items-center justify-center gap-2 bg-[var(--ink)] px-9 text-xs font-semibold uppercase tracking-[0.2em] text-white hover:bg-[var(--ink-2)] md:rounded-[var(--radius-control)]"
               >
                 <Search size={17} /> Search
               </button>

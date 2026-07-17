@@ -1,18 +1,18 @@
 const STYLES: Record<string, string> = {
-  active: "bg-[#e7f5ea] text-[#008234]",
-  confirmed: "bg-[#e7f5ea] text-[#008234]",
-  completed: "bg-[#eef1f5] text-[#475467]",
-  pending: "bg-[#fff4e5] text-[#b25e00]",
-  inactive: "bg-[#eef1f5] text-[#475467]",
-  cancelled: "bg-[#fdeced] text-[#c00]",
-  rejected: "bg-[#fdeced] text-[#c00]",
+  active: "bg-[var(--green-light)] text-[var(--rwanda-green)]",
+  confirmed: "bg-[var(--green-light)] text-[var(--rwanda-green)]",
+  completed: "bg-[var(--mist)] text-[var(--muted)]",
+  pending: "bg-[var(--gold-pale)] text-[var(--gold-deep)]",
+  inactive: "bg-[var(--mist)] text-[var(--muted)]",
+  cancelled: "bg-[#fdeced] text-[var(--terracotta)]",
+  rejected: "bg-[#fdeced] text-[var(--terracotta)]",
 };
 
 export function StatusBadge({ status }: { status: string }) {
   return (
     <span
       className={`inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-bold capitalize ${
-        STYLES[status] || "bg-[#eef1f5] text-[#475467]"
+        STYLES[status] || "bg-[var(--mist)] text-[var(--muted)]"
       }`}
     >
       <span className="size-1.5 rounded-full bg-current" />
