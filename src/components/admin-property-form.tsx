@@ -4,11 +4,13 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ImagePlus, Loader2, Trash2 } from "lucide-react";
+import { useToast } from "@/components/toast";
 
 const TYPES = ["Furnished apartment", "Serviced apartment", "Furnished home", "Guesthouse", "Villa"];
 
 export function AdminPropertyForm() {
   const router = useRouter();
+  const { toast } = useToast();
   const [form, setForm] = useState({
     title: "",
     neighborhood: "",
@@ -76,11 +78,14 @@ export function AdminPropertyForm() {
     });
     const json = await res.json().catch(() => ({}));
     if (res.ok) {
+      toast.success("Listing Published", `${form.title} is now live.`);
       router.push("/admin/properties");
       router.refresh();
       return;
     }
-    setError(json.error || "Unable to save listing.");
+    const errMsg = json.error || "Unable to save listing.";
+    toast.error("Publish Failed", errMsg);
+    setError(errMsg);
     setSaving(false);
   }
 
@@ -88,25 +93,25 @@ export function AdminPropertyForm() {
     <form onSubmit={submit} className="grid gap-6 lg:grid-cols-[1fr_360px]">
       <div className="space-y-5">
         <Card title="Listing details">
-          <Field label="Property name" value={form.title} onChange={(v) => update("title", v)} placeholder="e.g. Kibagabaga Garden Apartment" />
+          <Field label="Property name" value={form.title} onChange={(v) => update("title", v)} />
           <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="Neighbourhood" value={form.neighborhood} onChange={(v) => update("neighborhood", v)} placeholder="Kibagabaga" />
+            <Field label="Neighbourhood" value={form.neighborhood} onChange={(v) => update("neighborhood", v)} />
             <Field label="Location" value={form.location} onChange={(v) => update("location", v)} />
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
-            <label className="block text-sm font-bold">
+            <label className="block text-xs uppercase tracking-wider text-[var(--muted)] font-semibold">
               Property type
               <select
                 value={form.type}
                 onChange={(event) => update("type", event.target.value)}
-                className="field-3d mt-2 min-h-11 w-full px-3 font-normal outline-none focus:!border-[#006ce4]"
+                className="field-3d mt-1.5 min-h-11 w-full px-3 font-normal outline-none focus:!border-[var(--gold)]"
               >
                 {TYPES.map((type) => (
                   <option key={type}>{type}</option>
                 ))}
               </select>
             </label>
-            <Field label="Nightly price (RWF)" type="number" value={form.price} onChange={(v) => update("price", v)} placeholder="45000" />
+            <Field label="Nightly price (RWF)" type="number" value={form.price} onChange={(v) => update("price", v)} />
           </div>
         </Card>
 
@@ -121,20 +126,20 @@ export function AdminPropertyForm() {
 
         <Card title="About this place">
           <Field label="Host name" value={form.host} onChange={(v) => update("host", v)} />
-          <label className="block text-sm font-bold">
-            Amenities <span className="font-normal text-[#667085]">(comma separated)</span>
+          <div className="float-field">
             <input
               value={form.amenities}
               onChange={(event) => update("amenities", event.target.value)}
-              className="field-3d mt-2 min-h-11 w-full px-3 font-normal outline-none focus:!border-[#006ce4]"
+              placeholder=" "
             />
-          </label>
-          <label className="block text-sm font-bold">
+            <label>Amenities (comma separated)</label>
+          </div>
+          <label className="block text-xs uppercase tracking-wider text-[var(--muted)] font-semibold">
             Description
             <textarea
               value={form.description}
               onChange={(event) => update("description", event.target.value)}
-              className="field-3d mt-2 min-h-28 w-full p-3 font-normal outline-none focus:!border-[#006ce4]"
+              className="field-3d mt-1.5 min-h-28 w-full p-3 font-normal outline-none focus:!border-[var(--gold)]"
               placeholder="Describe the stay, the area and what makes it special."
             />
           </label>
@@ -143,8 +148,8 @@ export function AdminPropertyForm() {
 
       <aside className="space-y-5">
         <Card title="Photos">
-          <label className="surface-3d surface-3d-lift flex cursor-pointer flex-col items-center justify-center gap-2 border-2 border-dashed !border-[#cbd2dd] bg-[#f9fafb] px-4 py-8 text-center text-sm text-[#667085] hover:!border-[#006ce4] hover:bg-[#f0f6ff]">
-            {uploading ? <Loader2 className="animate-spin text-[#006ce4]" /> : <ImagePlus className="text-[#006ce4]" />}
+          <label className="surface-3d surface-3d-lift flex cursor-pointer flex-col items-center justify-center gap-2 border-2 border-dashed !border-[var(--gold)] bg-[var(--parchment)] px-4 py-8 text-center text-sm text-[var(--muted)] hover:bg-[var(--cream)] transition-all rounded-xl shadow-sm">
+            {uploading ? <Loader2 className="animate-spin text-[var(--gold-deep)]" /> : <ImagePlus className="text-[var(--gold-deep)]" />}
             {uploading ? "Uploading…" : "Click to upload images"}
             <input type="file" accept="image/*" multiple className="hidden" onChange={onUpload} disabled={uploading} />
           </label>
@@ -165,7 +170,7 @@ export function AdminPropertyForm() {
               ))}
             </div>
           )}
-          <p className="text-xs text-[#667085]">The first photo becomes the cover image.</p>
+          <p className="text-xs text-[var(--muted)]">The first photo becomes the cover image.</p>
         </Card>
 
         {error && (
@@ -175,12 +180,12 @@ export function AdminPropertyForm() {
         <button
           type="submit"
           disabled={saving || uploading}
-          className="button-3d flex min-h-12 w-full items-center justify-center gap-2 bg-[#006ce4] font-bold text-white hover:bg-[#0057b8] disabled:opacity-60"
+          className="button-3d flex min-h-12 w-full items-center justify-center gap-2 bg-[var(--ink)] font-semibold uppercase tracking-wider text-white hover:bg-[var(--ink-2)] disabled:opacity-60 transition-colors"
         >
           {saving && <Loader2 size={18} className="animate-spin" />}
           {saving ? "Publishing…" : "Publish listing"}
         </button>
-        <p className="text-center text-xs text-[#667085]">
+        <p className="text-center text-xs text-[var(--muted)]">
           Published listings go live on the site immediately.
         </p>
       </aside>
@@ -190,8 +195,8 @@ export function AdminPropertyForm() {
 
 function Card({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="surface-3d p-5">
-      <h2 className="mb-4 font-bold">{title}</h2>
+    <section className="surface-3d p-6 bg-white border border-[var(--line)] rounded-xl shadow-sm">
+      <h2 className="mb-4 font-serif text-xl font-semibold text-[var(--ink)]">{title}</h2>
       <div className="space-y-4">{children}</div>
     </section>
   );
@@ -201,7 +206,7 @@ function Field({
   label,
   value,
   onChange,
-  placeholder,
+  placeholder = " ",
   type = "text",
 }: {
   label: string;
@@ -211,16 +216,15 @@ function Field({
   type?: string;
 }) {
   return (
-    <label className="block text-sm font-bold">
-      {label}
+    <div className="float-field">
       <input
         type={type}
         value={value}
         onChange={(event) => onChange(event.target.value)}
         placeholder={placeholder}
         min={type === "number" ? 0 : undefined}
-        className="field-3d mt-2 min-h-11 w-full px-3 font-normal outline-none focus:!border-[#006ce4]"
       />
-    </label>
+      <label>{label}</label>
+    </div>
   );
 }

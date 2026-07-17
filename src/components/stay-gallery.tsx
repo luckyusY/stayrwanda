@@ -34,20 +34,21 @@ export function StayHeroGallery({
             onClick={() => launch(i)}
             className={`group relative overflow-hidden ${i === 0 ? "col-span-2 row-span-2" : ""}`}
             aria-label={`Open photo ${i + 1}`}
+            data-cursor="explore"
           >
             <SmartImage
               src={image}
               alt={`${title} photo ${i + 1}`}
               fill
               priority={i === 0}
-              className="object-cover transition duration-500 group-hover:scale-105 group-hover:brightness-95"
+              className="object-cover transition duration-500 group-hover:scale-106 group-hover:brightness-95 pointer-events-none"
               sizes={i === 0 ? "50vw" : "25vw"}
             />
           </button>
         ))}
         <button
           onClick={() => launch(0)}
-          className="interactive-3d absolute bottom-4 right-4 flex items-center gap-2 px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--ink)] hover:bg-[var(--cream)]"
+          className="interactive-3d shimmer-gold absolute bottom-4 right-4 flex items-center gap-2 px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--ink)] hover:bg-[var(--cream)]"
         >
           <Images size={16} /> All {photoCount} photos
         </button>
@@ -75,12 +76,13 @@ export function StayPhotoGrid({ images, title }: { images: string[]; title: stri
             }}
             className="group relative aspect-[4/3] overflow-hidden"
             aria-label={`Open photo ${i + 1}`}
+            data-cursor="explore"
           >
             <SmartImage
               src={image}
               alt={`${title} photo ${i + 1}`}
               fill
-              className="object-cover transition duration-500 group-hover:scale-105"
+              className="object-cover transition duration-500 group-hover:scale-105 pointer-events-none"
               sizes="(max-width:640px) 100vw, 33vw"
             />
             <span className="pointer-events-none absolute inset-0 bg-[var(--ink)]/0 transition group-hover:bg-[var(--ink)]/10" />

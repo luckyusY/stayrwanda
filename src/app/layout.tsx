@@ -4,6 +4,8 @@ import { ScrollProgress } from "@/components/scroll-progress";
 import { ClerkProvider } from "@clerk/nextjs";
 import { clerkConfigured } from "@/lib/env";
 import { CurrencyProvider } from "@/components/currency-provider";
+import { MagneticCursor } from "@/components/magnetic-cursor";
+import { ToastProvider } from "@/components/toast";
 
 
 export const metadata: Metadata = {
@@ -16,7 +18,15 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  const content = <CurrencyProvider><ScrollProgress />{children}</CurrencyProvider>;
+  const content = (
+    <CurrencyProvider>
+      <ToastProvider>
+        <ScrollProgress />
+        <MagneticCursor />
+        {children}
+      </ToastProvider>
+    </CurrencyProvider>
+  );
   return (
     <html lang="en">
       <head>

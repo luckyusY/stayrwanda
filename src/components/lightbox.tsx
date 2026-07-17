@@ -120,6 +120,33 @@ export function Lightbox({ images, open, index, alt, onClose }: Props) {
           </>
         )}
       </div>
+
+      {/* Thumbnail Filmstrip */}
+      {images.length > 1 && (
+        <div className="bg-black/40 border-t border-white/10 px-4 py-3 overflow-x-auto flex justify-center select-none" style={{ scrollbarWidth: "none" }}>
+          <div className="flex gap-2 max-w-full">
+            {images.map((src, i) => (
+              <button
+                key={`${src}-thumb-${i}`}
+                onClick={() => swiperRef.current?.slideTo(i)}
+                className={`relative size-12 sm:size-16 rounded overflow-hidden transition-all duration-300 border-2 shrink-0 ${
+                  active === i ? "border-[var(--gold)] scale-105" : "border-transparent opacity-50 hover:opacity-85"
+                }`}
+                aria-label={`Go to photo ${i + 1}`}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={src}
+                  alt={`thumbnail ${i + 1}`}
+                  className="h-full w-full object-cover pointer-events-none"
+                  loading="lazy"
+                  draggable={false}
+                />
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
     </div>,
     document.body,
   );

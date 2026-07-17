@@ -27,6 +27,8 @@ import { PropertyImageSlider } from "@/components/property-image-slider";
 import { Reveal, RevealGroup } from "@/components/reveal";
 import { TiltCard } from "@/components/tilt-card";
 import { SlotCounter } from "@/components/slot-counter";
+import { CountUp } from "@/components/count-up";
+import { DragScrollStrip } from "@/components/drag-scroll-strip";
 import type { Property } from "@/lib/properties";
 
 const stayTypes = ["All stays", "Furnished apartment", "Serviced apartment", "Furnished home"];
@@ -99,7 +101,7 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
         </div>
 
         <motion.div
-          className="absolute inset-x-0 top-[34%] z-30 -translate-y-1/2"
+          className="absolute inset-x-0 top-[35%] z-30 -translate-y-1/2"
           initial="hidden"
           animate="show"
           variants={{ show: { transition: { staggerChildren: 0.14, delayChildren: 0.15 } } }}
@@ -131,6 +133,26 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
             >
               A curated collection of apartments, residences and guesthouses across Kigali and beyond.
             </motion.p>
+
+            {/* A3. Hero Stat Strip */}
+            <motion.div
+              className="mx-auto mt-8 max-w-md bg-black/30 backdrop-blur-md border border-white/10 p-4 rounded-xl grid grid-cols-3 divide-x divide-white/10 shadow-lg"
+              variants={{ hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0 } }}
+              transition={{ duration: 0.8, ease: EASE }}
+            >
+              <div className="text-center">
+                <strong className="block text-2xl font-serif text-[var(--gold-mid)]"><CountUp value={120} />+</strong>
+                <span className="text-[10px] uppercase tracking-wider text-white/80 block mt-1">Residences</span>
+              </div>
+              <div className="text-center">
+                <strong className="block text-2xl font-serif text-[var(--gold-mid)]">4.9</strong>
+                <span className="text-[10px] uppercase tracking-wider text-white/80 block mt-1">Guest rating</span>
+              </div>
+              <div className="text-center">
+                <strong className="block text-2xl font-serif text-[var(--gold-mid)]"><CountUp value={50} />+</strong>
+                <span className="text-[10px] uppercase tracking-wider text-white/80 block mt-1">Districts</span>
+              </div>
+            </motion.div>
           </div>
         </motion.div>
 
@@ -278,59 +300,13 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
             </select>
           </div>
 
-          <RevealGroup className="mt-10 grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
-            {filtered.map((property) => (
-              <Reveal variant="depth" as="article" key={property.slug} className="surface-3d surface-3d-lift group min-w-0 overflow-hidden">
-                <div className="relative w-full min-w-0 overflow-hidden">
-                  <span className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-0.5 origin-left scale-x-0 bg-[var(--gold)] transition-transform duration-500 group-hover:scale-x-100" />
-                  <PropertyImageSlider
-                    images={property.images?.length ? property.images : [property.image]}
-                    alt={property.title}
-                    href={`/stays/${property.slug}`}
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  />
-                  <span className="pointer-events-none absolute left-4 top-4 z-30 bg-white/90 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-[var(--ink)]">
-                    {property.type}
-                  </span>
-                  <button
-                    onClick={() => toggleFavourite(property.slug)}
-                    className="absolute right-4 top-4 z-30 grid size-9 place-items-center rounded-full bg-white/90 shadow"
-                    aria-label={`Save ${property.title}`}
-                  >
-                    <Heart
-                      size={18}
-                      fill={favourites.includes(property.slug) ? "#b08d57" : "transparent"}
-                      className={favourites.includes(property.slug) ? "text-[var(--gold)]" : "text-[var(--ink)]"}
-                    />
-                  </button>
-                </div>
-                <div className="p-6">
-                  <p className="flex items-center gap-1.5 text-xs uppercase tracking-[0.16em] text-[var(--muted)]">
-                    <MapPin size={13} className="text-[var(--gold-deep)]" /> {property.neighborhood}
-                  </p>
-                  <Link
-                    href={`/stays/${property.slug}`}
-                    className="mt-2 block font-serif text-2xl font-semibold text-[var(--ink)] transition group-hover:text-[var(--gold-deep)]"
-                  >
-                    {property.title}
-                  </Link>
-                  <p className="mt-2 line-clamp-2 text-sm text-[var(--muted)]">{property.description}</p>
-                  <div className="mt-5 flex items-center justify-between border-t border-[var(--line)] pt-4">
-                    <span className="text-xs uppercase tracking-[0.16em] text-[var(--muted)]">
-                      {property.photoCount} photographs
-                    </span>
-                    <Link
-                      href={`/stays/${property.slug}`}
-                      className="group/cta inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--gold-deep)] hover:text-[var(--ink)]"
-                    >
-                      View stay
-                      <span className="transition-transform duration-300 group-hover/cta:translate-x-1">→</span>
-                    </Link>
-                  </div>
-                </div>
-              </Reveal>
-            ))}
-          </RevealGroup>
+          <div className="mt-10 overflow-hidden">
+            <DragScrollStrip
+              properties={filtered}
+              favourites={favourites}
+              toggleFavourite={toggleFavourite}
+            />
+          </div>
 
           {!filtered.length && (
             <div className="surface-3d mt-8 p-12 text-center">
@@ -370,6 +346,7 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
                 <button
                   onClick={() => chooseDestination(destination)}
                   className="surface-3d surface-3d-lift group relative aspect-[3/4] w-full overflow-hidden text-left image-shade"
+                  data-cursor="explore"
                 >
                   <SmartImage
                     src={property.image}

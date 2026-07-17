@@ -6,9 +6,11 @@ import { CalendarDays, Check, Loader2, Users } from "lucide-react";
 import type { Hotel, UnitType } from "@/lib/platform-types";
 import { useCurrency } from "@/components/currency-provider";
 import { SlotCounter } from "@/components/slot-counter";
+import { useToast } from "@/components/toast";
 
 export function HotelBookingPanel({ hotel, unit }: { hotel: Hotel; unit: UnitType | null }) {
   const { currency, format } = useCurrency();
+  const { toast } = useToast();
   const [form, setForm] = useState({ guestName: "", email: "", phone: "", checkIn: "", checkOut: "", guests: "2" });
   const [state, setState] = useState<{ loading?: boolean; error?: string; reference?: string; token?: string }>({});
   const nights = useMemo(() => form.checkIn && form.checkOut ? Math.max(0, Math.round((Date.parse(form.checkOut) - Date.parse(form.checkIn)) / 86400000)) : 0, [form.checkIn, form.checkOut]);
@@ -23,7 +25,12 @@ export function HotelBookingPanel({ hotel, unit }: { hotel: Hotel; unit: UnitTyp
       body: JSON.stringify({ hotelId: hotel.id, unitTypeId: unit.id, guestName: form.guestName, email: form.email, phone: form.phone, checkIn: form.checkIn, checkOut: form.checkOut, guests: Number(form.guests), quantity: 1, currency }),
     });
     const data = await response.json().catch(() => ({}));
-    if (!response.ok) return setState({ error: data.error || "Unable to send your request." });
+    if (!response.ok) {
+      const errMsg = data.error || "Unable to send your request.";
+      toast.error("Request Failed", errMsg);
+      return setState({ error: errMsg });
+    }
+    toast.success("Request Received", `Reference: ${data.booking.reference}`);
     setState({ reference: data.booking.reference, token: data.booking.publicToken });
   }
 
@@ -95,6 +102,30 @@ export function HotelBookingPanel({ hotel, unit }: { hotel: Hotel; unit: UnitTyp
       </button>
     </form>
     
-    {nights > 0 && unit && <p className="mt-4 text-center text-xs text-[var(--muted)]">{nights} nights · estimated {format(nights * unit.basePriceRwf)}</p>}
+    {nights > 0 && unit && (
+      <div className="mt-4 border-t border-[var(--line)] pt-3">
+        <details className="group">
+          <summary className="flex justify-between items-center text-xs text-[var(--muted)] cursor-pointer select-none outline-none hover:text-[var(--ink)] transition-colors">
+            <span>{nights} nights summary</span>
+            <span className="text-[10px] text-[var(--gold-deep)] font-semibold uppercase tracking-wider group-open:hidden">View breakdown</span>
+            <span className="text-[10px] text-[var(--gold-deep)] font-semibold uppercase tracking-wider hidden group-open:inline">Hide breakdown</span>
+          </summary>
+          <div className="mt-2.5 space-y-2 text-xs text-[var(--muted)] bg-[var(--parchment)] p-3 rounded-lg border border-[var(--line)]">
+            <div className="flex justify-between">
+              <span>Base rate ({nights} × {format(unit.basePriceRwf)})</span>
+              <span>{format(nights * unit.basePriceRwf)}</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Local Service fee</span>
+              <span>Free</span>
+            </div>
+            <div className="flex justify-between border-t border-dashed border-[var(--line)] pt-2 font-semibold text-[var(--ink)]">
+              <span>Estimated total</span>
+              <span>{format(nights * unit.basePriceRwf)}</span>
+            </div>
+          </div>
+        </details>
+      </div>
+    )}
   </aside>;
 }

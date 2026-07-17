@@ -457,3 +457,132 @@ select:-webkit-autofill {
   transform-origin: left;
 }
 
+/* ---- Magnetic cursor ring ---- */
+.cursor-ring {
+  position: fixed;
+  width: 16px; height: 16px;
+  border: 2px solid var(--gold);
+  border-radius: 9999px;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: width 0.25s, height 0.25s, background 0.25s;
+  mix-blend-mode: multiply;
+}
+.cursor-ring.is-hover {
+  width: 44px; height: 44px;
+  background: var(--gold);
+  border-color: transparent;
+}
+
+/* ---- Kanban columns ---- */
+.kanban-col {
+  min-width: 260px;
+  background: var(--cream);
+  border-radius: var(--radius-panel);
+  border: 1px solid var(--line);
+  padding: 1rem;
+  min-height: 400px;
+}
+.kanban-col-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.kanban-card {
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-control);
+  padding: 0.875rem;
+  margin-bottom: 0.5rem;
+  cursor: grab;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.kanban-card:active { cursor: grabbing; }
+.kanban-card.is-dragging {
+  box-shadow: var(--shadow-xl);
+  transform: rotate(2deg) scale(1.02);
+}
+
+/* ---- Calendar picker ---- */
+.calendar-fold {
+  transform-origin: top center;
+  transform: perspective(900px) rotateX(-90deg);
+  opacity: 0;
+  transition:
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity   0.3s ease;
+  pointer-events: none;
+}
+.calendar-fold.is-open {
+  transform: perspective(900px) rotateX(0deg);
+  opacity: 1;
+  pointer-events: auto;
+}
+.cal-day-range { background: var(--gold-pale); }
+.cal-day-start,
+.cal-day-end   { background: var(--gold); color: white; border-radius: 50%; }
+.cal-day-disabled { opacity: 0.3; pointer-events: none; }
+
+/* ---- Sparkline SVG ---- */
+.sparkline { stroke: var(--gold-mid); fill: none; stroke-width: 1.5; }
+.sparkline-up   { stroke: #16a34a; }
+.sparkline-down { stroke: var(--terracotta); }
+
+/* ---- Toast system ---- */
+.toast-stack {
+  position: fixed; top: 1rem; right: 1rem;
+  display: flex; flex-direction: column; gap: 0.5rem;
+  z-index: var(--z-toast);
+  pointer-events: none;
+}
+.toast {
+  pointer-events: all;
+  min-width: 300px; max-width: 400px;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  padding: 0.875rem 1rem;
+  display: flex; gap: 0.75rem; align-items: flex-start;
+  overflow: hidden;
+  position: relative;
+}
+.toast-progress {
+  position: absolute; bottom: 0; left: 0;
+  height: 2px; background: var(--gold);
+  animation: toast-shrink var(--dismiss-duration, 4s) linear forwards;
+}
+@keyframes toast-shrink { from { width: 100%; } to { width: 0%; } }
+.toast.success .toast-progress { background: #16a34a; }
+.toast.error   .toast-progress { background: var(--terracotta); }
+
+/* ---- Map embed container ---- */
+.map-container {
+  border-radius: var(--radius-panel);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-md);
+}
+.leaflet-container { background: var(--parchment); }
+
+/* ---- Horizontal stats ticker ---- */
+@keyframes ticker-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.ticker-track {
+  display: flex;
+  gap: 3rem;
+  animation: ticker-scroll 28s linear infinite;
+  white-space: nowrap;
+}
+.ticker-track:hover { animation-play-state: paused; }
+
+
