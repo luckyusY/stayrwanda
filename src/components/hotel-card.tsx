@@ -44,9 +44,9 @@ export function HotelCard({ hotel, onQuickView }: { hotel: Hotel; onQuickView?: 
         <div className="flex items-center gap-1.5" title="Guests"><Users size={14} className="text-[var(--gold-mid)]" /> <span className="text-xs">4</span></div>
         <div className="h-1 w-1 rounded-full bg-[var(--line)]" />
         <div className="flex items-center gap-2">
-          {hotel.amenities.includes("WiFi") && <Wifi size={14} className="text-[var(--gold-mid)]" title="High-speed WiFi" />}
-          {hotel.amenities.includes("Parking") && <Car size={14} className="text-[var(--gold-mid)]" title="Private parking" />}
-          {hotel.amenities.includes("Chef") && <ChefHat size={14} className="text-[var(--gold-mid)]" title="Private chef available" />}
+          {hotel.amenities.includes("WiFi") && <span title="High-speed WiFi" className="flex items-center"><Wifi size={14} className="text-[var(--gold-mid)]" /></span>}
+          {hotel.amenities.includes("Parking") && <span title="Private parking" className="flex items-center"><Car size={14} className="text-[var(--gold-mid)]" /></span>}
+          {hotel.amenities.includes("Chef") && <span title="Private chef available" className="flex items-center"><ChefHat size={14} className="text-[var(--gold-mid)]" /></span>}
         </div>
       </div>
       
