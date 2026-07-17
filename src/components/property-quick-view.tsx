@@ -34,6 +34,7 @@ export function PropertyQuickView({
               <PropertyImageSlider 
                  images={property.images?.length ? property.images : [property.image]}
                  alt={property.title}
+                 href={`/hotels/${property.slug}`}
                  sizes="(max-width: 640px) 100vw, 480px"
               />
             </div>
