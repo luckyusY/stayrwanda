@@ -18,6 +18,51 @@
   --foreground: #1f2430;
   --muted: #6b6256;
 
+  /* New accent tones */
+  --rwanda-green:   #1a4731;       /* trust badges, "Verified" tags */
+  --green-light:    #d4edda;       /* success bg */
+  --terracotta:     #c1440e;       /* error, cancellation */
+  --clay:           #e8a87c;       /* warm highlight, hover tints */
+
+  /* Extended gold ramp */
+  --gold-pale:      #f5edd8;       /* very subtle gold bg */
+  --gold-mid:       #c9a55a;       /* stronger gold for gradients */
+  --gold-shimmer:   rgba(201,165,90,0.18); /* glass shimmer tint */
+
+  /* Glass system */
+  --glass-white:    rgba(255,255,255,0.72);
+  --glass-ink:      rgba(15,28,46,0.78);
+  --glass-blur:     saturate(160%) blur(20px);
+
+  /* Layered shadow system */
+  --shadow-xs:     0 1px 2px rgba(15,28,46,.04);
+  --shadow-sm:     0 1px 3px rgba(15,28,46,.06), 0 4px 10px rgba(15,28,46,.06);
+  --shadow-md:     0 2px 6px rgba(15,28,46,.07), 0 12px 28px rgba(15,28,46,.09);
+  --shadow-lg:     0 4px 12px rgba(15,28,46,.09), 0 24px 52px rgba(15,28,46,.13);
+  --shadow-xl:     0 8px 20px rgba(15,28,46,.11), 0 40px 80px rgba(15,28,46,.16);
+  --shadow-button: 0 2px 0 rgba(9,18,33,.32), 0 9px 20px rgba(15,28,46,.18);
+  --shadow-press:  0 1px 0 rgba(9,18,33,.28), 0 4px 10px rgba(15,28,46,.12);
+  --shadow-inset:  inset 0 1px 3px rgba(15,28,46,.08), 0 1px 0 rgba(255,255,255,.92);
+  --shadow-gold:   0 0 0 3px rgba(201,165,90,.22), 0 8px 20px rgba(176,141,87,.12);
+  --shadow-focus:  0 0 0 2px #fff, 0 0 0 4px var(--gold);
+  --shadow-error:  0 0 0 3px rgba(193,68,14,.14);
+
+  /* Tighter radius scale */
+  --radius-xs:   0.25rem;   /* tags, badges */
+  --radius-sm:   0.5rem;    /* inputs, selects */
+  --radius-md:   0.75rem;   /* cards, panels */
+  --radius-lg:   1rem;      /* modals, drawers */
+  --radius-xl:   1.5rem;    /* hero card, floating search */
+  --radius-full: 9999px;    /* pills, avatars */
+
+  /* Z-index scale */
+  --z-base:      1;
+  --z-raised:    10;
+  --z-sticky:    30;
+  --z-overlay:   40;
+  --z-modal:     50;
+  --z-toast:     60;
+
   /* Dimensional interaction system */
   --depth-soft: 0 1px 2px rgba(20, 34, 58, .06), 0 12px 32px rgba(20, 34, 58, .08);
   --depth-raised: 0 2px 4px rgba(20, 34, 58, .08), 0 22px 52px rgba(20, 34, 58, .13);
@@ -33,28 +78,6 @@
   --panel-border: color-mix(in srgb, var(--line) 88%, var(--ink));
   --focus-glow: 0 0 0 3px rgba(176, 141, 87, .16);
   --error-glow: 0 0 0 3px rgba(180, 69, 58, .12);
-
-  /* Motion system — luxury easing curves and durations */
-  --ease-lux: cubic-bezier(0.22, 1, 0.36, 1);     /* decel, editorial */
-  --ease-in-out-lux: cubic-bezier(0.65, 0, 0.35, 1);
-  --dur-fast: 220ms;
-  --dur: 420ms;
-  --dur-slow: 720ms;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-ink: var(--ink);
-  --color-gold: var(--gold);
-  --color-cream: var(--cream);
-  --font-sans: var(--font-sans-display), "Jost", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-serif), Georgia, "Times New Roman", serif;
-}
-
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-
 /* Lenis smooth scroll — disable native smoothing while Lenis is driving */
 html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
@@ -264,4 +287,171 @@ select:-webkit-autofill {
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; }
   .surface-3d-lift:hover, .button-3d, .button-3d:hover, .button-3d:active, .interactive-3d:hover, .interactive-3d:active { transform: none; }
+  .form-card-3d,
+  .form-card-3d:focus-within,
+  .form-card-3d:hover {
+    transform: none;
+  }
+  .flip-card-inner { transform: none !important; }
+  .calendar-fold   { transform: none; transition: opacity 0.2s; }
+  .shimmer-gold::after { animation: none; }
+  .ken-burns       { animation: none; }
 }
+
+/* ---- Glassmorphism overlays ---- */
+.glass-white {
+  background: var(--glass-white);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid rgba(255,255,255,0.45);
+}
+.glass-ink {
+  background: var(--glass-ink);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+/* ---- Gold shimmer on any element ---- */
+.shimmer-gold::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg,
+    transparent 35%,
+    rgba(201,165,90,0.22) 50%,
+    transparent 65%
+  );
+  background-size: 300% 100%;
+  animation: shimmer-sweep 2.4s ease-in-out infinite;
+  pointer-events: none;
+  border-radius: inherit;
+}
+@keyframes shimmer-sweep {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ---- Gradient text (hero taglines) ---- */
+.text-gradient-gold {
+  background: linear-gradient(135deg, var(--gold-deep) 0%, var(--gold-mid) 50%, var(--clay) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.text-gradient-ink {
+  background: linear-gradient(135deg, var(--ink) 0%, var(--navy) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ---- Animated underline for section headings ---- */
+.heading-underline {
+  position: relative;
+  display: inline-block;
+}
+.heading-underline::after {
+  content: '';
+  position: absolute;
+  left: 0; bottom: -6px;
+  width: 0; height: 2px;
+  background: var(--gold);
+  transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.heading-underline.is-visible::after { width: 100%; }
+
+/* ---- 3D perspective containers ---- */
+.perspective-sm  { perspective: 600px; }
+.perspective-md  { perspective: 900px; }
+.perspective-lg  { perspective: 1200px; }
+.perspective-xl  { perspective: 1600px; }
+.preserve-3d     { transform-style: preserve-3d; }
+.backface-hidden { backface-visibility: hidden; }
+
+/* ---- Form card 3D resting state ---- */
+.form-card-3d {
+  transform-style: preserve-3d;
+  transform: perspective(1200px) rotateX(3deg) rotateY(-2deg);
+  transition: transform 0.7s cubic-bezier(0.22,1,0.36,1),
+              box-shadow 0.7s cubic-bezier(0.22,1,0.36,1);
+  box-shadow: 0 2px 1px rgba(15,28,46,.04), 0 4px 2px rgba(15,28,46,.04),
+              0 8px 4px rgba(15,28,46,.04), 0 32px 16px rgba(15,28,46,.04),
+              0 48px 60px rgba(15,28,46,.10);
+}
+.form-card-3d:focus-within,
+.form-card-3d:hover {
+  transform: perspective(1200px) rotateX(0deg) rotateY(0deg) translateY(-8px);
+  box-shadow: 0 4px 2px rgba(15,28,46,.05), 0 8px 4px rgba(15,28,46,.05),
+              0 24px 16px rgba(15,28,46,.05), 0 56px 80px rgba(15,28,46,.14);
+}
+
+/* ---- Flip card system ---- */
+.flip-card         { perspective: 900px; }
+.flip-card-inner   { transform-style: preserve-3d;
+                     transition: transform 0.65s cubic-bezier(0.22,1,0.36,1); }
+.flip-card:hover .flip-card-inner  { transform: rotateY(180deg); }
+.flip-card-front,
+.flip-card-back    { backface-visibility: hidden; }
+.flip-card-back    { transform: rotateY(180deg); position: absolute; inset: 0; }
+
+/* ---- Floating label field system ---- */
+.float-field       { position: relative; }
+.float-field input,
+.float-field textarea {
+  padding: 1.5rem 1rem 0.5rem;
+  border: 1px solid var(--control-border);
+  border-radius: var(--radius-sm);
+  background: linear-gradient(180deg, #fbfaf7 0%, #fff 40%);
+  box-shadow: var(--shadow-inset);
+  width: 100%;
+  font-family: var(--font-body);
+  transition: border-color 0.22s, box-shadow 0.22s;
+}
+.float-field label {
+  position: absolute; left: 1rem; top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.875rem; color: var(--muted);
+  pointer-events: none;
+  transition: all 0.22s cubic-bezier(0.22,1,0.36,1);
+}
+.float-field input:focus ~ label,
+.float-field input:not(:placeholder-shown) ~ label {
+  top: 0.6rem; transform: translateY(0);
+  font-size: 0.62rem; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--gold-deep);
+}
+.float-field input:focus,
+.float-field textarea:focus {
+  border-color: var(--gold);
+  box-shadow: var(--shadow-inset), var(--shadow-gold);
+  outline: none;
+}
+
+/* ---- Skeleton shimmer (warm, matches palette) ---- */
+.skeleton {
+  background: linear-gradient(100deg,
+    var(--cream-2) 28%, #e6dcc7 48%, var(--cream-2) 68%);
+  background-size: 200% 100%;
+  animation: sr-shimmer 1.4s ease-in-out infinite;
+  border-radius: var(--radius-sm);
+}
+
+/* ---- Stat counter number ---- */
+.stat-number {
+  font-family: var(--font-body);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  line-height: 1;
+  color: var(--gold-mid);
+}
+
+/* ---- Gold top progress bar ---- */
+.page-progress {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 2px; z-index: var(--z-toast);
+  background: linear-gradient(90deg, var(--gold-deep), var(--gold-mid), var(--clay));
+  transform-origin: left;
+}
+

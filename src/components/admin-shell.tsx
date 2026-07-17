@@ -17,6 +17,7 @@ import {
   X,
 } from "lucide-react";
 import { SignOutButton } from "@clerk/nextjs";
+import { motion } from "framer-motion";
 
 const NAV = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
@@ -62,23 +63,34 @@ export function AdminShell({
             </button>
           </div>
           <nav className="mt-3 flex-1 space-y-1 px-3">
-            {NAV.map(({ href, label, icon: Icon }) => (
-              <Link
-                key={href}
-                href={href}
-                onClick={() => setOpen(false)}
-                className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-semibold transition ${
-                  isActive(href)
-                    ? "bg-white text-[#073b74] shadow-[0_2px_0_rgba(255,255,255,.2),0_10px_24px_rgba(3,23,48,.28)]"
-                    : "text-white/80 hover:bg-white/10 hover:text-white"
-                }`}
-              >
-                <Icon size={19} />
-                {label}
-              </Link>
-            ))}
+            {NAV.map(({ href, label, icon: Icon }) => {
+              const active = isActive(href);
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  onClick={() => setOpen(false)}
+                  className={`relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-semibold transition-colors ${
+                    active
+                      ? "text-[#073b74]"
+                      : "text-white/80 hover:bg-white/10 hover:text-white"
+                  }`}
+                >
+                  {active && (
+                    <motion.span
+                      layoutId="activeAdminSidebarNavIndicator"
+                      className="absolute inset-0 bg-white rounded-lg shadow-md"
+                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                      style={{ zIndex: 0 }}
+                    />
+                  )}
+                  <Icon size={19} className="relative z-10" />
+                  <span className="relative z-10">{label}</span>
+                </Link>
+              );
+            })}
           </nav>
-          <div className="border-t border-white/15 p-3">
+          <div className="border-t border-white/15 p-3 relative z-10">
             <Link
               href="/"
               className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-semibold text-white/80 hover:bg-white/10 hover:text-white"

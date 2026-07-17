@@ -24,7 +24,9 @@ import {
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { SmartImage } from "@/components/smart-image";
 import { PropertyImageSlider } from "@/components/property-image-slider";
-import { Reveal } from "@/components/reveal";
+import { Reveal, RevealGroup } from "@/components/reveal";
+import { TiltCard } from "@/components/tilt-card";
+import { SlotCounter } from "@/components/slot-counter";
 import type { Property } from "@/lib/properties";
 
 const stayTypes = ["All stays", "Furnished apartment", "Serviced apartment", "Furnished home"];
@@ -110,14 +112,17 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
             >
               Furnished stays · Rwanda
             </motion.p>
-            <h1 className="mx-auto mt-4 max-w-3xl font-serif text-5xl font-semibold leading-[1.05] tracking-tight sm:text-6xl md:text-7xl">
-              {["Stay somewhere", "worth remembering"].map((line, i) => (
-                <span key={i} className="block overflow-hidden pb-1">
-                  <motion.span className="block" variants={maskUp}>
-                    {line}
-                  </motion.span>
-                </span>
-              ))}
+            <h1 className="mx-auto mt-4 max-w-3xl font-display text-5xl font-light leading-[1.05] tracking-tight sm:text-6xl md:text-7xl">
+              <span className="block overflow-hidden pb-1">
+                <motion.span className="block" variants={maskUp}>
+                  Stay somewhere
+                </motion.span>
+              </span>
+              <span className="block overflow-hidden pb-1">
+                <motion.span className="block italic text-gradient-gold" variants={maskUp}>
+                  worth remembering
+                </motion.span>
+              </span>
             </h1>
             <motion.p
               className="mx-auto mt-5 max-w-xl text-base text-white/85 sm:text-lg"
@@ -151,7 +156,7 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.55, duration: 0.8, ease: EASE }}
         >
-          <div className="surface-3d-floating p-2">
+          <div className="surface-3d-floating form-card-3d p-2">
             <div className="grid grid-cols-[minmax(0,1fr)] gap-px bg-[var(--line)] md:grid-cols-[1.3fr_1.2fr_1fr_auto]">
               <label className="flex min-h-16 items-center gap-3 bg-white px-5 transition-colors focus-within:bg-[var(--parchment)]">
                 <MapPin size={20} className="shrink-0 text-[var(--gold-deep)]" />
@@ -273,9 +278,9 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
             </select>
           </div>
 
-          <div className="mt-10 grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
+          <RevealGroup className="mt-10 grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
             {filtered.map((property) => (
-              <Reveal as="article" key={property.slug} className="surface-3d surface-3d-lift group min-w-0 overflow-hidden">
+              <Reveal variant="depth" as="article" key={property.slug} className="surface-3d surface-3d-lift group min-w-0 overflow-hidden">
                 <div className="relative w-full min-w-0 overflow-hidden">
                   <span className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-0.5 origin-left scale-x-0 bg-[var(--gold)] transition-transform duration-500 group-hover:scale-x-100" />
                   <PropertyImageSlider
@@ -325,7 +330,7 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
                 </div>
               </Reveal>
             ))}
-          </div>
+          </RevealGroup>
 
           {!filtered.length && (
             <div className="surface-3d mt-8 p-12 text-center">
@@ -361,23 +366,24 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
               (item) => destination === "Kigali" || item.neighborhood === destination,
             ).length;
             return (
-              <button
-                key={destination}
-                onClick={() => chooseDestination(destination)}
-                className="surface-3d surface-3d-lift group relative aspect-[3/4] overflow-hidden text-left image-shade"
-              >
-                <SmartImage
-                  src={property.image}
-                  alt={destination}
-                  fill
-                  className="object-cover transition duration-700 group-hover:scale-105"
-                  sizes="(max-width: 768px) 50vw, 25vw"
-                />
-                <div className="absolute inset-x-0 bottom-0 z-10 p-5 text-white">
-                  <h3 className="font-serif text-2xl font-semibold">{destination}</h3>
-                  <p className="text-xs uppercase tracking-[0.16em] text-white/80">{count} residences</p>
-                </div>
-              </button>
+              <TiltCard key={destination} strength={8} className="w-full">
+                <button
+                  onClick={() => chooseDestination(destination)}
+                  className="surface-3d surface-3d-lift group relative aspect-[3/4] w-full overflow-hidden text-left image-shade"
+                >
+                  <SmartImage
+                    src={property.image}
+                    alt={destination}
+                    fill
+                    className="object-cover transition duration-700 group-hover:scale-105"
+                    sizes="(max-width: 768px) 50vw, 25vw"
+                  />
+                  <div className="absolute inset-x-0 bottom-0 z-10 p-5 text-white">
+                    <h3 className="font-serif text-2xl font-semibold">{destination}</h3>
+                    <p className="text-xs uppercase tracking-[0.16em] text-white/80">{count} residences</p>
+                  </div>
+                </button>
+              </TiltCard>
             );
           })}
         </div>
@@ -511,7 +517,7 @@ function Counter({
         >
           <Minus size={15} />
         </button>
-        <span className="w-5 text-center text-sm">{value}</span>
+        <SlotCounter value={value} />
         <button
           onClick={() => setValue(value + 1)}
           className="interactive-3d grid size-9 place-items-center !border-[var(--gold)] text-[var(--gold-deep)]"

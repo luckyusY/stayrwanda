@@ -7,6 +7,7 @@ import { useMemo, useState } from "react";
 import { Check, ExternalLink, Plus, Search, Trash2, X } from "lucide-react";
 import { StatusBadge } from "@/components/admin-ui";
 import type { StoredProperty } from "@/lib/data";
+import { motion } from "framer-motion";
 
 const TABS = [
   { key: "all", label: "All" },
@@ -74,32 +75,40 @@ export function AdminProperties({ properties }: { properties: StoredProperty[] }
         </Link>
       </div>
 
-      <div className="mb-4 flex flex-wrap gap-1 border-b border-[#e4e7ec]">
-        {TABS.map(({ key, label }) => (
-          <button
-            key={key}
-            onClick={() => setTab(key)}
-            className={`-mb-px border-b-2 px-3 py-2.5 text-sm font-semibold ${
-              tab === key
-                ? "border-[#006ce4] text-[#006ce4]"
-                : "border-transparent text-[#667085] hover:text-[#1a1a1a]"
-            }`}
-          >
-            {label}
-            <span className="ml-1.5 rounded-full bg-[#f2f4f7] px-1.5 py-0.5 text-xs text-[#475467]">
-              {counts[key] || 0}
-            </span>
-          </button>
-        ))}
+      <div className="mb-6 flex flex-wrap gap-1 border-b border-[#e4e7ec]">
+        {TABS.map(({ key, label }) => {
+          const active = tab === key;
+          return (
+            <button
+              key={key}
+              onClick={() => setTab(key)}
+              className={`relative px-3 py-2.5 text-sm font-semibold transition-colors duration-300 ${
+                active ? "text-[#006ce4]" : "text-[#667085] hover:text-[#1a1a1a]"
+              }`}
+            >
+              {label}
+              <span className="ml-1.5 rounded-full bg-[#f2f4f7] px-1.5 py-0.5 text-xs text-[#475467]">
+                {counts[key] || 0}
+              </span>
+              {active && (
+                <motion.span
+                  layoutId="activeAdminPropertiesTabUnderline"
+                  className="absolute inset-x-0 bottom-0 h-0.5 bg-[#006ce4]"
+                  transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                />
+              )}
+            </button>
+          );
+        })}
       </div>
 
-      <div className="surface-3d overflow-hidden">
+      <div className="surface-3d overflow-hidden rounded-xl bg-white shadow-md border border-[#e4e7ec]">
         {rows.length === 0 ? (
           <p className="px-5 py-14 text-center text-sm text-[#667085]">No properties match this view.</p>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full min-w-[720px] text-left text-sm">
-              <thead className="bg-[#f9fafb] text-xs uppercase tracking-wide text-[#667085]">
+              <thead className="bg-[#f9fafb] text-xs uppercase tracking-wide text-[#667085] border-b border-[#e4e7ec]">
                 <tr>
                   <th className="px-5 py-3 font-semibold">Property</th>
                   <th className="px-3 py-3 font-semibold">Area</th>
@@ -110,7 +119,12 @@ export function AdminProperties({ properties }: { properties: StoredProperty[] }
               </thead>
               <tbody className="divide-y divide-[#eef1f5]">
                 {rows.map((property) => (
-                  <tr key={property.slug} className={busy === property.slug ? "opacity-50" : "hover:bg-[#f9fafb]"}>
+                  <tr
+                    key={property.slug}
+                    className={`transition-colors duration-200 hover:bg-[#f9fafb] ${
+                      busy === property.slug ? "opacity-50" : ""
+                    }`}
+                  >
                     <td className="px-5 py-3">
                       <div className="flex items-center gap-3">
                         <div className="relative size-12 shrink-0 overflow-hidden rounded-lg bg-[#eef1f5]">
@@ -135,7 +149,7 @@ export function AdminProperties({ properties }: { properties: StoredProperty[] }
                     <td className="px-3 py-3">
                       <StatusBadge status={property.status} />
                     </td>
-                    <td className="px-5 py-3">
+                    <td className="px-5 py-3 border-l-0">
                       <div className="flex items-center justify-end gap-1.5">
                         {property.status === "pending" && (
                           <>

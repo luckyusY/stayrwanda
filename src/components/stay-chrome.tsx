@@ -7,14 +7,12 @@ import { softSpring } from "@/lib/motion";
 
 const SECTIONS = [
   { id: "overview", label: "Overview" },
-  { id: "availability", label: "Rates" },
-  { id: "facilities", label: "Facilities" },
-  { id: "rules", label: "House rules" },
-  { id: "fine-print", label: "Fine print" },
-  { id: "reviews", label: "Reviews" },
+  { id: "rooms", label: "Accommodation" },
+  { id: "amenities", label: "Facilities" },
+  { id: "location", label: "Location" },
 ] as const;
 
-/** Sticky sub-navigation with IntersectionObserver scroll-spy. */
+/** Sticky sub-navigation with IntersectionObserver scroll-spy and sliding underline. */
 export function StaySectionNav() {
   const [active, setActive] = useState<string>("overview");
 
@@ -33,7 +31,7 @@ export function StaySectionNav() {
   }, []);
 
   return (
-    <nav className="sticky top-20 z-30 grid grid-cols-3 border-y border-[var(--line)] header-frost text-center text-xs font-medium uppercase tracking-[0.12em] sm:grid-cols-6">
+    <nav className="sticky top-20 z-30 grid grid-cols-4 border-y border-[var(--line)] header-frost text-center text-xs font-semibold uppercase tracking-[0.12em] rounded-lg overflow-hidden shadow-sm">
       {SECTIONS.map((s) => {
         const isActive = active === s.id;
         return (
@@ -41,16 +39,18 @@ export function StaySectionNav() {
             key={s.id}
             href={`#${s.id}`}
             aria-current={isActive ? "true" : undefined}
-            className={`relative px-2 py-4 transition-colors ${
+            className={`relative px-2 py-4 transition-colors duration-300 ${
               isActive ? "text-[var(--gold-deep)]" : "text-[var(--ink)] hover:text-[var(--gold-deep)]"
             }`}
           >
             {s.label}
-            <span
-              className={`absolute inset-x-0 bottom-0 h-0.5 origin-center bg-[var(--gold)] transition-transform duration-300 ${
-                isActive ? "scale-x-100" : "scale-x-0"
-              }`}
-            />
+            {isActive && (
+              <motion.span
+                layoutId="activeSectionNavIndicator"
+                className="absolute inset-x-0 bottom-0 h-0.5 bg-[var(--gold)]"
+                transition={{ type: "spring", stiffness: 380, damping: 30 }}
+              />
+            )}
           </a>
         );
       })}
@@ -85,7 +85,7 @@ export function StayReserveBar({
           animate={{ y: 0 }}
           exit={{ y: 96 }}
           transition={softSpring}
-          className="fixed inset-x-0 bottom-0 z-40 border-t border-[var(--line)] header-frost"
+          className="fixed inset-x-0 bottom-0 z-40 border-t border-[var(--line)] header-frost shadow-[0_-8px_30px_rgba(20,34,58,0.06)]"
         >
           <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
             <div className="min-w-0">

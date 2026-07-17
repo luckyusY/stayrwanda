@@ -260,7 +260,7 @@ export function SiteFooter() {
               className="min-h-13 flex-1 bg-white px-4 text-sm outline-none"
               placeholder="Your email address"
             />
-            <button className="button-3d !rounded-none bg-[var(--gold)] px-6 text-xs font-semibold uppercase tracking-[0.18em] text-white hover:bg-[var(--gold-deep)]">
+            <button className="button-3d !rounded-none bg-[var(--gold)] px-6 text-xs font-semibold uppercase tracking-[0.18em] text-white hover:bg-[var(--gold-deep)] shimmer-gold">
               Subscribe
             </button>
           </div>
