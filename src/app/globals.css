@@ -78,6 +78,8 @@
   --panel-border: color-mix(in srgb, var(--line) 88%, var(--ink));
   --focus-glow: 0 0 0 3px rgba(176, 141, 87, .16);
   --error-glow: 0 0 0 3px rgba(180, 69, 58, .12);
+}
+
 /* Lenis smooth scroll — disable native smoothing while Lenis is driving */
 html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
