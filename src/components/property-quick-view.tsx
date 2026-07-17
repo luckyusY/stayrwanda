@@ -45,7 +45,7 @@ export function PropertyQuickView({
                   <MapPin size={12} /> {property.neighborhood}, {property.location}
                 </span>
                 <h3 className="mt-2 font-serif text-3xl font-semibold text-[var(--ink)] leading-tight">{property.title}</h3>
-                <p className="mt-2 text-sm text-[var(--muted)]">{property.type} · Up to {property.units[0]?.maxGuests || 2} guests</p>
+                <p className="mt-2 text-sm text-[var(--muted)]">{property.type} · Up to {property.guests || 2} guests</p>
               </div>
 
               <div className="flex items-center gap-3 border-y border-[var(--line)] py-4">

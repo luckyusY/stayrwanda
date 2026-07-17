@@ -611,3 +611,204 @@ select:-webkit-autofill {
 .confirm-step { display: flex; align-items: flex-start; gap: .875rem; padding: .875rem 0; border-bottom: 1px solid var(--line); }
 .confirm-step:last-child { border-bottom: none; }
 .confirm-step-icon { flex-shrink: 0; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--green-light); color: var(--rwanda-green); }
+
+/* ── Phase 4: Canvas & Section Identity ───────────────── */
+
+/* Film-grain overlay — sits over any section at 3% opacity */
+.canvas-grain {
+  position: relative;
+}
+.canvas-grain::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999;
+  opacity: 0.028;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  mix-blend-mode: multiply;
+}
+
+/* Diagonal clip-path bottom edge — makes a section pour into the next */
+.section-wave {
+  clip-path: polygon(0 0, 100% 0, 100% 93%, 0 100%);
+  padding-bottom: 7vw;
+}
+.section-wave-top {
+  clip-path: polygon(0 7%, 100% 0, 100% 100%, 0 100%);
+  padding-top: 7vw;
+  margin-top: -1px;
+}
+
+/* Dot-grid background pattern */
+.section-dot-grid {
+  background-image: radial-gradient(circle, var(--gold-mid) 1px, transparent 1px);
+  background-size: 28px 28px;
+  background-color: var(--parchment);
+}
+
+/* 45° diagonal stripe background */
+.section-stripe {
+  background-color: var(--cream);
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 18px,
+    rgba(176, 141, 87, 0.055) 18px,
+    rgba(176, 141, 87, 0.055) 19px
+  );
+}
+
+/* Dark charcoal diagonal stripe — for filmstrip section */
+.section-stripe-dark {
+  background-color: #0f1c2e;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 24px,
+    rgba(255, 255, 255, 0.025) 24px,
+    rgba(255, 255, 255, 0.025) 25px
+  );
+}
+
+/* Large decorative floating numeral behind content */
+.float-numeral {
+  position: absolute;
+  font-family: var(--font-serif);
+  font-size: clamp(8rem, 18vw, 16rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  pointer-events: none;
+  user-select: none;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(176, 141, 87, 0.14);
+}
+
+/* 50/50 editorial split container */
+.split-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+@media (max-width: 767px) {
+  .split-section { grid-template-columns: 1fr; }
+}
+.split-left  { background: var(--ink); color: white; }
+.split-right { background: var(--parchment); }
+
+/* Gold horizon animated divider */
+.gold-horizon {
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--gold-mid) 30%, var(--clay) 50%, var(--gold-mid) 70%, transparent 100%);
+  background-size: 200% 100%;
+  animation: horizon-drift 4s ease-in-out infinite;
+}
+@keyframes horizon-drift {
+  0%, 100% { background-position: 0% 0; }
+  50%       { background-position: 100% 0; }
+}
+
+/* Diagonal gold stripe SVG watermark inside assurances section */
+.diagonal-stripe-watermark {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    -55deg,
+    transparent,
+    transparent 60px,
+    rgba(176, 141, 87, 0.045) 60px,
+    rgba(176, 141, 87, 0.045) 61px
+  );
+}
+
+/* Filmstrip tile — contact-sheet layout for property types */
+.filmstrip-track {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: 5fr 4fr 8fr 4fr;
+  grid-template-rows: 420px;
+}
+@media (max-width: 1023px) {
+  .filmstrip-track { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+}
+@media (max-width: 639px) {
+  .filmstrip-track { grid-template-columns: 1fr; }
+}
+.filmstrip-tile { position: relative; overflow: hidden; }
+.filmstrip-tile img, .filmstrip-tile > div { height: 100%; }
+
+/* Masonry destinations grid */
+.masonry-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr 1fr;
+  grid-template-rows: 320px 320px;
+  gap: 1rem;
+}
+.masonry-grid > :first-child { grid-row: span 2; }
+@media (max-width: 767px) {
+  .masonry-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+  .masonry-grid > :first-child { grid-row: span 1; }
+}
+@media (max-width: 479px) {
+  .masonry-grid { grid-template-columns: 1fr; }
+}
+
+/* Member perk row inside glass card */
+.member-perk {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.875rem;
+  padding: 0.875rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.member-perk:last-child { border-bottom: none; }
+.member-perk-icon {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: rgba(176, 141, 87, 0.14);
+  color: var(--gold-mid);
+}
+
+/* Ambient floating particles (CSS-only, used in Members section) */
+@keyframes float-particle {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.55; }
+  33%       { transform: translateY(-18px) scale(1.15); opacity: 0.8; }
+  66%       { transform: translateY(10px) scale(0.9); opacity: 0.4; }
+}
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--gold-mid);
+  animation: float-particle var(--dur, 6s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+  pointer-events: none;
+}
+
+/* Staggered assurance items (odd = left, even = right) */
+.assurance-grid {
+  display: grid;
+  gap: 2.5rem 4rem;
+  grid-template-columns: 1fr 1fr;
+}
+@media (max-width: 767px) {
+  .assurance-grid { grid-template-columns: 1fr; }
+}
+.assurance-item { display: flex; gap: 1.5rem; align-items: flex-start; }
+.assurance-item:nth-child(even) { flex-direction: row-reverse; text-align: right; }
+@media (max-width: 767px) {
+  .assurance-item:nth-child(even) { flex-direction: row; text-align: left; }
+}
+
+/* Overhanging section heading — bleeds past container on large screens */
+.heading-overhang {
+  position: relative;
+}
+@media (min-width: 1024px) {
+  .heading-overhang { margin-left: -2.5rem; }
+}
+
