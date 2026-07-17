@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { CalendarDays, ChevronDown, Globe2, MapPin, Menu, Search, Users, X, BedDouble, Home, Building2, Tag, PlusSquare, Bell, UserCircle2, Instagram, Twitter, Facebook } from "lucide-react";
+import { CalendarDays, ChevronDown, Globe2, MapPin, Menu, Search, Users, X, BedDouble, Home, Building2, Tag, PlusSquare, Bell, UserCircle2 } from "lucide-react";
 import { EASE, softSpring } from "@/lib/motion";
 import { CurrencyControl } from "@/components/currency-provider";
 import { AccountPopout } from "@/components/account-popout";
@@ -302,9 +302,9 @@ export function SiteFooter() {
               © {new Date().getFullYear()} StayRwanda — Rwanda-first furnished stays, reserved with confidence.
             </div>
             <div className="flex items-center gap-5 text-white/40">
-              <a href="#" className="hover:text-[var(--gold)] transition-colors" aria-label="Instagram"><Instagram size={18} /></a>
-              <a href="#" className="hover:text-[var(--gold)] transition-colors" aria-label="Twitter"><Twitter size={18} /></a>
-              <a href="#" className="hover:text-[var(--gold)] transition-colors" aria-label="Facebook"><Facebook size={18} /></a>
+              <a href="#" className="text-xs font-medium hover:text-[var(--gold)] transition-colors">Instagram</a>
+              <a href="#" className="text-xs font-medium hover:text-[var(--gold)] transition-colors">Twitter</a>
+              <a href="#" className="text-xs font-medium hover:text-[var(--gold)] transition-colors">Facebook</a>
             </div>
           </div>
         </div>
