@@ -10,7 +10,6 @@ import { EASE, softSpring } from "@/lib/motion";
 import { CurrencyControl } from "@/components/currency-provider";
 import { AccountPopout } from "@/components/account-popout";
 import { NotificationPopout } from "@/components/notification-popout";
-import { SearchCommand } from "@/components/search-command";
 
 const NAV = [
   { label: "Stays", href: "/stays" },
@@ -76,17 +75,11 @@ export function SiteHeader({
     >
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div
-          className={`flex items-center justify-between gap-3 transition-[height] duration-300 ${
+          className={`flex items-center justify-between gap-4 transition-[height] duration-300 ${
             compact ? "h-16" : "h-20"
           }`}
         >
-          {/* Logo + search cluster */}
-          <div className="flex min-w-0 items-center gap-3 sm:gap-4">
-            <Wordmark light={onLight} imgClass={compact ? "h-10 sm:h-12" : "h-12 sm:h-16"} />
-            <div className="hidden min-w-0 sm:block sm:max-w-[200px] md:max-w-[240px] lg:max-w-[220px] xl:max-w-[260px]">
-              <SearchCommand light={onLight} />
-            </div>
-          </div>
+          <Wordmark light={onLight} imgClass={compact ? "h-12" : "h-16"} />
 
           {/* Text-only destination nav */}
           <nav className="hidden items-center gap-5 xl:gap-6 lg:flex">
@@ -144,7 +137,7 @@ export function SiteHeader({
               exit={{ x: "100%" }}
               transition={softSpring}
             >
-              <div className="mb-6 flex items-center justify-between">
+              <div className="mb-8 flex items-center justify-between">
                 <Wordmark imgClass="h-12" />
                 <button
                   onClick={() => setOpen(false)}
@@ -153,10 +146,6 @@ export function SiteHeader({
                 >
                   <X />
                 </button>
-              </div>
-
-              <div className="mb-6 sm:hidden">
-                <SearchCommand />
               </div>
 
               <motion.ul
@@ -208,57 +197,40 @@ export function CompactSearch({ destination = "Kigali" }: { destination?: string
   return (
     <div className="bg-[var(--cream)] py-6">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <div className="surface-3d-floating grid grid-cols-1 gap-2 overflow-hidden p-2 md:grid-cols-[1.3fr_1.2fr_1fr_auto] md:gap-2">
-          <label className="flex min-h-15 min-w-0 items-center gap-3 rounded-[var(--radius-control)] bg-white px-3 py-2">
+        <div className="surface-3d-floating grid grid-cols-[minmax(0,1fr)] gap-px overflow-hidden bg-[var(--line)] md:grid-cols-[1.3fr_1.1fr_1fr_auto]">
+          <label className="flex min-h-15 min-w-0 items-center gap-3 bg-white px-4 transition-colors focus-within:bg-[var(--parchment)]">
             <MapPin size={20} className="shrink-0 text-[var(--gold-deep)]" />
-            <span className="min-w-0 flex-1">
-              <span className="block text-[0.65rem] uppercase tracking-[0.18em] text-[var(--muted)]">Destination</span>
-              <span className="search-field-well mt-1 block px-2.5 py-1.5">
-                <input
-                  value={place}
-                  onChange={(event) => setPlace(event.target.value)}
-                  className="search-field-input"
-                  placeholder="Kigali, Kibagabaga…"
-                />
-              </span>
-            </span>
+            <input
+              value={place}
+              onChange={(event) => setPlace(event.target.value)}
+              className="min-w-0 flex-1 cursor-text bg-transparent text-sm font-medium text-[var(--ink)] outline-none placeholder:font-normal placeholder:text-[var(--muted)]"
+              placeholder="Kigali, Kibagabaga…"
+            />
           </label>
-
-          <div className="flex min-h-15 min-w-0 items-center gap-3 rounded-[var(--radius-control)] bg-white px-3 py-2">
+          <div className="flex min-h-15 min-w-0 items-center gap-2 bg-white px-4 focus-within:bg-[var(--parchment)]">
             <CalendarDays size={20} className="shrink-0 text-[var(--gold-deep)]" />
-            <div className="grid min-w-0 flex-1 grid-cols-2 gap-2">
-              <label className="min-w-0">
-                <span className="block text-[0.65rem] uppercase tracking-[0.18em] text-[var(--muted)]">Check-in</span>
-                <span className="search-field-well mt-1 block px-2 py-1.5">
-                  <input type="date" className="search-field-input text-xs" />
-                </span>
-              </label>
-              <label className="min-w-0">
-                <span className="block text-[0.65rem] uppercase tracking-[0.18em] text-[var(--muted)]">Check-out</span>
-                <span className="search-field-well mt-1 block px-2 py-1.5">
-                  <input type="date" className="search-field-input text-xs" />
-                </span>
-              </label>
-            </div>
+            <input
+              type="date"
+              aria-label="Check-in"
+              className="w-[118px] min-w-0 cursor-text bg-transparent text-xs font-medium text-[var(--ink)] outline-none"
+            />
+            <span className="text-[var(--muted)]">—</span>
+            <input
+              type="date"
+              aria-label="Check-out"
+              className="w-[118px] min-w-0 cursor-text bg-transparent text-xs font-medium text-[var(--ink)] outline-none"
+            />
           </div>
-
           <button
             type="button"
-            className="flex min-h-15 items-center gap-3 rounded-[var(--radius-control)] bg-white px-3 py-2 text-left"
+            className="flex min-h-15 items-center gap-3 bg-white px-4 text-sm text-[var(--ink)]"
           >
-            <Users size={20} className="shrink-0 text-[var(--gold-deep)]" />
-            <span className="min-w-0 flex-1">
-              <span className="block text-[0.65rem] uppercase tracking-[0.18em] text-[var(--muted)]">Guests</span>
-              <span className="search-field-well mt-1 flex items-center justify-between px-2.5 py-1.5 text-sm font-medium text-[var(--ink)]">
-                2 guests · 1 room
-                <ChevronDown size={15} className="text-[var(--muted)]" />
-              </span>
-            </span>
+            <Users size={20} className="text-[var(--gold-deep)]" /> 2 guests · 1 room
+            <ChevronDown size={15} className="ml-auto" />
           </button>
-
           <Link
             href={`/search?destination=${encodeURIComponent(place)}`}
-            className="button-3d flex min-h-15 items-center justify-center gap-2 bg-[var(--ink)] px-8 text-xs font-semibold uppercase tracking-[0.2em] text-white hover:bg-[var(--ink-2)] md:rounded-[var(--radius-control)]"
+            className="button-3d flex min-h-15 items-center justify-center gap-2 !rounded-none bg-[var(--ink)] px-8 text-xs font-semibold uppercase tracking-[0.2em] text-white hover:bg-[var(--ink-2)]"
           >
             <Search size={17} /> Search
           </Link>
