@@ -7,9 +7,9 @@ import { getDb } from "@/lib/mongodb";
 type ClerkEvent = { type: string; data: { id: string; email_addresses?: Array<{ email_address: string; id: string }>; primary_email_address_id?: string; first_name?: string; last_name?: string; image_url?: string } };
 
 export async function POST(request: Request) {
-  if (!env.CLERK_WEBHOOK_SECRET) return NextResponse.json({ error: "Webhook not configured." }, { status: 503 });
+  if (!env.CLERK_WEBHOOK_SIGNING_SECRET) return NextResponse.json({ error: "Webhook not configured." }, { status: 503 });
   const headerStore = await headers();
-  const webhook = new Webhook(env.CLERK_WEBHOOK_SECRET);
+  const webhook = new Webhook(env.CLERK_WEBHOOK_SIGNING_SECRET);
   let event: ClerkEvent;
   try {
     event = webhook.verify(await request.text(), {

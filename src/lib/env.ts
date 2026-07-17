@@ -5,7 +5,7 @@ const serverSchema = z.object({
   MONGODB_URI: z.string().min(1).optional(),
   MONGODB_DB: z.string().default("stayrwanda"),
   CLERK_SECRET_KEY: z.string().min(1).optional(),
-  CLERK_WEBHOOK_SECRET: z.string().min(1).optional(),
+  CLERK_WEBHOOK_SIGNING_SECRET: z.string().min(1).optional(),
   CLOUDINARY_CLOUD_NAME: z.string().min(1).optional(),
   CLOUDINARY_API_KEY: z.string().min(1).optional(),
   CLOUDINARY_API_SECRET: z.string().min(1).optional(),
