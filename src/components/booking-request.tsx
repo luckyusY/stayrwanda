@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Check, ChevronLeft, LockKeyhole, Mail, Send, ShieldCheck } from "lucide-react";
+import { Check, ChevronLeft, LockKeyhole, Mail, Send, ShieldCheck, CheckCircle2, Clock, CalendarCheck, CreditCard, ClipboardList, Home } from "lucide-react";
 import type { Property } from "@/lib/properties";
 import { Button, ButtonLink } from "@/components/ui/button";
 import { FloatingField } from "@/components/ui/field";
@@ -93,41 +93,63 @@ export function BookingRequest({ property }: { property: Property }) {
 
   if (reference) {
     return (
-      <main className="min-h-screen bg-[var(--parchment)] flex items-center justify-center p-4">
+      <main className="min-h-screen bg-[var(--parchment)] flex items-center justify-center p-4 py-12">
         <motion.div
-          className="w-full max-w-lg bg-white rounded-xl border border-[var(--line)] p-8 text-center shadow-xl form-card-3d"
+          className="w-full max-w-lg bg-white rounded-xl border border-[var(--line)] p-0 text-center shadow-2xl form-card-3d overflow-hidden"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, ease: EASE }}
         >
-          {/* Animated paper airplane flying out from envelope */}
-          <div className="relative mx-auto size-20 flex items-center justify-center rounded-full bg-[var(--parchment)] text-[var(--gold-deep)] overflow-hidden">
-            <motion.div
-              initial={{ x: -40, y: 40, opacity: 0 }}
-              animate={{ x: 40, y: -40, opacity: 1 }}
-              transition={{ repeat: Infinity, duration: 2, ease: "easeInOut", repeatDelay: 1 }}
-              className="absolute text-[var(--gold)]"
-            >
-              <Send size={24} />
-            </motion.div>
-            <Mail size={32} className="relative z-10 text-[var(--ink)]" />
+          <div className="bg-[var(--parchment)] p-8 border-b border-[var(--line)] relative overflow-hidden">
+             {/* Glow background */}
+             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-[var(--rwanda-green)]/10 blur-3xl rounded-full pointer-events-none"></div>
+             
+             <div className="relative mx-auto size-20 flex items-center justify-center rounded-full bg-white shadow-sm border border-[var(--rwanda-green)]/30 text-[var(--rwanda-green)]">
+                <CheckCircle2 size={36} className="relative z-10" />
+                <motion.div 
+                  initial={{ scale: 1, opacity: 1 }}
+                  animate={{ scale: 1.5, opacity: 0 }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "easeOut" }}
+                  className="absolute inset-0 rounded-full border border-[var(--rwanda-green)] pointer-events-none"
+                />
+             </div>
+             <p className="eyebrow mt-6 text-[var(--rwanda-green)]">Request received</p>
+             <h1 className="mt-3 font-serif text-3xl font-semibold text-[var(--ink)] relative z-10">Your request is confirmed</h1>
+             
+             <div className="mx-auto mt-6 inline-block rounded-full border border-[var(--gold)] bg-[var(--gold-pale)] px-6 py-2.5 text-xs font-bold uppercase tracking-[0.16em] text-[var(--gold-deep)] shadow-sm relative z-10">
+                Reference: <span className="font-mono ml-1">{reference}</span>
+             </div>
           </div>
 
-          <p className="eyebrow mt-6">Request received</p>
-          <h1 className="mt-3 font-serif text-3xl font-semibold text-[var(--ink)]">Your booking request is sent</h1>
-          <p className="mt-4 text-sm text-[var(--muted)] leading-relaxed">
-            Your request for <strong className="text-[var(--ink)]">{property.title}</strong> has been received.
-            The host will review details and confirm availability shortly.
-          </p>
-          
-          <div className="mx-auto mt-6 inline-block rounded border border-[var(--line)] bg-[var(--parchment)] px-6 py-3 text-sm font-semibold tracking-[0.14em] text-[var(--ink)]">
-            Reference: <span className="font-mono text-[var(--gold-deep)]">{reference}</span>
-          </div>
-
-          <div className="mt-8 border-t border-[var(--line)] pt-6 flex justify-center">
-            <ButtonLink href="/account/bookings" size="lg" withArrow>
-              View requests
-            </ButtonLink>
+          <div className="p-8 text-left">
+            <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--muted)] mb-6 text-center">What happens next</h3>
+            
+            <div className="space-y-0">
+              {[
+                { icon: Mail, text: "Confirmation sent to your email" },
+                { icon: Clock, text: "Host reviews within 24 hours" },
+                { icon: CalendarCheck, text: "Dates are soft-held" },
+                { icon: CreditCard, text: "No payment collected yet" },
+              ].map((step, i) => (
+                <div key={i} className="confirm-step">
+                   <div className="confirm-step-icon">
+                     <step.icon size={18} />
+                   </div>
+                   <div className="pt-2">
+                     <span className="text-sm font-medium text-[var(--ink)]">{step.text}</span>
+                   </div>
+                </div>
+              ))}
+            </div>
+            
+            <div className="mt-8 pt-6 border-t border-[var(--line)] grid sm:grid-cols-2 gap-3">
+              <Link href="/account/bookings" className="button-3d flex w-full items-center justify-center gap-2 border border-[var(--line)] bg-white px-4 py-3.5 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--ink)] hover:bg-[var(--parchment)] transition-colors rounded">
+                <ClipboardList size={16} /> Track booking
+              </Link>
+              <Link href="/" className="button-3d flex w-full items-center justify-center gap-2 bg-[var(--ink)] px-4 py-3.5 text-xs font-semibold uppercase tracking-[0.14em] text-white hover:bg-[var(--ink-2)] transition-colors rounded shadow-md">
+                <Home size={16} /> Back to stays
+              </Link>
+            </div>
           </div>
         </motion.div>
       </main>

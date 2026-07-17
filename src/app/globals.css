@@ -585,4 +585,29 @@ select:-webkit-autofill {
 }
 .ticker-track:hover { animation-play-state: paused; }
 
+/* ── Popout primitive ─────────────────────────────────── */
+.popout-backdrop { position: fixed; inset: 0; z-index: var(--z-overlay); background: rgba(20,34,58,.42); backdrop-filter: blur(6px); }
+.popout-sheet    { position: fixed; inset-y: 0; right: 0; z-index: var(--z-modal); width: min(480px, 100vw); background: white; box-shadow: var(--shadow-xl); overflow-y: auto; }
+.popout-dialog   { position: fixed; inset: 0; z-index: var(--z-modal); display: grid; place-items: center; padding: 1.5rem; }
+.popout-panel    { background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-xl); max-width: 640px; width: 100%; }
+.popout-dropdown { position: absolute; z-index: var(--z-modal); background: white; border-radius: var(--radius-md); box-shadow: var(--shadow-lg); border: 1px solid var(--line); }
 
+/* ── Icon premium ─────────────────────────────────────── */
+.icon-premium { filter: drop-shadow(0 2px 6px rgba(176,141,87,.22)); transition: transform .25s, filter .25s; }
+.icon-premium:hover { transform: translateY(-1px) scale(1.08); filter: drop-shadow(0 4px 12px rgba(176,141,87,.4)); }
+.icon-halo { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; background: var(--gold-pale); border: 1.5px solid var(--gold-mid); box-shadow: 0 0 0 6px var(--gold-shimmer); }
+.icon-badge { position: relative; display: inline-flex; }
+.icon-badge::after { content: attr(data-count); position: absolute; top: -5px; right: -5px; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 9999px; background: var(--gold); color: white; font-size: 9px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+
+/* ── Amenity pill ─────────────────────────────────────── */
+.amenity-pill { display: inline-flex; align-items: center; gap: .375rem; padding: .375rem .75rem; border: 1px solid var(--line); border-radius: var(--radius-full); font-size: .6875rem; font-weight: 600; text-transform: uppercase; letter-spacing: .1em; color: var(--ink); background: var(--parchment); transition: border-color .2s, background .2s; }
+.amenity-pill:hover, .amenity-pill.active { border-color: var(--gold); background: var(--gold-pale); color: var(--gold-deep); }
+
+/* ── Notification indicator ──────────────────────────── */
+@keyframes pulse-dot { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .7; transform: scale(1.4); } }
+.notification-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); animation: pulse-dot 2s ease-in-out infinite; }
+
+/* ── Confirmation checklist ──────────────────────────── */
+.confirm-step { display: flex; align-items: flex-start; gap: .875rem; padding: .875rem 0; border-bottom: 1px solid var(--line); }
+.confirm-step:last-child { border-bottom: none; }
+.confirm-step-icon { flex-shrink: 0; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--green-light); color: var(--rwanda-green); }

@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { Check, ChevronDown, MapPin, SlidersHorizontal, Search } from "lucide-react";
+import { Check, ChevronDown, MapPin, SlidersHorizontal, Search, CheckCircle2, ShieldCheck, LockKeyhole, Eye } from "lucide-react";
 import { FavoriteButton } from "@/components/favorite-button";
+import { FilterDialog, FilterGroup } from "@/components/filter-dialog";
 import { PropertyImageSlider } from "@/components/property-image-slider";
+import { PropertyQuickView } from "@/components/property-quick-view";
 import { Reveal, RevealGroup } from "@/components/reveal";
-import { TiltCard } from "@/components/tilt-card";
 import type { Property } from "@/lib/properties";
 
 export function SearchResults({
@@ -19,6 +20,7 @@ export function SearchResults({
   const [destination, setDestination] = useState(initialDestination);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [mobileFilters, setMobileFilters] = useState(false);
+  const [quickViewSlug, setQuickViewSlug] = useState<string | null>(null);
 
   const results = useMemo(
     () =>
@@ -112,12 +114,12 @@ export function SearchResults({
               </h1>
               <p className="mt-1 text-sm text-[var(--muted)]">Furnished stays matching your search</p>
             </div>
-            <button
-              onClick={() => setMobileFilters(!mobileFilters)}
-              className="interactive-3d flex items-center gap-2 !border-[var(--gold)] px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--gold-deep)] lg:hidden"
-            >
-              <SlidersHorizontal size={16} /> Filters
-            </button>
+            <FilterDialog
+              selectedTypes={selectedTypes}
+              toggleType={toggle}
+              onClear={() => setSelectedTypes([])}
+              resultCount={results.length}
+            />
           </div>
 
           <div className="surface-3d mt-5 flex items-center justify-between bg-[var(--parchment)] px-4 py-3 rounded-lg">
@@ -142,16 +144,27 @@ export function SearchResults({
                     href={`/stays/${property.slug}`}
                     sizes="(max-width: 640px) 100vw, 240px"
                   />
-                  <FavoriteButton
-                    hotelSlug={property.slug}
-                    className="absolute right-3 top-3 z-30 grid size-9 place-items-center rounded-full bg-white/90 text-[var(--ink)] shadow transition-transform duration-200 hover:scale-110"
-                  />
+                  <div className="absolute right-3 top-3 z-30 flex flex-col gap-2">
+                    <FavoriteButton
+                      hotelSlug={property.slug}
+                      className="grid size-9 place-items-center rounded-full bg-white/90 text-[var(--ink)] shadow transition-transform duration-200 hover:scale-110"
+                    />
+                    <button
+                      onClick={() => setQuickViewSlug(property.slug)}
+                      aria-label="Quick view property"
+                      className="grid size-9 place-items-center rounded-full bg-white/90 text-[var(--ink)] opacity-0 shadow transition-all duration-200 hover:scale-110 group-hover:opacity-100 hover:text-[var(--gold-deep)]"
+                    >
+                      <Eye size={18} />
+                    </button>
+                  </div>
                 </div>
                 <div className="flex min-w-0 flex-col sm:flex-row sm:justify-between sm:gap-6">
                   <div className="min-w-0 flex-1">
-                    <p className="flex items-center gap-1.5 text-xs uppercase tracking-[0.16em] text-[var(--muted)]">
-                      <MapPin size={13} className="text-[var(--gold-deep)]" /> {property.neighborhood}
-                    </p>
+                    <div className="flex items-center gap-2">
+                      <span className="flex items-center gap-1 rounded bg-[var(--parchment)] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--ink)]">
+                        <MapPin size={10} className="text-[var(--gold-deep)]" /> {property.neighborhood}
+                      </span>
+                    </div>
                     <Link
                       href={`/stays/${property.slug}`}
                       className="mt-2 block font-serif text-2xl font-semibold text-[var(--ink)] transition group-hover:text-[var(--gold-deep)]"
@@ -162,9 +175,10 @@ export function SearchResults({
                     <p className="mt-1 text-sm text-[var(--muted)]">
                       {property.amenities.slice(0, 3).join(" · ")}
                     </p>
-                    <p className="mt-4 inline-block border-l-2 border-[var(--gold)] pl-3 text-sm text-[var(--gold-deep)]">
-                      Free booking request · No prepayment
-                    </p>
+                    <div className="mt-4 flex flex-wrap items-center gap-2">
+                      <span className="flex items-center gap-1.5 rounded-full border border-[var(--line)] bg-[var(--parchment)] px-2.5 py-1 text-[11px] font-medium text-[var(--ink)]"><CheckCircle2 size={12} className="text-[var(--gold-deep)]" /> Free booking request</span>
+                      <span className="flex items-center gap-1.5 rounded-full border border-[var(--line)] bg-[var(--parchment)] px-2.5 py-1 text-[11px] font-medium text-[var(--ink)]"><ShieldCheck size={12} className="text-[var(--gold-deep)]" /> No prepayment</span>
+                    </div>
                   </div>
                   <div className="mt-5 flex shrink-0 flex-row items-end justify-between sm:mt-0 sm:w-44 sm:flex-col sm:items-end">
                     <div className="text-right">
@@ -206,42 +220,14 @@ export function SearchResults({
           )}
         </section>
       </div>
+
+      <PropertyQuickView
+        slug={quickViewSlug}
+        properties={properties}
+        onClose={() => setQuickViewSlug(null)}
+      />
     </div>
   );
 }
 
-function FilterGroup({
-  title,
-  options,
-  selected,
-  toggle,
-}: {
-  title: string;
-  options: string[];
-  selected: string[];
-  toggle: (option: string) => void;
-}) {
-  return (
-    <div className="border-b border-[var(--line)] p-4 last:border-0">
-      <h4 className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--ink)]">{title}</h4>
-      <div className="mt-3 space-y-3">
-        {options.map((option) => (
-          <label key={option} className="flex cursor-pointer items-center gap-2.5 text-sm">
-            <button
-              onClick={() => toggle(option)}
-              className={`grid size-5 shrink-0 place-items-center rounded shadow-[inset_0_1px_2px_rgba(20,34,58,.12)] transition-colors ${
-                selected.includes(option)
-                  ? "border-[var(--gold)] bg-[var(--gold)] text-white"
-                  : "border-[var(--muted)]"
-              }`}
-              aria-label={`Filter by ${option}`}
-            >
-              {selected.includes(option) && <Check size={13} />}
-            </button>
-            <span className="text-[var(--foreground)]">{option}</span>
-          </label>
-        ))}
-      </div>
-    </div>
-  );
-}
+

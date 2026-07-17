@@ -1,7 +1,7 @@
 "use client";
 
 import { SignIn, SignUp } from "@clerk/nextjs";
-import { Check, LockKeyhole, ShieldCheck } from "lucide-react";
+import { Check, LockKeyhole, ShieldCheck, UserCircle2 } from "lucide-react";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { clerkConfigured } from "@/lib/env";
 import { useEffect, useState } from "react";
@@ -135,11 +135,9 @@ export function AuthExperience({ mode }: { mode: "sign-in" | "sign-up" }) {
                   />
                 )
               ) : (
-                <div className="text-center py-10">
-                  <span className="mx-auto grid size-14 place-items-center rounded-full bg-[var(--cream)] text-[var(--gold-deep)]">
-                    <LockKeyhole size={25} />
-                  </span>
-                  <h2 className="mt-5 font-serif text-3xl text-[var(--ink)]">Accounts are temporarily unavailable</h2>
+                <div className="text-center py-10 flex flex-col items-center">
+                  <UserCircle2 size={48} className="text-[var(--gold)] mb-4" />
+                  <h2 className="font-serif text-3xl text-[var(--ink)]">Accounts are temporarily unavailable</h2>
                   <p className="mt-3 text-sm leading-relaxed text-[var(--muted)]">
                     Authentication has not been connected for this deployment. Please try again after the site administrator completes the secure account setup.
                   </p>

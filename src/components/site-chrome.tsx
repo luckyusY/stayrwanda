@@ -5,17 +5,20 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { CalendarDays, ChevronDown, Globe2, MapPin, Menu, Search, Users, X } from "lucide-react";
+import { CalendarDays, ChevronDown, Globe2, MapPin, Menu, Search, Users, X, BedDouble, Home, Building2, Tag, PlusSquare, Bell, UserCircle2, Instagram, Twitter, Facebook } from "lucide-react";
 import { EASE, softSpring } from "@/lib/motion";
 import { CurrencyControl } from "@/components/currency-provider";
+import { AccountPopout } from "@/components/account-popout";
+import { NotificationPopout } from "@/components/notification-popout";
+import { SearchCommand } from "@/components/search-command";
 
 const NAV = [
-  { label: "Stays", href: "/stays" },
-  { label: "Residences", href: "/residences" },
-  { label: "Hotels", href: "/hotels" },
-  { label: "Destinations", href: "/destinations" },
-  { label: "Offers", href: "/offers" },
-  { label: "List your property", href: "/list-property" },
+  { label: "Stays", href: "/stays", icon: BedDouble },
+  { label: "Residences", href: "/residences", icon: Home },
+  { label: "Hotels", href: "/hotels", icon: Building2 },
+  { label: "Destinations", href: "/destinations", icon: MapPin },
+  { label: "Offers", href: "/offers", icon: Tag },
+  { label: "List your property", href: "/list-property", icon: PlusSquare },
 ] as const;
 
 export function Wordmark({ light = false, imgClass = "h-16" }: { light?: boolean; imgClass?: string }) {
@@ -82,16 +85,21 @@ export function SiteHeader({
         >
           <Wordmark light={onLight} imgClass={compact ? "h-12" : "h-16"} />
 
-          <nav className="hidden items-center gap-7 lg:flex">
+          <div className="hidden flex-1 max-w-sm px-8 lg:block">
+            <SearchCommand light={onLight} />
+          </div>
+
+          <nav className="hidden items-center gap-6 lg:flex">
             {NAV.map((item, i) => (
               <Link
                 key={item.label}
                 href={item.href}
                 aria-current={i === activeIndex ? "page" : undefined}
-                className={`group relative text-sm font-medium tracking-wide ${
+                className={`group relative flex items-center gap-1.5 text-sm font-medium tracking-wide ${
                   onLight ? "text-white/90 hover:text-white" : "text-[var(--ink)] hover:text-[var(--gold-deep)]"
                 }`}
               >
+                <item.icon size={15} className="icon-premium opacity-70 group-hover:opacity-100" />
                 {item.label}
                 <span
                   className={`absolute -bottom-1.5 left-0 h-px bg-[var(--gold)] transition-all duration-300 group-hover:w-full ${
@@ -102,24 +110,11 @@ export function SiteHeader({
             ))}
           </nav>
 
-          <div className="hidden items-center gap-3 md:flex">
-            <button
-              className={`flex items-center gap-1.5 text-sm font-medium transition-colors ${
-                onLight ? "text-white/90 hover:text-white" : "text-[var(--ink)] hover:text-[var(--gold-deep)]"
-              }`}
-            >
-              <Globe2 size={17} /> <CurrencyControl light={onLight} />
-            </button>
-            <Link
-              href="/sign-in"
-              className={`border px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] ${
-                onLight
-                  ? "border-white/70 text-white hover:bg-white hover:text-[var(--ink)]"
-                  : "border-[var(--gold)] text-[var(--gold-deep)] hover:bg-[var(--gold)] hover:text-white"
-              }`}
-            >
-              Sign in
-            </Link>
+          <div className="hidden items-center gap-2 md:flex">
+            <CurrencyControl light={onLight} />
+            <div className="h-4 w-px bg-current opacity-20" />
+            <NotificationPopout light={onLight} />
+            <AccountPopout light={onLight} />
           </div>
 
           <button
@@ -172,13 +167,14 @@ export function SiteHeader({
                     variants={{ hidden: { opacity: 0, x: 24 }, show: { opacity: 1, x: 0 } }}
                     transition={{ duration: 0.5, ease: EASE }}
                   >
-                    <Link
-                      href={item.href}
-                      onClick={() => setOpen(false)}
-                      className="block border-b border-[var(--line)] py-4 font-serif text-2xl text-[var(--ink)] transition-colors hover:text-[var(--gold-deep)]"
-                    >
-                      {item.label}
-                    </Link>
+                      <Link
+                        href={item.href}
+                        onClick={() => setOpen(false)}
+                        className="flex items-center gap-4 border-b border-[var(--line)] py-4 font-serif text-2xl text-[var(--ink)] transition-colors hover:text-[var(--gold-deep)]"
+                      >
+                        <item.icon size={24} className="text-[var(--gold)] opacity-80" />
+                        {item.label}
+                      </Link>
                   </motion.li>
                 ))}
               </motion.ul>
@@ -203,12 +199,12 @@ export function CompactSearch({ destination = "Kigali" }: { destination?: string
     <div className="bg-[var(--cream)] py-6">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="surface-3d-floating grid grid-cols-[minmax(0,1fr)] gap-px overflow-hidden bg-[var(--line)] md:grid-cols-[1.3fr_1.1fr_1fr_auto]">
-          <label className="flex min-h-15 min-w-0 items-center gap-3 bg-white px-4">
+          <label className="flex min-h-15 min-w-0 items-center gap-3 bg-white px-4 hover:bg-[var(--parchment)] transition-colors cursor-pointer">
             <MapPin size={20} className="shrink-0 text-[var(--gold-deep)]" />
             <input
               value={place}
               onChange={(event) => setPlace(event.target.value)}
-              className="min-w-0 flex-1 text-sm outline-none"
+              className="min-w-0 flex-1 text-sm outline-none cursor-pointer bg-transparent"
               placeholder="Where are you going?"
             />
           </label>
@@ -260,7 +256,10 @@ export function SiteFooter() {
               className="min-h-13 flex-1 bg-white px-4 text-sm outline-none"
               placeholder="Your email address"
             />
-            <button className="button-3d !rounded-none bg-[var(--gold)] px-6 text-xs font-semibold uppercase tracking-[0.18em] text-white hover:bg-[var(--gold-deep)] shimmer-gold">
+            <button 
+              onClick={() => window.dispatchEvent(new Event("open-newsletter"))}
+              className="button-3d !rounded-none bg-[var(--gold)] px-6 text-xs font-semibold uppercase tracking-[0.18em] text-white hover:bg-[var(--gold-deep)] shimmer-gold"
+            >
               Subscribe
             </button>
           </div>
@@ -298,8 +297,15 @@ export function SiteFooter() {
               </div>
             ))}
           </div>
-          <div className="mt-12 border-t border-white/10 pt-6 text-xs text-white/50">
-            © {new Date().getFullYear()} StayRwanda — Rwanda-first furnished stays, reserved with confidence.
+          <div className="mt-12 border-t border-white/10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="text-xs text-white/50">
+              © {new Date().getFullYear()} StayRwanda — Rwanda-first furnished stays, reserved with confidence.
+            </div>
+            <div className="flex items-center gap-5 text-white/40">
+              <a href="#" className="hover:text-[var(--gold)] transition-colors" aria-label="Instagram"><Instagram size={18} /></a>
+              <a href="#" className="hover:text-[var(--gold)] transition-colors" aria-label="Twitter"><Twitter size={18} /></a>
+              <a href="#" className="hover:text-[var(--gold)] transition-colors" aria-label="Facebook"><Facebook size={18} /></a>
+            </div>
           </div>
         </div>
       </div>

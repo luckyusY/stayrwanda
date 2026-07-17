@@ -6,6 +6,7 @@ import { clerkConfigured } from "@/lib/env";
 import { CurrencyProvider } from "@/components/currency-provider";
 import { MagneticCursor } from "@/components/magnetic-cursor";
 import { ToastProvider } from "@/components/toast";
+import { NewsletterModal } from "@/components/newsletter-modal";
 
 
 export const metadata: Metadata = {
@@ -24,6 +25,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <ScrollProgress />
         <MagneticCursor />
         {children}
+        <NewsletterModal />
       </ToastProvider>
     </CurrencyProvider>
   );

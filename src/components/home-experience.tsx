@@ -26,6 +26,7 @@ import { SmartImage } from "@/components/smart-image";
 import { PropertyImageSlider } from "@/components/property-image-slider";
 import { Reveal, RevealGroup } from "@/components/reveal";
 import { TiltCard } from "@/components/tilt-card";
+import { Popout } from "@/components/popout";
 import { SlotCounter } from "@/components/slot-counter";
 import { CountUp } from "@/components/count-up";
 import { DragScrollStrip } from "@/components/drag-scroll-strip";
@@ -209,51 +210,45 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
                 </span>
               </div>
 
-              <div className="relative">
+              <Popout
+                variant="dropdown"
+                isOpen={guestOpen}
+                onClose={() => setGuestOpen(false)}
+                wrapperClassName="relative w-full"
+                className="surface-3d-floating w-[320px] p-5 text-[var(--foreground)]"
+                align="right"
+                trigger={
+                  <div
+                    onClick={() => setGuestOpen(!guestOpen)}
+                    aria-expanded={guestOpen}
+                    className="flex min-h-16 w-full items-center gap-3 bg-white px-5 text-left transition-colors hover:bg-[var(--parchment)]"
+                  >
+                    <Users size={20} className="shrink-0 text-[var(--gold-deep)]" />
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-[0.65rem] uppercase tracking-[0.18em] text-[var(--muted)]">
+                        Guests
+                      </span>
+                      <span className="block truncate text-sm font-medium">
+                        {adults} adults · {children} children · {rooms} room
+                      </span>
+                    </span>
+                    <ChevronDown
+                      size={16}
+                      className={`text-[var(--muted)] transition-transform duration-300 ${guestOpen ? "rotate-180" : ""}`}
+                    />
+                  </div>
+                }
+              >
+                <Counter label="Adults" value={adults} min={1} setValue={setAdults} />
+                <Counter label="Children" value={children} min={0} setValue={setChildren} />
+                <Counter label="Rooms" value={rooms} min={1} setValue={setRooms} />
                 <button
-                  onClick={() => setGuestOpen(!guestOpen)}
-                  aria-expanded={guestOpen}
-                  className="flex min-h-16 w-full items-center gap-3 bg-white px-5 text-left transition-colors hover:bg-[var(--parchment)]"
+                  onClick={() => setGuestOpen(false)}
+                  className="interactive-3d mt-2 w-full !border-[var(--gold)] py-2.5 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--gold-deep)] hover:bg-[var(--gold)] hover:text-white"
                 >
-                  <Users size={20} className="shrink-0 text-[var(--gold-deep)]" />
-                  <span className="min-w-0 flex-1">
-                    <span className="block text-[0.65rem] uppercase tracking-[0.18em] text-[var(--muted)]">
-                      Guests
-                    </span>
-                    <span className="block truncate text-sm font-medium">
-                      {adults} adults · {children} children · {rooms} room
-                    </span>
-                  </span>
-                  <ChevronDown
-                    size={16}
-                    className={`text-[var(--muted)] transition-transform duration-300 ${guestOpen ? "rotate-180" : ""}`}
-                  />
+                  Done
                 </button>
-                <AnimatePresence>
-                  {guestOpen && (
-                    <>
-                      <div className="fixed inset-0 z-40" onClick={() => setGuestOpen(false)} aria-hidden />
-                      <motion.div
-                        className="surface-3d-floating absolute right-0 top-[calc(100%+10px)] z-50 w-full min-w-72 p-5 text-[var(--foreground)]"
-                        initial={{ opacity: 0, y: -8, scale: 0.98 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: -8, scale: 0.98 }}
-                        transition={softSpring}
-                      >
-                        <Counter label="Adults" value={adults} min={1} setValue={setAdults} />
-                        <Counter label="Children" value={children} min={0} setValue={setChildren} />
-                        <Counter label="Rooms" value={rooms} min={1} setValue={setRooms} />
-                        <button
-                          onClick={() => setGuestOpen(false)}
-                          className="interactive-3d mt-2 w-full !border-[var(--gold)] py-2.5 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--gold-deep)] hover:bg-[var(--gold)] hover:text-white"
-                        >
-                          Done
-                        </button>
-                      </motion.div>
-                    </>
-                  )}
-                </AnimatePresence>
-              </div>
+              </Popout>
 
               <button
                 onClick={runSearch}

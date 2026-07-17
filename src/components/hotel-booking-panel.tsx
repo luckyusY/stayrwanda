@@ -2,11 +2,12 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { CalendarDays, Check, Loader2, Users } from "lucide-react";
+import { CalendarCheck, CalendarX, Check, Loader2, Users2, CreditCard, ShieldCheck } from "lucide-react";
 import type { Hotel, UnitType } from "@/lib/platform-types";
 import { useCurrency } from "@/components/currency-provider";
 import { SlotCounter } from "@/components/slot-counter";
 import { useToast } from "@/components/toast";
+import { CalendarPopout } from "@/components/calendar-popout";
 
 export function HotelBookingPanel({ hotel, unit }: { hotel: Hotel; unit: UnitType | null }) {
   const { currency, format } = useCurrency();
@@ -42,9 +43,15 @@ export function HotelBookingPanel({ hotel, unit }: { hotel: Hotel; unit: UnitTyp
   </aside>;
 
   return <aside className="surface-3d form-card-3d h-fit p-6 lg:sticky lg:top-24 bg-white rounded-xl shadow-md">
-    <p className="eyebrow">Request to book</p>
+    <p className="eyebrow flex items-center justify-between">
+      <span>Request to book</span>
+      <span className="flex items-center gap-1 text-[var(--rwanda-green)]" title="Verified Host"><ShieldCheck size={14} /> Verified</span>
+    </p>
     <h2 className="mt-2 font-serif text-2xl font-semibold text-[var(--ink)]">{unit ? format(unit.basePriceRwf) : "Rate on request"}</h2>
-    <p className="text-xs text-[var(--muted)]">{unit ? "per night · no payment collected now" : "Contact the property for current availability"}</p>
+    <p className="flex items-center gap-1.5 text-xs text-[var(--muted)] mt-1">
+      <CreditCard size={13} className="text-[var(--gold-mid)]" /> 
+      {unit ? "per night · no payment collected now" : "Contact the property for current availability"}
+    </p>
     
     <form className="mt-5 space-y-4" onSubmit={submit}>
       <div className="float-field">
@@ -57,21 +64,31 @@ export function HotelBookingPanel({ hotel, unit }: { hotel: Hotel; unit: UnitTyp
         <label>Email address</label>
       </div>
 
-      <div className="grid grid-cols-2 gap-2">
-        <label className="field-3d p-2 text-[10px] uppercase tracking-wider text-[var(--muted)] flex flex-col justify-between">
-          <span className="flex items-center gap-1.5"><CalendarDays size={13} className="text-[var(--gold-deep)]" /> Check-in</span>
-          <input required type="date" value={form.checkIn} onChange={(e) => setForm((prev) => ({ ...prev, checkIn: e.target.value }))} className="mt-1 block w-full bg-transparent text-xs text-[var(--ink)] outline-none" />
-        </label>
-        <label className="field-3d p-2 text-[10px] uppercase tracking-wider text-[var(--muted)] flex flex-col justify-between">
-          <span className="flex items-center gap-1.5"><CalendarDays size={13} className="text-[var(--gold-deep)]" /> Check-out</span>
-          <input required type="date" value={form.checkOut} onChange={(e) => setForm((prev) => ({ ...prev, checkOut: e.target.value }))} className="mt-1 block w-full bg-transparent text-xs text-[var(--ink)] outline-none" />
-        </label>
-      </div>
+      <CalendarPopout
+        checkIn={form.checkIn}
+        checkOut={form.checkOut}
+        onChange={(checkIn, checkOut) => setForm(prev => ({ ...prev, checkIn, checkOut }))}
+      >
+        <div className="grid grid-cols-2 gap-2">
+          <div className="field-3d p-2 text-[10px] uppercase tracking-wider text-[var(--muted)] flex flex-col justify-between cursor-pointer hover:bg-[var(--parchment)] transition-colors">
+            <span className="flex items-center gap-1.5"><CalendarCheck size={13} className="text-[var(--gold-deep)]" /> Check-in</span>
+            <span className="mt-1 block w-full bg-transparent text-xs text-[var(--ink)] font-medium">
+              {form.checkIn ? new Date(form.checkIn + "T00:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "Add date"}
+            </span>
+          </div>
+          <div className="field-3d p-2 text-[10px] uppercase tracking-wider text-[var(--muted)] flex flex-col justify-between cursor-pointer hover:bg-[var(--parchment)] transition-colors">
+            <span className="flex items-center gap-1.5"><CalendarX size={13} className="text-[var(--gold-deep)]" /> Check-out</span>
+            <span className="mt-1 block w-full bg-transparent text-xs text-[var(--ink)] font-medium">
+              {form.checkOut ? new Date(form.checkOut + "T00:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "Add date"}
+            </span>
+          </div>
+        </div>
+      </CalendarPopout>
 
       {/* Rebuilt Guest Selector counter widget */}
       <div className="flex items-center justify-between p-3 border border-[var(--line)] rounded-lg bg-white">
         <span className="text-xs font-semibold uppercase tracking-wider text-[var(--muted)] flex items-center gap-2">
-          <Users size={15} className="text-[var(--gold-deep)]" /> Guests
+          <Users2 size={15} className="text-[var(--gold-deep)]" /> Guests
         </span>
         <div className="flex items-center gap-2.5">
           <button
