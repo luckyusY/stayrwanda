@@ -52,7 +52,7 @@ export function AdminBookings({ bookings }: { bookings: Booking[] }) {
 
   return (
     <div>
-      <div className="mb-4 flex items-center gap-2 rounded-lg border border-[#d0d5dd] bg-white px-3">
+      <div className="surface-3d mb-4 flex items-center gap-2 px-3">
         <Search size={18} className="text-[#667085]" />
         <input
           value={query}
@@ -81,7 +81,7 @@ export function AdminBookings({ bookings }: { bookings: Booking[] }) {
         ))}
       </div>
 
-      <div className="overflow-hidden rounded-2xl border border-[#e4e7ec] bg-white">
+      <div className="surface-3d overflow-hidden">
         {rows.length === 0 ? (
           <p className="px-5 py-14 text-center text-sm text-[#667085]">
             No reservations in this view yet.
@@ -101,7 +101,7 @@ export function AdminBookings({ bookings }: { bookings: Booking[] }) {
               </thead>
               <tbody className="divide-y divide-[#eef1f5]">
                 {rows.map((booking) => (
-                  <tr key={booking.id} className={busy === booking.id ? "opacity-50" : ""}>
+                  <tr key={booking.id} className={busy === booking.id ? "opacity-50" : "hover:bg-[#f9fafb]"}>
                     <td className="px-5 py-3">
                       <p className="font-semibold">{booking.guestName}</p>
                       <p className="text-xs text-[#667085]">{booking.email}</p>
@@ -125,7 +125,7 @@ export function AdminBookings({ bookings }: { bookings: Booking[] }) {
                         {(booking.status === "pending" || booking.status === "cancelled") && (
                           <button
                             onClick={() => setStatus(booking.id, "confirmed")}
-                            className="flex h-8 items-center gap-1 rounded-lg border border-[#bfe3c9] px-2.5 text-xs font-bold text-[#008234] hover:bg-[#e7f5ea]"
+                            className="interactive-3d flex h-8 items-center gap-1 !border-[#bfe3c9] px-2.5 text-xs font-bold text-[#008234] hover:bg-[#e7f5ea]"
                           >
                             <Check size={14} /> Confirm
                           </button>
@@ -133,7 +133,7 @@ export function AdminBookings({ bookings }: { bookings: Booking[] }) {
                         {booking.status === "confirmed" && (
                           <button
                             onClick={() => setStatus(booking.id, "completed")}
-                            className="flex h-8 items-center gap-1 rounded-lg border border-[#d0d5dd] px-2.5 text-xs font-bold text-[#475467] hover:bg-[#f2f4f7]"
+                            className="interactive-3d flex h-8 items-center gap-1 !border-[#d0d5dd] px-2.5 text-xs font-bold text-[#475467] hover:bg-[#f2f4f7]"
                           >
                             Mark complete
                           </button>
@@ -141,7 +141,7 @@ export function AdminBookings({ bookings }: { bookings: Booking[] }) {
                         {booking.status !== "cancelled" && booking.status !== "completed" && (
                           <button
                             onClick={() => setStatus(booking.id, "cancelled")}
-                            className="flex h-8 items-center gap-1 rounded-lg border border-[#f2c1c1] px-2.5 text-xs font-bold text-[#c00] hover:bg-[#fdeced]"
+                            className="interactive-3d flex h-8 items-center gap-1 !border-[#f2c1c1] px-2.5 text-xs font-bold text-[#c00] hover:bg-[#fdeced]"
                           >
                             <X size={14} /> Cancel
                           </button>

@@ -57,7 +57,7 @@ export function AdminProperties({ properties }: { properties: StoredProperty[] }
   return (
     <div>
       <div className="mb-4 flex flex-wrap items-center gap-3">
-        <div className="flex min-w-0 flex-1 items-center gap-2 rounded-lg border border-[#d0d5dd] bg-white px-3">
+        <div className="surface-3d flex min-w-0 flex-1 items-center gap-2 px-3">
           <Search size={18} className="text-[#667085]" />
           <input
             value={query}
@@ -68,7 +68,7 @@ export function AdminProperties({ properties }: { properties: StoredProperty[] }
         </div>
         <Link
           href="/admin/properties/new"
-          className="flex min-h-11 items-center gap-2 rounded-lg bg-[#006ce4] px-4 text-sm font-bold text-white hover:bg-[#0057b8]"
+          className="button-3d flex min-h-11 items-center gap-2 bg-[#006ce4] px-4 text-sm font-bold text-white hover:bg-[#0057b8]"
         >
           <Plus size={18} /> Add listing
         </Link>
@@ -93,7 +93,7 @@ export function AdminProperties({ properties }: { properties: StoredProperty[] }
         ))}
       </div>
 
-      <div className="overflow-hidden rounded-2xl border border-[#e4e7ec] bg-white">
+      <div className="surface-3d overflow-hidden">
         {rows.length === 0 ? (
           <p className="px-5 py-14 text-center text-sm text-[#667085]">No properties match this view.</p>
         ) : (
@@ -110,7 +110,7 @@ export function AdminProperties({ properties }: { properties: StoredProperty[] }
               </thead>
               <tbody className="divide-y divide-[#eef1f5]">
                 {rows.map((property) => (
-                  <tr key={property.slug} className={busy === property.slug ? "opacity-50" : ""}>
+                  <tr key={property.slug} className={busy === property.slug ? "opacity-50" : "hover:bg-[#f9fafb]"}>
                     <td className="px-5 py-3">
                       <div className="flex items-center gap-3">
                         <div className="relative size-12 shrink-0 overflow-hidden rounded-lg bg-[#eef1f5]">
@@ -171,14 +171,14 @@ export function AdminProperties({ properties }: { properties: StoredProperty[] }
                         <Link
                           href={`/stays/${property.slug}`}
                           target="_blank"
-                          className="grid size-8 place-items-center rounded-lg border border-[#d0d5dd] text-[#475467] hover:bg-[#f2f4f7]"
+                          className="interactive-3d grid size-8 place-items-center !border-[#d0d5dd] text-[#475467] hover:bg-[#f2f4f7]"
                           aria-label="Preview"
                         >
                           <ExternalLink size={15} />
                         </Link>
                         <button
                           onClick={() => remove(property.slug, property.title)}
-                          className="grid size-8 place-items-center rounded-lg border border-[#f2c1c1] text-[#c00] hover:bg-[#fdeced]"
+                          className="interactive-3d grid size-8 place-items-center !border-[#f2c1c1] text-[#c00] hover:bg-[#fdeced]"
                           aria-label="Delete"
                         >
                           <Trash2 size={15} />
@@ -215,7 +215,7 @@ function ActionButton({
   return (
     <button
       onClick={onClick}
-      className={`flex h-8 items-center gap-1 rounded-lg border px-2.5 text-xs font-bold ${tones[tone]}`}
+      className={`interactive-3d flex h-8 items-center gap-1 px-2.5 text-xs font-bold ${tones[tone]}`}
     >
       {Icon && <Icon size={14} />}
       {label}

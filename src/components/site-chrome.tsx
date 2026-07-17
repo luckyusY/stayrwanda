@@ -144,7 +144,7 @@ export function SiteHeader({
           >
             <div className="absolute inset-0 bg-[var(--ink)]/50 backdrop-blur-sm" onClick={() => setOpen(false)} />
             <motion.nav
-              className="absolute right-0 top-0 flex h-full w-80 max-w-[85%] flex-col bg-white p-6"
+              className="surface-3d-floating absolute right-0 top-0 flex h-full w-80 max-w-[85%] flex-col !rounded-none border-y-0 border-r-0 p-6"
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
@@ -185,7 +185,7 @@ export function SiteHeader({
               <Link
                 href="/sign-in"
                 onClick={() => setOpen(false)}
-                className="mt-auto bg-[var(--ink)] px-4 py-4 text-center text-xs font-semibold uppercase tracking-[0.18em] text-white"
+                className="button-3d mt-auto bg-[var(--ink)] px-4 py-4 text-center text-xs font-semibold uppercase tracking-[0.18em] text-white"
               >
                 Sign in
               </Link>
@@ -202,7 +202,7 @@ export function CompactSearch({ destination = "Kigali" }: { destination?: string
   return (
     <div className="bg-[var(--cream)] py-6">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <div className="grid grid-cols-[minmax(0,1fr)] gap-px overflow-hidden border border-[var(--line)] bg-[var(--line)] md:grid-cols-[1.3fr_1.1fr_1fr_auto]">
+        <div className="surface-3d-floating grid grid-cols-[minmax(0,1fr)] gap-px overflow-hidden bg-[var(--line)] md:grid-cols-[1.3fr_1.1fr_1fr_auto]">
           <label className="flex min-h-15 min-w-0 items-center gap-3 bg-white px-4">
             <MapPin size={20} className="shrink-0 text-[var(--gold-deep)]" />
             <input
@@ -224,7 +224,7 @@ export function CompactSearch({ destination = "Kigali" }: { destination?: string
           </button>
           <Link
             href={`/search?destination=${encodeURIComponent(place)}`}
-            className="flex min-h-15 items-center justify-center gap-2 bg-[var(--ink)] px-8 text-xs font-semibold uppercase tracking-[0.2em] text-white hover:bg-[var(--ink-2)]"
+            className="button-3d flex min-h-15 items-center justify-center gap-2 !rounded-none bg-[var(--ink)] px-8 text-xs font-semibold uppercase tracking-[0.2em] text-white hover:bg-[var(--ink-2)]"
           >
             <Search size={17} /> Search
           </Link>
@@ -255,12 +255,12 @@ export function SiteFooter() {
           <p className="mt-3 text-sm text-[var(--muted)]">
             Quietly curated apartments, residences and seasonal offers — delivered now and then.
           </p>
-          <div className="mx-auto mt-6 flex max-w-md gap-px border border-[var(--line)] bg-[var(--line)]">
+          <div className="surface-3d mx-auto mt-6 flex max-w-md gap-px overflow-hidden bg-[var(--line)]">
             <input
               className="min-h-13 flex-1 bg-white px-4 text-sm outline-none"
               placeholder="Your email address"
             />
-            <button className="bg-[var(--gold)] px-6 text-xs font-semibold uppercase tracking-[0.18em] text-white hover:bg-[var(--gold-deep)]">
+            <button className="button-3d !rounded-none bg-[var(--gold)] px-6 text-xs font-semibold uppercase tracking-[0.18em] text-white hover:bg-[var(--gold-deep)]">
               Subscribe
             </button>
           </div>

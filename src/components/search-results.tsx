@@ -52,12 +52,12 @@ export function SearchResults({
 
       <div className="grid gap-8 lg:grid-cols-[280px_1fr]">
         <aside className={`${mobileFilters ? "block" : "hidden"} h-fit lg:block`}>
-          <div className="border border-[var(--line)] bg-[var(--cream)] p-5">
+          <div className="surface-3d bg-[var(--cream)] p-5">
             <h2 className="font-serif text-2xl font-semibold text-[var(--ink)]">Refine</h2>
             <label className="mt-4 block text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
               Destination
             </label>
-            <div className="mt-1.5 flex items-center gap-2 border border-[var(--line)] bg-white px-3">
+            <div className="field-3d mt-1.5 flex items-center gap-2 px-3">
               <MapPin size={17} className="text-[var(--gold-deep)]" />
               <input
                 value={destination}
@@ -68,14 +68,14 @@ export function SearchResults({
             <label className="mt-4 block text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
               Check-in
             </label>
-            <input type="date" className="mt-1.5 min-h-11 w-full border border-[var(--line)] bg-white px-3 text-sm outline-none" />
+            <input type="date" className="field-3d mt-1.5 min-h-11 w-full px-3 text-sm outline-none" />
             <label className="mt-4 block text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
               Check-out
             </label>
-            <input type="date" className="mt-1.5 min-h-11 w-full border border-[var(--line)] bg-white px-3 text-sm outline-none" />
+            <input type="date" className="field-3d mt-1.5 min-h-11 w-full px-3 text-sm outline-none" />
           </div>
 
-          <div className="mt-5 border border-[var(--line)]">
+          <div className="surface-3d mt-5 overflow-hidden">
             <h3 className="border-b border-[var(--line)] bg-[var(--parchment)] p-4 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--ink)]">
               Filter by
             </h3>
@@ -96,13 +96,13 @@ export function SearchResults({
             </div>
             <button
               onClick={() => setMobileFilters(!mobileFilters)}
-              className="flex items-center gap-2 border border-[var(--gold)] px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--gold-deep)] lg:hidden"
+              className="interactive-3d flex items-center gap-2 !border-[var(--gold)] px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--gold-deep)] lg:hidden"
             >
               <SlidersHorizontal size={16} /> Filters
             </button>
           </div>
 
-          <div className="mt-5 flex items-center justify-between border border-[var(--line)] bg-[var(--parchment)] px-4 py-3">
+          <div className="surface-3d mt-5 flex items-center justify-between bg-[var(--parchment)] px-4 py-3">
             <span className="text-sm text-[var(--muted)]">Sorted by our recommendations</span>
             <button className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--gold-deep)]">
               Top picks <ChevronDown size={15} />
@@ -114,7 +114,7 @@ export function SearchResults({
               <Reveal
                 as="article"
                 key={property.slug}
-                className="lift grid min-w-0 gap-5 border border-[var(--line)] bg-white p-5 card-shadow sm:grid-cols-[240px_1fr]"
+                className="surface-3d surface-3d-lift grid min-w-0 gap-5 p-5 sm:grid-cols-[240px_1fr]"
               >
                 <div className="relative w-full min-w-0">
                   <PropertyImageSlider
@@ -153,7 +153,7 @@ export function SearchResults({
                       <strong className="mt-1 block font-serif text-xl text-[var(--ink)]">On request</strong>
                       <Link
                         href={`/stays/${property.slug}`}
-                        className="group/cta mt-3 inline-flex items-center gap-1.5 bg-[var(--ink)] px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.16em] text-white hover:bg-[var(--ink-2)]"
+                        className="button-3d group/cta mt-3 inline-flex items-center gap-1.5 bg-[var(--ink)] px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.16em] text-white hover:bg-[var(--ink-2)]"
                       >
                         View stay
                         <span className="transition-transform duration-300 group-hover/cta:translate-x-1">→</span>
@@ -166,14 +166,14 @@ export function SearchResults({
           </div>
 
           {!results.length && (
-            <div className="mt-6 border border-[var(--line)] bg-white p-12 text-center">
+            <div className="surface-3d mt-6 p-12 text-center">
               <h2 className="font-serif text-2xl text-[var(--ink)]">No residences match these filters</h2>
               <button
                 onClick={() => {
                   setDestination("");
                   setSelectedTypes([]);
                 }}
-                className="mt-5 bg-[var(--ink)] px-6 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-white"
+                className="button-3d mt-5 bg-[var(--ink)] px-6 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-white"
               >
                 Clear filters
               </button>
@@ -204,7 +204,7 @@ function FilterGroup({
           <label key={option} className="flex cursor-pointer items-center gap-2.5 text-sm">
             <button
               onClick={() => toggle(option)}
-              className={`grid size-5 shrink-0 place-items-center border ${
+              className={`grid size-5 shrink-0 place-items-center rounded shadow-[inset_0_1px_2px_rgba(20,34,58,.12)] ${
                 selected.includes(option)
                   ? "border-[var(--gold)] bg-[var(--gold)] text-white"
                   : "border-[var(--muted)]"

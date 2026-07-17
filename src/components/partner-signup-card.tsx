@@ -9,7 +9,7 @@ export function PartnerSignupCard() {
   const set = (key: keyof typeof form) => (value: string) => setForm((f) => ({ ...f, [key]: value }));
 
   return (
-    <div className="border border-[var(--line)] bg-white p-7 text-[var(--foreground)] soft-shadow">
+    <div className="surface-3d p-7 text-[var(--foreground)]">
       <p className="eyebrow">Become a host</p>
       <h2 className="mt-2 font-serif text-3xl font-semibold text-[var(--ink)]">Get started</h2>
       <p className="mt-2 text-sm text-[var(--muted)]">Create a partner account to begin.</p>

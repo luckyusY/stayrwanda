@@ -34,10 +34,10 @@ export function FloatingField({
   const floated = multiline || intrinsic || focused || value.length > 0;
 
   const borderColor = error
-    ? "border-[#b4453a]"
+    ? "field-3d-error"
     : focused
-      ? "border-[var(--gold)] shadow-[0_0_0_3px_rgba(176,141,87,0.12)]"
-      : "border-[var(--line)]";
+      ? "!border-[var(--gold)]"
+      : "";
 
   const sharedProps = {
     id: name,
@@ -53,7 +53,7 @@ export function FloatingField({
 
   return (
     <div>
-      <div className={`relative flex bg-white transition-all duration-200 ${borderColor} border`}>
+      <div className={`field-3d relative flex overflow-hidden transition-all duration-200 ${borderColor}`}>
         {icon && (
           <span className="grid w-12 shrink-0 place-items-center text-[var(--gold-deep)]">{icon}</span>
         )}

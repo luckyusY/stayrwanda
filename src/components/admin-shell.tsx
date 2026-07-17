@@ -42,7 +42,7 @@ export function AdminShell({
     href === "/admin" ? pathname === "/admin" : pathname.startsWith(href);
 
   return (
-    <div className="min-h-screen bg-[#f2f4f7] text-[#1a1a1a] md:grid md:grid-cols-[248px_1fr]">
+    <div className="workspace-3d min-h-screen bg-[#f2f4f7] text-[#1a1a1a] md:grid md:grid-cols-[248px_1fr]">
       {/* Sidebar */}
       <aside
         className={`${open ? "block" : "hidden"} fixed inset-0 z-40 md:static md:block`}
@@ -51,7 +51,7 @@ export function AdminShell({
           className="absolute inset-0 bg-black/40 md:hidden"
           onClick={() => setOpen(false)}
         />
-        <div className="relative flex h-full w-64 flex-col bg-[#073b74] text-white md:h-screen md:w-auto md:sticky md:top-0">
+        <div className="relative flex h-full w-64 flex-col bg-[#073b74] text-white shadow-[0_18px_48px_rgba(5,25,50,.28)] md:h-screen md:w-auto md:sticky md:top-0">
           <div className="flex h-16 items-center justify-between px-5">
             <Link href="/admin" className="flex items-center gap-2">
               <Image src="/brand/stayrwanda-logo.png" alt="StayRwanda" width={1093} height={607} className="h-12 w-auto brightness-0 invert" />
@@ -69,7 +69,7 @@ export function AdminShell({
                 onClick={() => setOpen(false)}
                 className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-semibold transition ${
                   isActive(href)
-                    ? "bg-white text-[#073b74]"
+                    ? "bg-white text-[#073b74] shadow-[0_2px_0_rgba(255,255,255,.2),0_10px_24px_rgba(3,23,48,.28)]"
                     : "text-white/80 hover:bg-white/10 hover:text-white"
                 }`}
               >
@@ -92,7 +92,7 @@ export function AdminShell({
 
       {/* Main */}
       <div className="flex min-h-screen flex-col">
-        <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-[#e4e7ec] bg-white px-4 sm:px-7">
+        <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-[#e4e7ec] bg-white px-4 shadow-[0_5px_18px_rgba(20,34,58,.06)] sm:px-7">
           <button
             className="grid size-9 place-items-center rounded-lg hover:bg-[#f2f4f7] md:hidden"
             onClick={() => setOpen(true)}

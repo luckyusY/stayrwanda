@@ -4,7 +4,7 @@ import { ArrowRight, MapPin } from "lucide-react";
 import type { Hotel } from "@/lib/platform-types";
 
 export function HotelCard({ hotel }: { hotel: Hotel }) {
-  return <article className="group border border-[var(--line)] bg-white">
+  return <article className="surface-3d surface-3d-lift group overflow-hidden">
     <Link href={`/hotels/${hotel.slug}`} className="relative block aspect-[4/3] overflow-hidden bg-[var(--cream)]">
       {hotel.heroImage && <Image src={hotel.heroImage} alt={hotel.name} fill className="object-cover transition duration-700 group-hover:scale-105" sizes="(max-width: 768px) 100vw, 33vw" />}
       <span className="absolute left-4 top-4 bg-white/95 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[.16em] text-[var(--ink)]">{hotel.category}</span>

@@ -2,5 +2,30 @@ import Link from "next/link";
 import { ArrowRight, Tag } from "lucide-react";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { offers } from "@/lib/editorial";
+
 export const metadata = { title: "Offers" };
-export default function OffersPage() { return <main><SiteHeader /><section className="bg-[var(--cream)] px-4 py-20 text-center"><Tag className="mx-auto text-[var(--gold-deep)]" /><p className="eyebrow mt-4">Seasonal value</p><h1 className="mt-3 font-serif text-6xl font-semibold text-[var(--ink)]">Offers worth staying for</h1><p className="mx-auto mt-5 max-w-2xl text-[var(--muted)]">Curated ways to stay longer and experience more, confirmed directly with participating properties.</p></section><section className="mx-auto grid max-w-6xl gap-6 px-4 py-16 sm:grid-cols-3 sm:px-6">{offers.map((offer) => <article key={offer.slug} className="border border-[var(--line)] p-7"><span className="text-xs uppercase tracking-[.16em] text-[var(--gold-deep)]">{offer.badge}</span><h2 className="mt-4 font-serif text-3xl font-semibold text-[var(--ink)]">{offer.title}</h2><p className="mt-4 leading-7 text-[var(--muted)]">{offer.copy}</p><Link href={`/offers/${offer.slug}`} className="mt-6 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[var(--gold-deep)]">View offer <ArrowRight size={14} /></Link></article>)}</section><SiteFooter /></main>; }
+
+export default function OffersPage() {
+  return (
+    <main>
+      <SiteHeader />
+      <section className="bg-[var(--cream)] px-4 py-20 text-center">
+        <Tag className="mx-auto text-[var(--gold-deep)]" />
+        <p className="eyebrow mt-4">Seasonal value</p>
+        <h1 className="mt-3 font-serif text-6xl font-semibold text-[var(--ink)]">Offers worth staying for</h1>
+        <p className="mx-auto mt-5 max-w-2xl text-[var(--muted)]">Curated ways to stay longer and experience more, confirmed directly with participating properties.</p>
+      </section>
+      <section className="mx-auto grid max-w-6xl gap-6 px-4 py-16 sm:grid-cols-3 sm:px-6">
+        {offers.map((offer) => (
+          <article key={offer.slug} className="surface-3d surface-3d-lift p-7">
+            <span className="text-xs uppercase tracking-[.16em] text-[var(--gold-deep)]">{offer.badge}</span>
+            <h2 className="mt-4 font-serif text-3xl font-semibold text-[var(--ink)]">{offer.title}</h2>
+            <p className="mt-4 leading-7 text-[var(--muted)]">{offer.copy}</p>
+            <Link href={`/offers/${offer.slug}`} className="mt-6 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[var(--gold-deep)]">View offer <ArrowRight size={14} /></Link>
+          </article>
+        ))}
+      </section>
+      <SiteFooter />
+    </main>
+  );
+}

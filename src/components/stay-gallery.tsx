@@ -47,7 +47,7 @@ export function StayHeroGallery({
         ))}
         <button
           onClick={() => launch(0)}
-          className="absolute bottom-4 right-4 flex items-center gap-2 bg-white px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--ink)] shadow transition hover:bg-[var(--cream)]"
+          className="interactive-3d absolute bottom-4 right-4 flex items-center gap-2 px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--ink)] hover:bg-[var(--cream)]"
         >
           <Images size={16} /> All {photoCount} photos
         </button>

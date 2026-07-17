@@ -15,13 +15,14 @@ const appearance = {
   },
   elements: {
     rootBox: "w-full",
-    cardBox: "w-full shadow-none",
-    card: "w-full border border-[#d9d3c7] shadow-none",
+    cardBox: "w-full rounded-xl shadow-[0_3px_8px_rgba(20,34,58,.08),0_24px_60px_rgba(20,34,58,.14)]",
+    card: "w-full rounded-xl border border-[#d9d3c7] shadow-none",
     headerTitle: "font-serif text-[#102a43]",
     headerSubtitle: "text-[#64748b]",
-    socialButtonsBlockButton: "border-[#d9d3c7] hover:bg-[#f7f3eb]",
+    socialButtonsBlockButton: "border-[#d9d3c7] shadow-[0_2px_0_rgba(20,34,58,.08),0_6px_14px_rgba(20,34,58,.06)] hover:-translate-y-0.5 hover:bg-[#f7f3eb] hover:shadow-[0_3px_0_rgba(20,34,58,.08),0_10px_20px_rgba(20,34,58,.09)]",
     socialButtonsBlockButtonText: "font-semibold text-[#102a43]",
-    formButtonPrimary: "bg-[#102a43] hover:bg-[#1e4770]",
+    formFieldInput: "shadow-[inset_0_1px_2px_rgba(20,34,58,.08),0_1px_0_rgba(255,255,255,.9)] focus:shadow-[0_0_0_3px_rgba(176,141,87,.14),0_8px_18px_rgba(20,34,58,.07)]",
+    formButtonPrimary: "bg-[#102a43] shadow-[0_2px_0_rgba(9,18,33,.35),0_9px_20px_rgba(20,34,58,.18)] hover:-translate-y-0.5 hover:bg-[#1e4770] hover:shadow-[0_3px_0_rgba(9,18,33,.3),0_13px_25px_rgba(20,34,58,.22)]",
     footerActionLink: "font-semibold text-[#9a6b28] hover:text-[#714916]",
   },
 } as const;
@@ -33,7 +34,7 @@ export function AuthExperience({ mode }: { mode: "sign-in" | "sign-up" }) {
     <main>
       <SiteHeader />
       <section className="bg-[var(--cream)] px-4 py-12 sm:px-6 sm:py-20">
-        <div className="mx-auto grid max-w-5xl overflow-hidden border border-[var(--line)] bg-white lg:grid-cols-[0.9fr_1.1fr]">
+        <div className="surface-3d mx-auto grid max-w-5xl overflow-hidden lg:grid-cols-[0.9fr_1.1fr]">
           <div className="bg-[var(--ink)] p-8 text-white sm:p-12">
             <p className="eyebrow !text-[var(--gold)]">StayRwanda account</p>
             <h1 className="mt-4 font-serif text-4xl font-semibold sm:text-5xl">

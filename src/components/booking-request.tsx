@@ -135,7 +135,7 @@ export function BookingRequest({ property }: { property: Property }) {
           <h1 className="mt-3 font-serif text-4xl font-semibold text-[var(--ink)]">Enter your details</h1>
           <p className="mt-3 text-[var(--muted)]">The host will confirm availability and the final rate.</p>
 
-          <div className="mt-8 border border-[var(--line)] bg-white p-6">
+          <div className="surface-3d mt-8 p-6">
             <h2 className="font-serif text-xl font-semibold text-[var(--ink)]">Your information</h2>
             <div className="mt-5 grid gap-4 sm:grid-cols-2">
               <FloatingField label="First name" value={form.firstName} onChange={update("firstName")} autoComplete="given-name" />
@@ -145,7 +145,7 @@ export function BookingRequest({ property }: { property: Property }) {
             </div>
           </div>
 
-          <div className="mt-5 border border-[var(--line)] bg-white p-6">
+          <div className="surface-3d mt-5 p-6">
             <h2 className="font-serif text-xl font-semibold text-[var(--ink)]">Your stay</h2>
             <div className="mt-5 grid gap-4 sm:grid-cols-3">
               <FloatingField label="Check-in" type="date" value={form.checkIn} onChange={update("checkIn")} />
@@ -157,7 +157,7 @@ export function BookingRequest({ property }: { property: Property }) {
             </div>
           </div>
 
-          <div className="mt-5 border border-[var(--line)] bg-[var(--cream)] p-6">
+          <div className="surface-3d mt-5 bg-[var(--cream)] p-6">
             <h2 className="font-serif text-xl font-semibold text-[var(--ink)]">Good to know</h2>
             <ul className="mt-4 space-y-3 text-sm text-[var(--muted)]">
               <li className="flex gap-2"><Check size={18} className="shrink-0 text-[var(--gold-deep)]" /> No payment is collected for this request.</li>
@@ -182,7 +182,7 @@ export function BookingRequest({ property }: { property: Property }) {
         </section>
 
         <aside className="h-fit space-y-4 lg:sticky lg:top-28">
-          <div className="border border-[var(--line)] bg-white p-4">
+          <div className="surface-3d surface-3d-lift p-4">
             <div className="flex gap-4">
               <div className="relative size-24 shrink-0 overflow-hidden">
                 <Image src={property.image} alt={property.title} fill className="object-cover" sizes="96px" />
@@ -195,7 +195,7 @@ export function BookingRequest({ property }: { property: Property }) {
             </div>
           </div>
 
-          <div className="border border-[var(--line)] bg-white p-5">
+          <div className="surface-3d p-5">
             <h3 className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--ink)]">Your booking</h3>
             <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
               <div>
@@ -213,7 +213,7 @@ export function BookingRequest({ property }: { property: Property }) {
             </p>
           </div>
 
-          <div className="border border-[var(--line)] bg-white p-5">
+          <div className="surface-3d p-5">
             <h3 className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--ink)]">Price</h3>
             <div className="mt-3 flex items-end justify-between">
               <span className="text-sm text-[var(--muted)]">Property rate</span>
@@ -224,7 +224,7 @@ export function BookingRequest({ property }: { property: Property }) {
             </p>
           </div>
 
-          <div className="border border-[var(--line)] bg-[var(--cream)] p-5 text-sm">
+          <div className="surface-3d bg-[var(--cream)] p-5 text-sm">
             <p className="flex items-center gap-2 font-semibold text-[var(--ink)]">
               <ShieldCheck size={19} className="text-[var(--gold-deep)]" /> Safe booking request
             </p>

@@ -99,7 +99,7 @@ export function AdminPropertyForm() {
               <select
                 value={form.type}
                 onChange={(event) => update("type", event.target.value)}
-                className="mt-2 min-h-11 w-full rounded-lg border border-[#868686] bg-white px-3 font-normal outline-none focus:border-[#006ce4]"
+                className="field-3d mt-2 min-h-11 w-full px-3 font-normal outline-none focus:!border-[#006ce4]"
               >
                 {TYPES.map((type) => (
                   <option key={type}>{type}</option>
@@ -126,7 +126,7 @@ export function AdminPropertyForm() {
             <input
               value={form.amenities}
               onChange={(event) => update("amenities", event.target.value)}
-              className="mt-2 min-h-11 w-full rounded-lg border border-[#868686] px-3 font-normal outline-none focus:border-[#006ce4]"
+              className="field-3d mt-2 min-h-11 w-full px-3 font-normal outline-none focus:!border-[#006ce4]"
             />
           </label>
           <label className="block text-sm font-bold">
@@ -134,7 +134,7 @@ export function AdminPropertyForm() {
             <textarea
               value={form.description}
               onChange={(event) => update("description", event.target.value)}
-              className="mt-2 min-h-28 w-full rounded-lg border border-[#868686] p-3 font-normal outline-none focus:border-[#006ce4]"
+              className="field-3d mt-2 min-h-28 w-full p-3 font-normal outline-none focus:!border-[#006ce4]"
               placeholder="Describe the stay, the area and what makes it special."
             />
           </label>
@@ -143,7 +143,7 @@ export function AdminPropertyForm() {
 
       <aside className="space-y-5">
         <Card title="Photos">
-          <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-[#cbd2dd] bg-[#f9fafb] px-4 py-8 text-center text-sm text-[#667085] hover:border-[#006ce4] hover:bg-[#f0f6ff]">
+          <label className="surface-3d surface-3d-lift flex cursor-pointer flex-col items-center justify-center gap-2 border-2 border-dashed !border-[#cbd2dd] bg-[#f9fafb] px-4 py-8 text-center text-sm text-[#667085] hover:!border-[#006ce4] hover:bg-[#f0f6ff]">
             {uploading ? <Loader2 className="animate-spin text-[#006ce4]" /> : <ImagePlus className="text-[#006ce4]" />}
             {uploading ? "Uploading…" : "Click to upload images"}
             <input type="file" accept="image/*" multiple className="hidden" onChange={onUpload} disabled={uploading} />
@@ -169,13 +169,13 @@ export function AdminPropertyForm() {
         </Card>
 
         {error && (
-          <p className="rounded-lg bg-[#fdeced] px-3 py-2 text-sm font-semibold text-[#c00]">{error}</p>
+          <p className="surface-3d-error rounded-[var(--radius-control)] border px-3 py-2 text-sm font-semibold text-[#c00]">{error}</p>
         )}
 
         <button
           type="submit"
           disabled={saving || uploading}
-          className="flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-[#006ce4] font-bold text-white hover:bg-[#0057b8] disabled:opacity-60"
+          className="button-3d flex min-h-12 w-full items-center justify-center gap-2 bg-[#006ce4] font-bold text-white hover:bg-[#0057b8] disabled:opacity-60"
         >
           {saving && <Loader2 size={18} className="animate-spin" />}
           {saving ? "Publishing…" : "Publish listing"}
@@ -190,7 +190,7 @@ export function AdminPropertyForm() {
 
 function Card({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="rounded-2xl border border-[#e4e7ec] bg-white p-5">
+    <section className="surface-3d p-5">
       <h2 className="mb-4 font-bold">{title}</h2>
       <div className="space-y-4">{children}</div>
     </section>
@@ -219,7 +219,7 @@ function Field({
         onChange={(event) => onChange(event.target.value)}
         placeholder={placeholder}
         min={type === "number" ? 0 : undefined}
-        className="mt-2 min-h-11 w-full rounded-lg border border-[#868686] px-3 font-normal outline-none focus:border-[#006ce4]"
+        className="field-3d mt-2 min-h-11 w-full px-3 font-normal outline-none focus:!border-[#006ce4]"
       />
     </label>
   );

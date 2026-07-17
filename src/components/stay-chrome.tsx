@@ -96,7 +96,7 @@ export function StayReserveBar({
             </div>
             <Link
               href={`/booking/${slug}`}
-              className="shrink-0 bg-[var(--ink)] px-6 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-white transition-colors hover:bg-[var(--ink-2)]"
+              className="button-3d shrink-0 bg-[var(--ink)] px-6 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-white transition-colors hover:bg-[var(--ink-2)]"
             >
               Reserve
             </Link>

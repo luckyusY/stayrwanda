@@ -151,7 +151,7 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.55, duration: 0.8, ease: EASE }}
         >
-          <div className="soft-shadow border border-[var(--line)] bg-white p-2">
+          <div className="surface-3d-floating p-2">
             <div className="grid grid-cols-[minmax(0,1fr)] gap-px bg-[var(--line)] md:grid-cols-[1.3fr_1.2fr_1fr_auto]">
               <label className="flex min-h-16 items-center gap-3 bg-white px-5 transition-colors focus-within:bg-[var(--parchment)]">
                 <MapPin size={20} className="shrink-0 text-[var(--gold-deep)]" />
@@ -207,7 +207,7 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
                     <>
                       <div className="fixed inset-0 z-40" onClick={() => setGuestOpen(false)} aria-hidden />
                       <motion.div
-                        className="absolute right-0 top-[calc(100%+10px)] z-50 w-full min-w-72 border border-[var(--line)] bg-white p-5 text-[var(--foreground)] soft-shadow"
+                        className="surface-3d-floating absolute right-0 top-[calc(100%+10px)] z-50 w-full min-w-72 p-5 text-[var(--foreground)]"
                         initial={{ opacity: 0, y: -8, scale: 0.98 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -8, scale: 0.98 }}
@@ -218,7 +218,7 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
                         <Counter label="Rooms" value={rooms} min={1} setValue={setRooms} />
                         <button
                           onClick={() => setGuestOpen(false)}
-                          className="mt-2 w-full border border-[var(--gold)] py-2.5 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--gold-deep)] hover:bg-[var(--gold)] hover:text-white"
+                          className="interactive-3d mt-2 w-full !border-[var(--gold)] py-2.5 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--gold-deep)] hover:bg-[var(--gold)] hover:text-white"
                         >
                           Done
                         </button>
@@ -230,7 +230,7 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
 
               <button
                 onClick={runSearch}
-                className="flex min-h-16 items-center justify-center gap-2 bg-[var(--ink)] px-9 text-xs font-semibold uppercase tracking-[0.2em] text-white hover:bg-[var(--ink-2)]"
+                className="button-3d flex min-h-16 items-center justify-center gap-2 bg-[var(--ink)] px-9 text-xs font-semibold uppercase tracking-[0.2em] text-white hover:bg-[var(--ink-2)]"
               >
                 <Search size={17} /> Search
               </button>
@@ -265,7 +265,7 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
             <select
               value={type}
               onChange={(event) => setType(event.target.value)}
-              className="border border-[var(--line)] bg-white px-4 py-3 text-sm outline-none focus:border-[var(--gold)]"
+              className="field-3d px-4 py-3 text-sm outline-none"
             >
               {stayTypes.map((item) => (
                 <option key={item}>{item}</option>
@@ -275,7 +275,7 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
 
           <div className="mt-10 grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
             {filtered.map((property) => (
-              <Reveal as="article" key={property.slug} className="lift group min-w-0 bg-white card-shadow">
+              <Reveal as="article" key={property.slug} className="surface-3d surface-3d-lift group min-w-0 overflow-hidden">
                 <div className="relative w-full min-w-0 overflow-hidden">
                   <span className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-0.5 origin-left scale-x-0 bg-[var(--gold)] transition-transform duration-500 group-hover:scale-x-100" />
                   <PropertyImageSlider
@@ -328,7 +328,7 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
           </div>
 
           {!filtered.length && (
-            <div className="mt-8 border border-[var(--line)] bg-white p-12 text-center">
+            <div className="surface-3d mt-8 p-12 text-center">
               <Search className="mx-auto text-[var(--gold-deep)]" />
               <h3 className="mt-3 font-serif text-2xl text-[var(--ink)]">No exact matches</h3>
               <p className="mt-1 text-sm text-[var(--muted)]">Try another neighbourhood or stay type.</p>
@@ -337,7 +337,7 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
                   setQuery("");
                   setType("All stays");
                 }}
-                className="mt-5 bg-[var(--ink)] px-6 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-white"
+                className="button-3d mt-5 bg-[var(--ink)] px-6 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-white"
               >
                 See all stays
               </button>
@@ -364,7 +364,7 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
               <button
                 key={destination}
                 onClick={() => chooseDestination(destination)}
-                className="group relative aspect-[3/4] overflow-hidden text-left image-shade"
+                className="surface-3d surface-3d-lift group relative aspect-[3/4] overflow-hidden text-left image-shade"
               >
                 <SmartImage
                   src={property.image}
@@ -439,7 +439,7 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
                 setType(item.value);
                 runSearch();
               }}
-              className="group relative aspect-[4/5] overflow-hidden text-left image-shade"
+              className="surface-3d surface-3d-lift group relative aspect-[4/5] overflow-hidden text-left image-shade"
             >
               <SmartImage
                 src={item.image ?? properties[0].image}
@@ -470,13 +470,13 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
           <div className="flex gap-3">
             <Link
               href="/sign-in"
-              className="bg-[var(--ink)] px-7 py-3.5 text-xs font-semibold uppercase tracking-[0.18em] text-white hover:bg-[var(--ink-2)]"
+              className="button-3d bg-[var(--ink)] px-7 py-3.5 text-xs font-semibold uppercase tracking-[0.18em] text-white hover:bg-[var(--ink-2)]"
             >
               Sign in
             </Link>
             <Link
               href="/register"
-              className="border border-[var(--gold)] px-7 py-3.5 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--gold-deep)] hover:bg-[var(--gold)] hover:text-white"
+              className="interactive-3d !border-[var(--gold)] px-7 py-3.5 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--gold-deep)] hover:bg-[var(--gold)] hover:text-white"
             >
               Create account
             </Link>
@@ -507,14 +507,14 @@ function Counter({
         <button
           onClick={() => setValue(Math.max(min, value - 1))}
           disabled={value <= min}
-          className="grid size-9 place-items-center border border-[var(--gold)] text-[var(--gold-deep)] disabled:border-[#ccc] disabled:text-[#ccc]"
+          className="interactive-3d grid size-9 place-items-center !border-[var(--gold)] text-[var(--gold-deep)] disabled:border-[#ccc] disabled:text-[#ccc] disabled:shadow-none"
         >
           <Minus size={15} />
         </button>
         <span className="w-5 text-center text-sm">{value}</span>
         <button
           onClick={() => setValue(value + 1)}
-          className="grid size-9 place-items-center border border-[var(--gold)] text-[var(--gold-deep)]"
+          className="interactive-3d grid size-9 place-items-center !border-[var(--gold)] text-[var(--gold-deep)]"
         >
           <Plus size={15} />
         </button>
