@@ -91,7 +91,7 @@ export function PropertyQuickView({
             <div>
               <p className="text-[10px] uppercase tracking-wider text-[var(--muted)] mb-1">Starting from</p>
               <div className="font-serif text-2xl font-semibold text-[var(--ink)]">
-                {format(property.units[0]?.basePriceRwf || 85000)}
+                {format(property.price || 85000)}
                 <span className="text-sm font-sans font-normal text-[var(--muted)] ml-1">/ night</span>
               </div>
             </div>
