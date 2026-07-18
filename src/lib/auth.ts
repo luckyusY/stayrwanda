@@ -18,8 +18,21 @@ export async function currentIdentity(): Promise<AppIdentity | null> {
   const user = await currentUser();
   const email = user?.primaryEmailAddress?.emailAddress?.toLowerCase();
   const configuredAdmins = env.PLATFORM_ADMIN_EMAILS.split(",").map((item) => item.trim().toLowerCase()).filter(Boolean);
-  const db = await getDb();
-  const appUser = await db.collection("users").findOne({ clerkUserId: session.userId });
+  let appUser: { role?: string } | null = null;
+
+  // Clerk remains the identity provider even while the application database is
+  // unavailable. This keeps account settings accessible and lets database-backed
+  // areas report their own actionable errors instead of crashing the whole page.
+  try {
+    const db = await getDb();
+    const storedUser = await db.collection("users").findOne({ clerkUserId: session.userId });
+    appUser = storedUser ? { role: typeof storedUser.role === "string" ? storedUser.role : undefined } : null;
+  } catch (error) {
+    console.error("Unable to load the application user record.", {
+      message: error instanceof Error ? error.message : "Unknown database error",
+    });
+  }
+
   return {
     userId: session.userId,
     email,
