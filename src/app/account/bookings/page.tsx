@@ -2,18 +2,27 @@ import { redirect } from "next/navigation";
 import { CalendarCheck } from "lucide-react";
 import { AccountShell, EmptyState } from "@/components/account-shell";
 import { currentIdentity } from "@/lib/auth";
-import { getSafeBookings } from "@/lib/guest-account";
+import { getSafeProfile, getSafeBookings } from "@/lib/guest-account";
 import { GuestBookingList } from "@/components/guest-booking-list";
 
 export default async function BookingsPage() {
   const identity = await currentIdentity();
   if (!identity) redirect("/sign-in");
 
-  const result = await getSafeBookings(identity.userId, identity.email);
+  const [profileResult, result] = await Promise.all([
+    getSafeProfile(identity.userId, identity.email),
+    getSafeBookings(identity.userId, identity.email),
+  ]);
+
+  const profile = profileResult.data;
 
   if (result.error) {
     return (
-      <AccountShell title="Bookings">
+      <AccountShell
+        title="Bookings"
+        userName={profile?.name}
+        userEmail={profile?.email}
+      >
         <EmptyState
           icon={CalendarCheck}
           title="Booking history is temporarily unavailable"
@@ -28,7 +37,11 @@ export default async function BookingsPage() {
   const bookings = result.data || [];
 
   return (
-    <AccountShell title="Bookings">
+    <AccountShell
+      title="Bookings"
+      userName={profile?.name}
+      userEmail={profile?.email}
+    >
       <GuestBookingList bookings={bookings} />
     </AccountShell>
   );

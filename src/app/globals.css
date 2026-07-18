@@ -916,3 +916,9 @@ header a[aria-label="StayRwanda home"] img {
   text-shadow: none;
 }
 
+/* Undo toast progress bar shrink animation */
+@keyframes shrink-bar {
+  from { width: 100%; }
+  to   { width: 0%; }
+}
+

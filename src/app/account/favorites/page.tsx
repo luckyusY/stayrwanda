@@ -2,25 +2,37 @@ import { Heart } from "lucide-react";
 import { redirect } from "next/navigation";
 import { AccountShell, EmptyState } from "@/components/account-shell";
 import { currentIdentity } from "@/lib/auth";
-import { getSafeFavorites } from "@/lib/guest-account";
+import { getSafeProfile, getSafeFavorites } from "@/lib/guest-account";
 import { GuestFavoriteCard } from "@/components/guest-favorite-card";
+import { FavoritesGrid } from "@/components/favorites-grid";
 
 export default async function FavoritesPage() {
   const identity = await currentIdentity();
   if (!identity) redirect("/sign-in");
 
-  const result = await getSafeFavorites(identity.userId);
+  const [profileResult, result] = await Promise.all([
+    getSafeProfile(identity.userId, identity.email),
+    getSafeFavorites(identity.userId),
+  ]);
+
+  const profile = profileResult.data;
 
   if (result.error) {
     return (
-      <AccountShell title="Saved Properties">
-        <div className="surface-3d bg-white p-8 border border-[var(--line)] rounded-xl text-center shadow-sm">
-          <Heart className="mx-auto text-[#e33] animate-pulse" size={36} />
-          <h2 className="mt-4 text-xl font-serif font-bold text-[var(--ink)]">
+      <AccountShell
+        title="Saved Properties"
+        userName={profile?.name}
+        userEmail={profile?.email}
+      >
+        <div className="rounded-2xl border border-dashed border-[var(--terracotta)]/30 bg-red-50 p-10 text-center shadow-sm">
+          <div className="mx-auto grid size-14 place-items-center rounded-full bg-red-100 text-[var(--terracotta)]">
+            <Heart size={26} />
+          </div>
+          <h2 className="mt-4 font-serif text-xl font-bold text-[var(--ink)]">
             Saved properties are temporarily unavailable
           </h2>
           <p className="mx-auto mt-2 max-w-md text-sm text-[var(--muted)]">
-            We encountered a database connection failure while trying to load your saved stays. Please reload the page or check back later.
+            We encountered an issue loading your saved stays. Please reload the page or check back later.
           </p>
         </div>
       </AccountShell>
@@ -30,18 +42,18 @@ export default async function FavoritesPage() {
   const hotels = result.data || [];
 
   return (
-    <AccountShell title="Saved Properties">
+    <AccountShell
+      title="Saved Properties"
+      userName={profile?.name}
+      userEmail={profile?.email}
+    >
       {hotels.length ? (
-        <div className="grid gap-5 sm:grid-cols-2">
-          {hotels.map((hotel) => (
-            <GuestFavoriteCard key={hotel.id} favorite={hotel} />
-          ))}
-        </div>
+        <FavoritesGrid hotels={hotels} />
       ) : (
         <EmptyState
           icon={Heart}
-          title="Save properties you like"
-          copy="Tap the heart icon on any stay profile to save it here for quick reference."
+          title="Save properties you love"
+          copy="Tap the heart icon on any stay profile to save it here for quick reference and easy booking."
           action="Browse properties"
           href="/stays"
         />

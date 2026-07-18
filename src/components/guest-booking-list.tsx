@@ -1,33 +1,103 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
-import { useMemo, useState } from "react";
-import { CalendarCheck, Clock3 } from "lucide-react";
-import { formatRwf } from "@/lib/pricing";
-import type { GuestBooking } from "@/lib/guest-account";
+import { useState, useMemo } from "react";
+import { CalendarCheck } from "lucide-react";
+import { BookingReceiptCard } from "@/components/booking-receipt-card";
 import { EmptyState } from "@/components/account-shell";
+import type { GuestBooking } from "@/lib/guest-account";
 
-type Filter = "upcoming" | "past" | "requests";
+type Tab = "upcoming" | "past" | "requests";
+
+const TAB_LABELS: Record<Tab, string> = {
+  upcoming: "Upcoming",
+  past:     "Completed",
+  requests: "Requests",
+};
 
 export function GuestBookingList({ bookings }: { bookings: GuestBooking[] }) {
-  const [filter, setFilter] = useState<Filter>("upcoming");
-  const rows = useMemo(() => bookings.filter((booking) => {
-    if (filter === "upcoming") return booking.isUpcoming && ["pending", "confirmed"].includes(booking.status);
-    if (filter === "requests") return ["pending", "rejected", "cancelled", "expired"].includes(booking.status);
-    return !booking.isUpcoming || booking.status === "completed";
-  }), [bookings, filter]);
+  const [tab, setTab] = useState<Tab>("upcoming");
 
-  return <div className="space-y-5">
-    <div className="surface-3d flex flex-wrap gap-2 bg-white p-2">
-      {(["upcoming", "past", "requests"] as Filter[]).map((item) => <button key={item} onClick={() => setFilter(item)} className={`rounded-lg px-4 py-2 text-sm font-semibold capitalize transition-colors ${filter === item ? "bg-[var(--ink)] text-white" : "text-[var(--muted)] hover:bg-[var(--parchment)] hover:text-[var(--ink)]"}`}>{item}</button>)}
-    </div>
-    {rows.length ? rows.map((booking) => <article key={booking.id} className="surface-3d surface-3d-lift overflow-hidden bg-white sm:grid sm:grid-cols-[170px_1fr]">
-      <div className="relative min-h-40 bg-[var(--cream)]">{booking.propertyImage ? <Image src={booking.propertyImage} alt={booking.propertyName} fill className="object-cover" sizes="(max-width: 640px) 100vw, 170px" /> : <CalendarCheck className="absolute inset-0 m-auto text-[var(--gold-deep)]" size={32} />}</div>
-      <div className="p-5"><div className="flex flex-wrap items-start justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[.14em] text-[var(--muted)]">{booking.reference}</p><h2 className="mt-1 font-serif text-2xl font-semibold text-[var(--ink)]">{booking.propertyName}</h2></div><span className="rounded-full bg-[var(--gold-pale)] px-3 py-1 text-xs font-bold capitalize text-[var(--gold-deep)]">{booking.status}</span></div>
-        <p className="mt-4 flex items-center gap-2 text-sm text-[var(--muted)]"><Clock3 size={15} /> {booking.checkIn} → {booking.checkOut} · {booking.nights || "—"} nights · {booking.guests || "—"} guests</p>
-        <div className="mt-4 flex flex-wrap items-end justify-between gap-3 border-t border-[var(--line)] pt-4"><div><p className="text-xs text-[var(--muted)]">Booking price snapshot</p><p className="mt-1 font-serif text-lg font-semibold text-[var(--ink)]">{booking.totalRwf ? formatRwf(booking.totalRwf) : "Price confirmed by host"}</p>{booking.nightlyRwf && <p className="text-xs text-[var(--muted)]">{formatRwf(booking.nightlyRwf)} / night</p>}</div><Link href={`/bookings/${booking.reference}`} className="button-3d bg-[var(--ink)] px-4 py-2.5 text-xs font-semibold uppercase tracking-[.14em] text-white">View details</Link></div>
+  const todayStr = new Date().toISOString().slice(0, 10);
+
+  const counts = useMemo(
+    () => ({
+      upcoming: bookings.filter(
+        (b) => ["confirmed", "pending"].includes(b.status) && b.checkOut >= todayStr
+      ).length,
+      past: bookings.filter(
+        (b) => b.status === "completed" || (b.status === "confirmed" && b.checkOut < todayStr)
+      ).length,
+      requests: bookings.filter((b) =>
+        ["pending", "cancelled", "rejected", "expired"].includes(b.status)
+      ).length,
+    }),
+    [bookings, todayStr]
+  );
+
+  const rows = useMemo(() => {
+    if (tab === "upcoming")
+      return bookings.filter(
+        (b) => ["confirmed", "pending"].includes(b.status) && b.checkOut >= todayStr
+      ).sort((a, b) => a.checkIn.localeCompare(b.checkIn));
+    if (tab === "past")
+      return bookings.filter(
+        (b) => b.status === "completed" || (b.status === "confirmed" && b.checkOut < todayStr)
+      ).sort((a, b) => b.checkOut.localeCompare(a.checkOut));
+    return bookings
+      .filter((b) => ["pending", "cancelled", "rejected", "expired"].includes(b.status))
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  }, [bookings, tab, todayStr]);
+
+  return (
+    <div className="space-y-5">
+      {/* Pill tab bar */}
+      <div className="flex flex-wrap gap-2">
+        {(["upcoming", "past", "requests"] as Tab[]).map((t) => (
+          <button
+            key={t}
+            onClick={() => setTab(t)}
+            className={`relative flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-all ${
+              tab === t
+                ? "bg-[var(--ink)] text-white shadow-sm"
+                : "bg-white border border-[var(--line)] text-[var(--muted)] hover:border-[var(--gold)] hover:text-[var(--ink)]"
+            }`}
+          >
+            {TAB_LABELS[t]}
+            <span
+              className={`inline-flex min-w-[20px] items-center justify-center rounded-full px-1.5 py-0.5 text-[10px] font-bold ${
+                tab === t
+                  ? "bg-white/20 text-white"
+                  : "bg-[var(--cream)] text-[var(--muted)]"
+              }`}
+            >
+              {counts[t]}
+            </span>
+          </button>
+        ))}
       </div>
-    </article>) : <EmptyState icon={CalendarCheck} title={`No ${filter} bookings`} copy="Your booking requests and confirmed stays will appear here." action="Find a stay" href="/stays" />}
-  </div>;
+
+      {/* Cards */}
+      {rows.length > 0 ? (
+        <div className="space-y-4">
+          {rows.map((booking) => (
+            <BookingReceiptCard key={booking.id} booking={booking} />
+          ))}
+        </div>
+      ) : (
+        <EmptyState
+          icon={CalendarCheck}
+          title={`No ${TAB_LABELS[tab].toLowerCase()} bookings`}
+          copy={
+            tab === "upcoming"
+              ? "Your confirmed and upcoming stays will appear here."
+              : tab === "past"
+              ? "Completed stays will be listed here after your check-out."
+              : "Booking requests and their current status will appear here."
+          }
+          action="Find a stay"
+          href="/stays"
+        />
+      )}
+    </div>
+  );
 }

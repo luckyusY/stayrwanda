@@ -3,177 +3,329 @@ import { redirect } from "next/navigation";
 import { AccountShell } from "@/components/account-shell";
 import { currentIdentity } from "@/lib/auth";
 import { getSafeProfile, getSafeBookings, getSafeFavorites } from "@/lib/guest-account";
-import { CalendarDays, Heart, ArrowRight, LifeBuoy, Sparkles, User } from "lucide-react";
-import { formatRwf } from "@/lib/pricing";
+import {
+  CalendarDays,
+  Heart,
+  ArrowRight,
+  LifeBuoy,
+  Sparkles,
+  TrendingUp,
+  Clock,
+  CheckCircle2,
+  Circle,
+  XCircle,
+  Phone,
+  MessageCircle,
+  ExternalLink,
+} from "lucide-react";
+import { formatRwf, formatDate, daysUntil } from "@/lib/pricing";
+import Image from "next/image";
+
+function timeGreeting() {
+  const hour = new Date().toLocaleString("en-US", { hour: "numeric", hour12: false, timeZone: "Africa/Kigali" });
+  const h = parseInt(hour);
+  if (h < 12) return "Good morning";
+  if (h < 17) return "Good afternoon";
+  return "Good evening";
+}
+
+const STATUS_DOT: Record<string, { icon: typeof Circle; colour: string; label: string }> = {
+  pending:   { icon: Clock,         colour: "text-[var(--gold)]",           label: "Pending" },
+  confirmed: { icon: CheckCircle2,  colour: "text-[var(--rwanda-green)]",   label: "Confirmed" },
+  completed: { icon: CheckCircle2,  colour: "text-[var(--muted)]",          label: "Completed" },
+  cancelled: { icon: XCircle,       colour: "text-[var(--terracotta)]",     label: "Cancelled" },
+  rejected:  { icon: XCircle,       colour: "text-[var(--terracotta)]",     label: "Rejected" },
+  expired:   { icon: XCircle,       colour: "text-[var(--muted)]",          label: "Expired" },
+};
 
 export default async function AccountPage() {
   const identity = await currentIdentity();
   if (!identity) redirect("/sign-in");
 
-  // Load section data independently and safely
-  const profileResult = await getSafeProfile(identity.userId, identity.email);
-  const bookingsResult = await getSafeBookings(identity.userId, identity.email);
-  const favoritesResult = await getSafeFavorites(identity.userId);
+  const [profileResult, bookingsResult, favoritesResult] = await Promise.all([
+    getSafeProfile(identity.userId, identity.email),
+    getSafeBookings(identity.userId, identity.email),
+    getSafeFavorites(identity.userId),
+  ]);
 
   const profile = profileResult.data;
   const bookings = bookingsResult.data || [];
   const favorites = favoritesResult.data || [];
 
-  // Identify upcoming stays (confirmed bookings with check-in in the future or active today)
   const todayStr = new Date().toISOString().slice(0, 10);
   const upcomingBookings = bookings.filter(
     (b) => b.status === "confirmed" && b.checkOut >= todayStr
   );
-  const nextStay = upcomingBookings[upcomingBookings.length - 1]; // next chronological stay
+  // Sort ascending to find the next chronological stay
+  const nextStay = upcomingBookings.sort((a, b) => a.checkIn.localeCompare(b.checkIn))[0];
+  const recentActivity = [...bookings]
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    .slice(0, 4);
+
+  const greeting = timeGreeting();
+  const firstName = profile?.name?.split(" ")[0] || "Guest";
 
   return (
-    <AccountShell title="Overview">
+    <AccountShell
+      title="Overview"
+      userName={profile?.name}
+      userEmail={profile?.email}
+    >
       <div className="space-y-6">
-        {/* Welcome Section */}
-        <div className="surface-3d bg-white p-6 rounded-xl border border-[var(--line)] shadow-sm">
-          <div className="flex items-center gap-4">
-            <span className="grid size-12 place-items-center rounded-full bg-[var(--cream)] text-[var(--gold-deep)] border border-[var(--gold)]">
-              <User size={24} />
-            </span>
+
+        {/* ── Welcome Hero ─────────────────────────────────────────── */}
+        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[var(--ink)] to-[var(--ink-2)] p-7 shadow-lg">
+          {/* Decorative watermark */}
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-end pr-8 opacity-[0.04]">
+            <svg width="220" height="220" viewBox="0 0 200 200" fill="white">
+              <path d="M100 10 L190 100 L100 190 L10 100 Z" />
+              <circle cx="100" cy="100" r="40" />
+            </svg>
+          </div>
+          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[var(--gold)]">{greeting}</p>
+          <h2 className="mt-1 font-serif text-4xl font-bold text-white">{firstName}</h2>
+          <p className="mt-2 text-sm text-white/60">Welcome to your StayRwanda guest hub.</p>
+          <div className="mt-5 flex flex-wrap gap-3">
+            <Link
+              href="/stays"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-white transition hover:bg-white/20"
+            >
+              Explore stays <ArrowRight size={12} />
+            </Link>
+            {nextStay && (
+              <Link
+                href={`/bookings/${nextStay.reference}`}
+                className="inline-flex items-center gap-1.5 rounded-lg bg-[var(--gold)] px-4 py-2 text-xs font-semibold uppercase tracking-wider text-white transition hover:bg-[var(--gold-mid)]"
+              >
+                Manage booking <ArrowRight size={12} />
+              </Link>
+            )}
+          </div>
+        </div>
+
+        {/* ── 3 Stat Cards ─────────────────────────────────────────── */}
+        <div className="grid gap-4 sm:grid-cols-3">
+          {/* Total bookings */}
+          <div className="flex items-center gap-4 rounded-2xl border border-[var(--line)] bg-white p-5 shadow-sm">
+            <div className="grid size-12 shrink-0 place-items-center rounded-xl bg-[var(--cream)] text-[var(--gold-deep)]">
+              <CalendarDays size={22} />
+            </div>
             <div>
-              <h2 className="text-2xl font-serif font-bold text-[var(--ink)]">
-                Muraho, {profile?.name || "Guest"}
-              </h2>
-              <p className="text-sm text-[var(--muted)]">
-                Welcome to your StayRwanda guest hub.
+              <p className="font-serif text-3xl font-bold text-[var(--ink)]">
+                {bookingsResult.error ? "—" : bookings.length}
               </p>
+              <p className="text-[10px] uppercase tracking-wider text-[var(--muted)]">Total bookings</p>
+            </div>
+          </div>
+
+          {/* Upcoming stays */}
+          <div className="flex items-center gap-4 rounded-2xl border border-[var(--green-light)] bg-white p-5 shadow-sm">
+            <div className="grid size-12 shrink-0 place-items-center rounded-xl bg-[var(--green-light)] text-[var(--rwanda-green)]">
+              <TrendingUp size={22} />
+            </div>
+            <div>
+              <p className="font-serif text-3xl font-bold text-[var(--ink)]">
+                {bookingsResult.error ? "—" : upcomingBookings.length}
+              </p>
+              <p className="text-[10px] uppercase tracking-wider text-[var(--muted)]">Upcoming stays</p>
+            </div>
+          </div>
+
+          {/* Saved properties */}
+          <div className="flex items-center gap-4 rounded-2xl border border-[var(--gold-pale)] bg-white p-5 shadow-sm">
+            <div className="grid size-12 shrink-0 place-items-center rounded-xl bg-[var(--gold-pale)] text-[var(--gold-deep)]">
+              <Heart size={22} />
+            </div>
+            <div>
+              <p className="font-serif text-3xl font-bold text-[var(--ink)]">
+                {favoritesResult.error ? "—" : favorites.length}
+              </p>
+              <p className="text-[10px] uppercase tracking-wider text-[var(--muted)]">Saved stays</p>
             </div>
           </div>
         </div>
 
-        {/* Quick Stats Panel */}
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div className="surface-3d bg-white p-5 rounded-xl border border-[var(--line)] flex items-center justify-between shadow-sm">
-            <div className="flex items-center gap-3">
-              <div className="grid size-10 place-items-center rounded-lg bg-[var(--cream)] text-[var(--gold-deep)]">
-                <CalendarDays size={20} />
-              </div>
-              <div>
-                <span className="block text-2xl font-bold text-[var(--ink)]">
-                  {bookingsResult.error ? "—" : bookings.length}
-                </span>
-                <span className="text-xs text-[var(--muted)] uppercase tracking-wider">Bookings & requests</span>
-              </div>
-            </div>
-            {!bookingsResult.error && (
-              <Link href="/account/bookings" className="text-[var(--gold-deep)] hover:text-[var(--ink)]">
-                <ArrowRight size={18} />
-              </Link>
-            )}
-          </div>
-
-          <div className="surface-3d bg-white p-5 rounded-xl border border-[var(--line)] flex items-center justify-between shadow-sm">
-            <div className="flex items-center gap-3">
-              <div className="grid size-10 place-items-center rounded-lg bg-[var(--cream)] text-[var(--gold-deep)]">
-                <Heart size={20} />
-              </div>
-              <div>
-                <span className="block text-2xl font-bold text-[var(--ink)]">
-                  {favoritesResult.error ? "—" : favorites.length}
-                </span>
-                <span className="text-xs text-[var(--muted)] uppercase tracking-wider">Saved stays</span>
-              </div>
-            </div>
-            {!favoritesResult.error && (
-              <Link href="/account/favorites" className="text-[var(--gold-deep)] hover:text-[var(--ink)]">
-                <ArrowRight size={18} />
-              </Link>
-            )}
-          </div>
-        </div>
-
-        {/* Fail-safe sections */}
-        {bookingsResult.error && (
-          <div className="surface-3d border-dashed border-[#e33]/30 bg-[#fff5f5] p-4 text-center rounded-xl">
-            <p className="text-sm text-[#a33] font-medium">
-              We are temporarily unable to fetch your booking records.
+        {/* ── Error states ──────────────────────────────────────────── */}
+        {(bookingsResult.error || favoritesResult.error) && (
+          <div className="rounded-2xl border border-dashed border-[var(--terracotta)]/30 bg-red-50 p-4 text-center">
+            <p className="text-sm font-medium text-[var(--terracotta)]">
+              {bookingsResult.error && favoritesResult.error
+                ? "Bookings and saved properties are temporarily unavailable."
+                : bookingsResult.error
+                ? "Your booking history is temporarily unavailable."
+                : "Your saved properties are temporarily unavailable."}
             </p>
           </div>
         )}
 
-        {favoritesResult.error && (
-          <div className="surface-3d border-dashed border-[#e33]/30 bg-[#fff5f5] p-4 text-center rounded-xl">
-            <p className="text-sm text-[#a33] font-medium">
-              We are temporarily unable to load your saved properties.
-            </p>
-          </div>
-        )}
-
-        {/* Upcoming Stay Card */}
+        {/* ── Next Stay — Boarding Pass ─────────────────────────────── */}
         {!bookingsResult.error && (
-          <div className="surface-3d bg-white rounded-xl border border-[var(--line)] overflow-hidden shadow-sm">
-            <h3 className="bg-[var(--parchment)]/50 border-b border-[var(--line)] px-6 py-4 text-xs font-bold uppercase tracking-wider text-[var(--ink)]">
-              Your next stay
-            </h3>
-            <div className="p-6">
-              {nextStay ? (
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                  <div>
-                    <span className="inline-block rounded bg-[var(--gold-pale)] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[var(--gold-deep)]">
-                      Confirmed Stay
-                    </span>
-                    <h4 className="mt-2 font-serif text-xl font-bold text-[var(--ink)]">
-                      {nextStay.hotelName}
-                    </h4>
-                    <p className="mt-1 text-sm text-[var(--muted)]">
-                      {nextStay.checkIn} → {nextStay.checkOut} · {nextStay.guests} guest{nextStay.guests > 1 ? "s" : ""}
-                    </p>
-                  </div>
-                  <Link
-                    href={`/bookings/${nextStay.reference}`}
-                    className="button-3d inline-block bg-[var(--ink)] text-center text-xs font-semibold uppercase tracking-wider text-white px-5 py-3 shrink-0"
-                  >
-                    View Status Page
-                  </Link>
-                </div>
-              ) : (
-                <div className="text-center py-6">
-                  <Sparkles className="mx-auto text-[var(--gold-deep)]" size={30} />
-                  <h4 className="mt-3 text-lg font-serif font-semibold text-[var(--ink)]">
-                    No upcoming stays planned
-                  </h4>
-                  <p className="mt-1 text-sm text-[var(--muted)]">
-                    Explore Kigali's finest hosted residences and book your next stay.
-                  </p>
-                  <Link
-                    href="/stays"
-                    className="button-3d mt-4 inline-block bg-[var(--ink)] px-5 py-2.5 text-xs font-semibold uppercase tracking-wider text-white"
-                  >
-                    Browse Stays
-                  </Link>
-                </div>
+          <div className="overflow-hidden rounded-2xl border border-[var(--line)] bg-white shadow-sm">
+            <div className="flex items-center justify-between border-b border-[var(--line)] bg-[var(--parchment)] px-6 py-4">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--ink)]">Your next stay</h3>
+              {nextStay && (
+                <Link
+                  href="/account/bookings"
+                  className="text-xs font-semibold text-[var(--gold-deep)] hover:text-[var(--ink)]"
+                >
+                  All bookings →
+                </Link>
               )}
             </div>
+
+            {nextStay ? (
+              <div className="flex flex-col sm:flex-row">
+                {/* Property image */}
+                {nextStay.hotelImage && (
+                  <div className="relative h-48 w-full shrink-0 overflow-hidden sm:h-auto sm:w-52">
+                    <Image
+                      src={nextStay.hotelImage}
+                      alt={nextStay.hotelName}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 640px) 100vw, 208px"
+                    />
+                  </div>
+                )}
+                <div className="flex flex-1 flex-col justify-between p-6">
+                  <div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="rounded-full bg-[var(--green-light)] px-3 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[var(--rwanda-green)]">
+                        Confirmed
+                      </span>
+                      {(() => {
+                        const d = daysUntil(nextStay.checkIn);
+                        if (d < 0 || d > 7) return null;
+                        const label = d === 0 ? "Today!" : d === 1 ? "Tomorrow" : `In ${d} days`;
+                        return (
+                          <span className="inline-flex items-center gap-1 rounded-full bg-[var(--gold-pale)] px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[var(--gold-deep)]">
+                            <span className="size-1.5 rounded-full bg-[var(--gold)] animate-pulse" />
+                            {label}
+                          </span>
+                        );
+                      })()}
+                    </div>
+                    <h4 className="mt-3 font-serif text-2xl font-bold text-[var(--ink)]">
+                      {nextStay.hotelName}
+                    </h4>
+                    <p className="mt-2 text-sm text-[var(--muted)]">
+                      {formatDate(nextStay.checkIn)} → {formatDate(nextStay.checkOut)}
+                    </p>
+                    <p className="mt-1 text-sm text-[var(--muted)]">
+                      {nextStay.guests} guest{nextStay.guests > 1 ? "s" : ""} · {nextStay.nights} night{nextStay.nights > 1 ? "s" : ""}
+                    </p>
+                    {nextStay.totalRwf ? (
+                      <p className="mt-3 font-serif text-xl font-semibold text-[var(--ink)]">
+                        {formatRwf(nextStay.totalRwf)}
+                        <span className="ml-1 text-xs font-normal text-[var(--muted)]">total (snapshot)</span>
+                      </p>
+                    ) : null}
+                  </div>
+                  <div className="mt-5">
+                    <Link
+                      href={`/bookings/${nextStay.reference}`}
+                      className="inline-flex items-center gap-1.5 rounded-xl bg-[var(--ink)] px-5 py-3 text-xs font-bold uppercase tracking-wider text-white transition hover:bg-[var(--ink-2)]"
+                    >
+                      Manage booking <ArrowRight size={13} />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="px-6 py-12 text-center">
+                <div className="mx-auto grid size-16 place-items-center rounded-full bg-[var(--gold-pale)] text-[var(--gold-deep)]">
+                  <Sparkles size={26} />
+                </div>
+                <h4 className="mt-4 font-serif text-xl font-bold text-[var(--ink)]">No upcoming stays planned</h4>
+                <p className="mx-auto mt-2 max-w-sm text-sm text-[var(--muted)]">
+                  Explore Kigali&apos;s finest hosted residences and book your next escape.
+                </p>
+                <Link
+                  href="/stays"
+                  className="mt-5 inline-flex items-center gap-2 rounded-xl bg-[var(--ink)] px-6 py-3 text-xs font-bold uppercase tracking-wider text-white transition hover:bg-[var(--ink-2)]"
+                >
+                  Browse stays <ArrowRight size={13} />
+                </Link>
+              </div>
+            )}
           </div>
         )}
 
-        {/* Profile details fail-safe */}
+        {/* ── Recent Activity Feed ──────────────────────────────────── */}
+        {!bookingsResult.error && recentActivity.length > 0 && (
+          <div className="rounded-2xl border border-[var(--line)] bg-white shadow-sm">
+            <div className="flex items-center justify-between border-b border-[var(--line)] bg-[var(--parchment)] px-6 py-4">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--ink)]">Recent activity</h3>
+              <Link
+                href="/account/bookings"
+                className="text-xs font-semibold text-[var(--gold-deep)] hover:text-[var(--ink)]"
+              >
+                View all →
+              </Link>
+            </div>
+            <ul className="divide-y divide-[var(--line)]">
+              {recentActivity.map((b) => {
+                const cfg = STATUS_DOT[b.status] ?? STATUS_DOT["pending"];
+                const Dot = cfg.icon;
+                return (
+                  <li key={b.id} className="flex items-center gap-4 px-6 py-4">
+                    <Dot size={16} className={`shrink-0 ${cfg.colour}`} />
+                    <div className="flex-1 min-w-0">
+                      <p className="truncate text-sm font-semibold text-[var(--ink)]">{b.hotelName}</p>
+                      <p className="text-xs text-[var(--muted)]">
+                        {cfg.label} · {formatDate(b.checkIn)}
+                      </p>
+                    </div>
+                    <Link
+                      href={`/bookings/${b.reference}`}
+                      className="shrink-0 text-[var(--gold-deep)] hover:text-[var(--ink)]"
+                    >
+                      <ArrowRight size={15} />
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        )}
+
+        {/* ── Profile Card ──────────────────────────────────────────── */}
         {profileResult.error ? (
-          <div className="surface-3d border-dashed border-[#e33]/30 bg-[#fff5f5] p-4 text-center rounded-xl">
-            <p className="text-sm text-[#a33] font-medium">
-              Profile details are temporarily unavailable.
-            </p>
+          <div className="rounded-2xl border border-dashed border-[var(--terracotta)]/30 bg-red-50 p-4 text-center">
+            <p className="text-sm font-medium text-[var(--terracotta)]">Profile details are temporarily unavailable.</p>
           </div>
         ) : (
-          <div className="surface-3d bg-white p-6 rounded-xl border border-[var(--line)] shadow-sm">
-            <h3 className="font-serif text-lg font-bold text-[var(--ink)]">Personal Details</h3>
-            <div className="mt-4 divide-y divide-[var(--line)]">
-              <div className="grid gap-2 py-3 sm:grid-cols-[150px_1fr] text-sm">
-                <strong className="text-[var(--ink)] font-semibold">Name</strong>
-                <span className="text-[var(--muted)]">{profile?.name}</span>
+          <div className="rounded-2xl border border-[var(--line)] bg-white shadow-sm">
+            <div className="flex items-center justify-between border-b border-[var(--line)] bg-[var(--parchment)] px-6 py-4">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--ink)]">Personal details</h3>
+              <a
+                href="https://accounts.clerk.com/user"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 text-xs font-semibold text-[var(--gold-deep)] hover:text-[var(--ink)]"
+              >
+                Edit <ExternalLink size={11} />
+              </a>
+            </div>
+            <div className="divide-y divide-[var(--line)]">
+              <div className="grid grid-cols-[120px_1fr] items-center gap-3 px-6 py-4 text-sm">
+                <span className="font-semibold text-[var(--ink)]">Name</span>
+                <span className="text-[var(--muted)]">{profile?.name || "—"}</span>
               </div>
-              <div className="grid gap-2 py-3 sm:grid-cols-[150px_1fr] text-sm">
-                <strong className="text-[var(--ink)] font-semibold">Email</strong>
-                <span className="text-[var(--muted)]">{profile?.email || "No email"}</span>
+              <div className="grid grid-cols-[120px_1fr] items-center gap-3 px-6 py-4 text-sm">
+                <span className="font-semibold text-[var(--ink)]">Email</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-[var(--muted)]">{profile?.email || "—"}</span>
+                  {profile?.email && (
+                    <span className="rounded-full bg-[var(--green-light)] px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-[var(--rwanda-green)]">
+                      Verified
+                    </span>
+                  )}
+                </div>
               </div>
               {profile?.phone && (
-                <div className="grid gap-2 py-3 sm:grid-cols-[150px_1fr] text-sm">
-                  <strong className="text-[var(--ink)] font-semibold">Phone</strong>
+                <div className="grid grid-cols-[120px_1fr] items-center gap-3 px-6 py-4 text-sm">
+                  <span className="font-semibold text-[var(--ink)]">Phone</span>
                   <span className="text-[var(--muted)]">{profile.phone}</span>
                 </div>
               )}
@@ -181,24 +333,38 @@ export default async function AccountPage() {
           </div>
         )}
 
-        {/* Support & Quick Help Prompt */}
-        <div className="surface-3d bg-[var(--cream)] border border-[var(--gold)]/30 p-5 rounded-xl flex gap-4 items-start shadow-sm">
-          <LifeBuoy className="text-[var(--gold-deep)] shrink-0 mt-0.5" size={20} />
-          <div>
-            <h3 className="text-sm font-semibold text-[var(--ink)] uppercase tracking-wider">
-              Need assistance?
-            </h3>
-            <p className="mt-1 text-sm text-[var(--muted)]">
-              Our guest relations team is here to help with any inquiries, schedule adjustments, or check-in questions.
-            </p>
-            <Link
-              href="/contact"
-              className="mt-3 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-wider text-[var(--gold-deep)] hover:text-[var(--ink)]"
-            >
-              Contact guest support <ArrowRight size={13} />
-            </Link>
+        {/* ── Support Card ──────────────────────────────────────────── */}
+        <div className="rounded-2xl border border-[var(--gold)]/30 bg-gradient-to-br from-[var(--gold-pale)] to-[var(--cream)] p-6 shadow-sm">
+          <div className="flex items-start gap-4">
+            <div className="grid size-10 shrink-0 place-items-center rounded-xl bg-white text-[var(--gold-deep)] shadow-sm">
+              <LifeBuoy size={20} />
+            </div>
+            <div className="flex-1">
+              <h3 className="text-sm font-bold uppercase tracking-wider text-[var(--ink)]">Need assistance?</h3>
+              <p className="mt-1 text-sm text-[var(--muted)]">
+                Our Kigali guest relations team is available <strong className="text-[var(--ink)]">08:00–22:00 EAT</strong>, 
+                seven days a week. We&apos;re here to help with any inquiries, schedule adjustments, or check-in questions.
+              </p>
+              <div className="mt-4 flex flex-wrap gap-3">
+                <Link
+                  href="/contact"
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-[var(--ink)] px-4 py-2 text-xs font-semibold uppercase tracking-wider text-white transition hover:bg-[var(--ink-2)]"
+                >
+                  <Phone size={12} /> Contact support
+                </Link>
+                <a
+                  href="https://wa.me/250700000000"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--gold)]/40 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-wider text-[var(--gold-deep)] transition hover:border-[var(--gold)]"
+                >
+                  <MessageCircle size={12} /> WhatsApp
+                </a>
+              </div>
+            </div>
           </div>
         </div>
+
       </div>
     </AccountShell>
   );
