@@ -31,6 +31,7 @@ export function assertProductionConfiguration() {
   if (required.length) throw new Error(`Missing production configuration: ${required.join(", ")}`);
 }
 
+/** True only when both Clerk keys are non-empty after trim (empty Vercel vars still “exist”). */
 export const clerkConfigured = Boolean(
-  process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY && env.CLERK_SECRET_KEY,
+  process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY?.trim() && env.CLERK_SECRET_KEY?.trim(),
 );

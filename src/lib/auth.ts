@@ -4,6 +4,8 @@ import { getDb } from "@/lib/mongodb";
 import { clerkConfigured, env } from "@/lib/env";
 import type { Membership, Role } from "@/lib/platform-types";
 
+export { clerkConfigured };
+
 export type AppIdentity = { userId: string; email?: string; platformAdmin: boolean };
 
 export async function currentIdentity(): Promise<AppIdentity | null> {
