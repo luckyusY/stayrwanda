@@ -197,40 +197,46 @@ export function CompactSearch({ destination = "Kigali" }: { destination?: string
   return (
     <div className="bg-[var(--cream)] py-6">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <div className="surface-3d-floating grid grid-cols-[minmax(0,1fr)] gap-px overflow-hidden bg-[var(--line)] md:grid-cols-[1.3fr_1.1fr_1fr_auto]">
-          <label className="flex min-h-15 min-w-0 items-center gap-3 bg-white px-4 transition-colors focus-within:bg-[var(--parchment)]">
-            <MapPin size={20} className="shrink-0 text-[var(--gold-deep)]" />
-            <input
-              value={place}
-              onChange={(event) => setPlace(event.target.value)}
-              className="min-w-0 flex-1 cursor-text bg-transparent text-sm font-medium text-[var(--ink)] outline-none placeholder:font-normal placeholder:text-[var(--muted)]"
-              placeholder="Kigali, Kibagabaga…"
-            />
+        <div className="surface-3d-floating grid grid-cols-[minmax(0,1fr)] gap-px overflow-hidden bg-[var(--line)] md:grid-cols-[1.4fr_auto_auto_auto]">
+          <label className="flex min-h-[4rem] min-w-0 items-center gap-3 bg-white px-4 transition-colors focus-within:bg-[var(--parchment)] cursor-text">
+            <MapPin size={18} className="shrink-0 text-[var(--gold-deep)]" />
+            <span className="min-w-0 flex-1">
+              <span className="block text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">Destination</span>
+              <input
+                value={place}
+                onChange={(event) => setPlace(event.target.value)}
+                className="mt-0.5 min-w-0 w-full bg-transparent text-sm font-medium text-[var(--ink)] outline-none placeholder:font-normal placeholder:text-[var(--muted)]"
+                placeholder="Where are you going?"
+              />
+            </span>
           </label>
-          <div className="flex min-h-15 min-w-0 items-center gap-2 bg-white px-4 focus-within:bg-[var(--parchment)]">
-            <CalendarDays size={20} className="shrink-0 text-[var(--gold-deep)]" />
-            <input
-              type="date"
-              aria-label="Check-in"
-              className="w-[118px] min-w-0 cursor-text bg-transparent text-xs font-medium text-[var(--ink)] outline-none"
-            />
-            <span className="text-[var(--muted)]">—</span>
-            <input
-              type="date"
-              aria-label="Check-out"
-              className="w-[118px] min-w-0 cursor-text bg-transparent text-xs font-medium text-[var(--ink)] outline-none"
-            />
-          </div>
-          <button
-            type="button"
-            className="flex min-h-15 items-center gap-3 bg-white px-4 text-sm text-[var(--ink)]"
-          >
-            <Users size={20} className="text-[var(--gold-deep)]" /> 2 guests · 1 room
-            <ChevronDown size={15} className="ml-auto" />
-          </button>
+          <label className="flex min-h-[4rem] min-w-[130px] items-center gap-3 bg-white px-4 transition-colors focus-within:bg-[var(--parchment)] cursor-text border-l border-[var(--line)]">
+            <CalendarDays size={18} className="shrink-0 text-[var(--gold-deep)]" />
+            <span className="min-w-0 flex-1">
+              <span className="block text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">Check-in</span>
+              <input
+                type="text"
+                placeholder="Add date"
+                aria-label="Check-in date"
+                className="mt-0.5 w-full bg-transparent text-sm font-medium text-[var(--ink)] outline-none placeholder:font-normal placeholder:text-[var(--muted)]"
+              />
+            </span>
+          </label>
+          <label className="flex min-h-[4rem] min-w-[130px] items-center gap-3 bg-white px-4 transition-colors focus-within:bg-[var(--parchment)] cursor-text border-l border-[var(--line)]">
+            <CalendarDays size={18} className="shrink-0 text-[var(--gold-deep)] opacity-50" />
+            <span className="min-w-0 flex-1">
+              <span className="block text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">Check-out</span>
+              <input
+                type="text"
+                placeholder="Add date"
+                aria-label="Check-out date"
+                className="mt-0.5 w-full bg-transparent text-sm font-medium text-[var(--ink)] outline-none placeholder:font-normal placeholder:text-[var(--muted)]"
+              />
+            </span>
+          </label>
           <Link
             href={`/search?destination=${encodeURIComponent(place)}`}
-            className="button-3d flex min-h-15 items-center justify-center gap-2 !rounded-none bg-[var(--ink)] px-8 text-xs font-semibold uppercase tracking-[0.2em] text-white hover:bg-[var(--ink-2)]"
+            className="button-3d flex min-h-[4rem] items-center justify-center gap-2 !rounded-none bg-[var(--ink)] px-8 text-xs font-semibold uppercase tracking-[0.2em] text-white hover:bg-[var(--ink-2)]"
           >
             <Search size={17} /> Search
           </Link>

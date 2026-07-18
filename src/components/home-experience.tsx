@@ -178,44 +178,52 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.6, ease: EASE }}
         >
-          <div className="surface-3d-floating border-t-2 border-t-[var(--gold)] p-1.5">
-            <div className="grid grid-cols-[minmax(0,1fr)] gap-px bg-[var(--line)] md:grid-cols-[1.3fr_1.2fr_1fr_auto]">
-              <label className="flex min-h-16 items-center gap-3 bg-white px-5 transition-colors focus-within:bg-[var(--parchment)]">
-                <MapPin size={20} className="shrink-0 text-[var(--gold-deep)]" />
+          <div className="surface-3d-floating shadow-xl">
+            <div className="grid grid-cols-[minmax(0,1fr)] gap-px bg-[var(--line)] md:grid-cols-[1.4fr_auto_auto_auto]">
+              <label className="flex min-h-[4.5rem] items-center gap-3 bg-white px-5 transition-colors focus-within:bg-[var(--parchment)] cursor-text">
+                <MapPin size={18} className="shrink-0 text-[var(--gold-deep)]" />
                 <span className="min-w-0 flex-1">
-                  <span className="block text-[0.65rem] uppercase tracking-[0.18em] text-[var(--muted)]">
+                  <span className="block text-[0.6rem] uppercase tracking-[0.2em] text-[var(--muted)] font-semibold">
                     Destination
                   </span>
                   <input
                     value={query}
                     onChange={(event) => setQuery(event.target.value)}
-                    placeholder="Kigali, Kibagabaga…"
-                    className="mt-0.5 w-full cursor-text bg-transparent text-sm font-medium text-[var(--ink)] outline-none placeholder:font-normal placeholder:text-[var(--muted)]"
+                    placeholder="Where are you going?"
+                    className="mt-0.5 w-full bg-transparent text-sm font-medium text-[var(--ink)] outline-none placeholder:font-normal placeholder:text-[var(--muted)]"
                   />
                 </span>
               </label>
 
-              <div className="flex min-h-16 min-w-0 items-center gap-3 bg-white px-5 transition-colors focus-within:bg-[var(--parchment)]">
-                <CalendarDays size={20} className="shrink-0 text-[var(--gold-deep)]" />
+              <label className="flex min-h-[4.5rem] min-w-[140px] items-center gap-3 bg-white px-5 transition-colors focus-within:bg-[var(--parchment)] cursor-text border-l border-[var(--line)]">
+                <CalendarDays size={18} className="shrink-0 text-[var(--gold-deep)]" />
                 <span className="min-w-0 flex-1">
-                  <span className="block text-[0.65rem] uppercase tracking-[0.18em] text-[var(--muted)]">
-                    Dates
+                  <span className="block text-[0.6rem] uppercase tracking-[0.2em] text-[var(--muted)] font-semibold">
+                    Check-in
                   </span>
-                  <span className="mt-0.5 flex items-center gap-2">
-                    <input
-                      type="date"
-                      aria-label="Check-in"
-                      className="w-[118px] min-w-0 cursor-text bg-transparent text-xs font-medium text-[var(--ink)] outline-none"
-                    />
-                    <span className="text-[var(--muted)]">—</span>
-                    <input
-                      type="date"
-                      aria-label="Check-out"
-                      className="w-[118px] min-w-0 cursor-text bg-transparent text-xs font-medium text-[var(--ink)] outline-none"
-                    />
-                  </span>
+                  <input
+                    type="text"
+                    placeholder="Add date"
+                    aria-label="Check-in date"
+                    className="mt-0.5 w-full bg-transparent text-sm font-medium text-[var(--ink)] outline-none placeholder:font-normal placeholder:text-[var(--muted)]"
+                  />
                 </span>
-              </div>
+              </label>
+
+              <label className="flex min-h-[4.5rem] min-w-[140px] items-center gap-3 bg-white px-5 transition-colors focus-within:bg-[var(--parchment)] cursor-text border-l border-[var(--line)]">
+                <CalendarDays size={18} className="shrink-0 text-[var(--gold-deep)] opacity-50" />
+                <span className="min-w-0 flex-1">
+                  <span className="block text-[0.6rem] uppercase tracking-[0.2em] text-[var(--muted)] font-semibold">
+                    Check-out
+                  </span>
+                  <input
+                    type="text"
+                    placeholder="Add date"
+                    aria-label="Check-out date"
+                    className="mt-0.5 w-full bg-transparent text-sm font-medium text-[var(--ink)] outline-none placeholder:font-normal placeholder:text-[var(--muted)]"
+                  />
+                </span>
+              </label>
 
               <Popout
                 variant="dropdown"
