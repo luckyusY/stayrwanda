@@ -898,3 +898,19 @@ header a[aria-label="StayRwanda home"] img {
   visibility: visible;
 }
 
+/* Primary nav labels — high legibility over hero photography */
+.site-nav-link {
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  letter-spacing: 0.03em;
+}
+/* Soft shadow when floating over imagery so white labels stay sharp */
+.site-nav-link--on-dark {
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(9, 18, 33, 0.5), 0 0 20px rgba(9, 18, 33, 0.25);
+}
+.site-nav-link--on-light {
+  text-shadow: none;
+}
+

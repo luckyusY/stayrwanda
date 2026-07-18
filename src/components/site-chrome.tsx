@@ -4,19 +4,19 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { CalendarDays, ChevronDown, Globe2, MapPin, Menu, Search, Users, X, BedDouble, Home, Building2, Tag, PlusSquare, Bell, UserCircle2 } from "lucide-react";
+import { CalendarDays, ChevronDown, MapPin, Menu, Search, Users, X } from "lucide-react";
 import { EASE, softSpring } from "@/lib/motion";
 import { CurrencyControl } from "@/components/currency-provider";
 import { AccountPopout } from "@/components/account-popout";
 import { NotificationPopout } from "@/components/notification-popout";
 
 const NAV = [
-  { label: "Stays", href: "/stays", icon: BedDouble },
-  { label: "Residences", href: "/residences", icon: Home },
-  { label: "Hotels", href: "/hotels", icon: Building2 },
-  { label: "Destinations", href: "/destinations", icon: MapPin },
-  { label: "Offers", href: "/offers", icon: Tag },
-  { label: "List your property", href: "/list-property", icon: PlusSquare },
+  { label: "Stays", href: "/stays" },
+  { label: "Residences", href: "/residences" },
+  { label: "Hotels", href: "/hotels" },
+  { label: "Destinations", href: "/destinations" },
+  { label: "Offers", href: "/offers" },
+  { label: "List your property", href: "/list-property", emphasize: true },
 ] as const;
 
 export function Wordmark({ light = false, imgClass = "h-16" }: { light?: boolean; imgClass?: string }) {
@@ -96,25 +96,46 @@ export function SiteHeader({
         >
           <Wordmark light={onLight} imgClass={compact ? "h-12" : "h-16"} />
 
-          <nav className="hidden items-center gap-6 lg:flex">
-            {NAV.map((item, i) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                aria-current={i === activeIndex ? "page" : undefined}
-                className={`group relative flex items-center gap-1.5 text-sm font-medium tracking-wide ${
-                  onLight ? "text-white/90 hover:text-white" : "text-[var(--ink)] hover:text-[var(--gold-deep)]"
-                }`}
-              >
-                <item.icon size={15} className="icon-premium opacity-70 group-hover:opacity-100" />
-                {item.label}
-                <span
-                  className={`absolute -bottom-1.5 left-0 h-px bg-[var(--gold)] transition-all duration-300 group-hover:w-full ${
-                    i === activeIndex ? "w-full" : "w-0"
-                  }`}
-                />
-              </Link>
-            ))}
+          {/* Text-only nav — no icons so labels stay crisp over photography */}
+          <nav
+            className="hidden items-center gap-1 lg:flex xl:gap-1.5"
+            aria-label="Primary"
+          >
+            {NAV.map((item, i) => {
+              const active = i === activeIndex;
+              const emphasize = "emphasize" in item && item.emphasize;
+              return (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  aria-current={active ? "page" : undefined}
+                  className={[
+                    "site-nav-link group relative whitespace-nowrap px-2.5 py-2 text-[13px] font-semibold tracking-[0.02em] transition-colors duration-200 xl:px-3 xl:text-sm",
+                    emphasize ? "ml-1" : "",
+                    onLight ? "site-nav-link--on-dark" : "site-nav-link--on-light",
+                    onLight
+                      ? active
+                        ? "text-white"
+                        : "text-white hover:text-white"
+                      : active
+                        ? "text-[var(--gold-deep)]"
+                        : "text-[var(--ink)] hover:text-[var(--gold-deep)]",
+                  ].join(" ")}
+                >
+                  {item.label}
+                  <span
+                    aria-hidden
+                    className={[
+                      "absolute bottom-0.5 left-2.5 right-2.5 h-[2px] origin-left rounded-full bg-[var(--gold)] transition-transform duration-300 ease-out xl:left-3 xl:right-3",
+                      active || emphasize
+                        ? "scale-x-100"
+                        : "scale-x-0 group-hover:scale-x-100",
+                      emphasize && !active ? "opacity-70" : "",
+                    ].join(" ")}
+                  />
+                </Link>
+              );
+            })}
           </nav>
 
           <div className="hidden items-center gap-2 md:flex">
@@ -174,14 +195,13 @@ export function SiteHeader({
                     variants={{ hidden: { opacity: 0, x: 24 }, show: { opacity: 1, x: 0 } }}
                     transition={{ duration: 0.5, ease: EASE }}
                   >
-                      <Link
-                        href={item.href}
-                        onClick={() => setOpen(false)}
-                        className="flex items-center gap-4 border-b border-[var(--line)] py-4 font-serif text-2xl text-[var(--ink)] transition-colors hover:text-[var(--gold-deep)]"
-                      >
-                        <item.icon size={24} className="text-[var(--gold)] opacity-80" />
-                        {item.label}
-                      </Link>
+                    <Link
+                      href={item.href}
+                      onClick={() => setOpen(false)}
+                      className="block border-b border-[var(--line)] py-4 font-serif text-2xl font-medium tracking-tight text-[var(--ink)] transition-colors hover:text-[var(--gold-deep)]"
+                    >
+                      {item.label}
+                    </Link>
                   </motion.li>
                 ))}
               </motion.ul>
