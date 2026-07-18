@@ -13,9 +13,25 @@ export async function currentIdentity(): Promise<AppIdentity | null> {
     }
     return null;
   }
-  const session = await auth();
+  let session;
+  try {
+    session = await auth();
+  } catch (error) {
+    console.error("Unable to verify the Clerk session.", {
+      message: error instanceof Error ? error.message : "Unknown Clerk error",
+    });
+    return null;
+  }
+
   if (!session.userId) return null;
-  const user = await currentUser();
+  let user: Awaited<ReturnType<typeof currentUser>> = null;
+  try {
+    user = await currentUser();
+  } catch (error) {
+    console.error("Unable to load the Clerk user profile.", {
+      message: error instanceof Error ? error.message : "Unknown Clerk error",
+    });
+  }
   const email = user?.primaryEmailAddress?.emailAddress?.toLowerCase();
   const configuredAdmins = env.PLATFORM_ADMIN_EMAILS.split(",").map((item) => item.trim().toLowerCase()).filter(Boolean);
   let appUser: { role?: string } | null = null;
