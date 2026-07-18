@@ -137,22 +137,24 @@ export function NotificationPopout({ light = false }: { light?: boolean }) {
   const trigger = (
     <div
       onClick={() => setOpen(!open)}
-      className={`relative flex min-w-[4.25rem] cursor-pointer flex-col items-center gap-0.5 rounded-lg px-2 py-1.5 transition-colors ${
+      className={`relative flex cursor-pointer flex-col items-center gap-0.5 rounded-lg px-1.5 py-1.5 transition-colors md:min-w-[4.25rem] md:px-2 ${
         light
           ? "text-white/90 hover:bg-white/10 hover:text-white"
           : "text-[var(--ink)] hover:bg-[var(--parchment)] hover:text-[var(--gold-deep)]"
       }`}
       aria-label={`Alerts, ${unreadCount} unread updates`}
     >
-      <span className="relative">
-        <Bell size={16} className="shrink-0 opacity-90" />
-        {unreadCount > 0 && <span className="notification-dot absolute -right-0.5 -top-0.5" />}
+      <span className="relative grid size-9 place-items-center md:size-auto">
+        <Bell size={18} className="shrink-0 opacity-90 md:size-4" />
+        {unreadCount > 0 && (
+          <span className="notification-dot absolute right-1 top-1 md:-right-0.5 md:-top-0.5" />
+        )}
       </span>
-      <span className="text-[11px] font-semibold leading-none tracking-wide">
+      <span className="hidden text-[11px] font-semibold leading-none tracking-wide md:block">
         {unreadCount > 0 ? unreadCount : "Alerts"}
       </span>
       <span
-        className={`text-[9px] font-medium uppercase leading-none tracking-[0.12em] ${
+        className={`hidden text-[9px] font-medium uppercase leading-none tracking-[0.12em] md:block ${
           light ? "text-white/55" : "text-[var(--muted)]"
         }`}
       >

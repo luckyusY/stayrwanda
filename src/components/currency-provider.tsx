@@ -95,7 +95,7 @@ export function CurrencyControl({ light = false }: { light?: boolean }) {
       }}
       trigger={
         <div
-          className={`flex min-w-[4.25rem] flex-col items-center gap-0.5 rounded-lg px-2 py-1.5 transition-colors ${
+          className={`flex flex-col items-center gap-0.5 rounded-lg px-1.5 py-1.5 transition-colors md:min-w-[4.25rem] md:px-2 ${
             light
               ? "text-white/90 hover:bg-white/10 hover:text-white"
               : "text-[var(--ink)] hover:bg-[var(--parchment)] hover:text-[var(--gold-deep)]"
@@ -104,8 +104,10 @@ export function CurrencyControl({ light = false }: { light?: boolean }) {
           aria-expanded={open}
           aria-haspopup="listbox"
         >
-          <Globe2 size={16} className="shrink-0 opacity-90" />
-          <span className="inline-flex items-center gap-0.5 text-[11px] font-semibold leading-none tracking-wide">
+          <span className="relative grid size-9 place-items-center md:size-auto">
+            <Globe2 size={18} className="shrink-0 opacity-90 md:size-4" />
+          </span>
+          <span className="hidden items-center gap-0.5 text-[11px] font-semibold leading-none tracking-wide md:inline-flex">
             {activeMeta.flag} {currency}
             <ChevronDown
               size={11}
@@ -113,7 +115,7 @@ export function CurrencyControl({ light = false }: { light?: boolean }) {
             />
           </span>
           <span
-            className={`text-[9px] font-medium uppercase leading-none tracking-[0.12em] ${
+            className={`hidden text-[9px] font-medium uppercase leading-none tracking-[0.12em] md:block ${
               light ? "text-white/55" : "text-[var(--muted)]"
             }`}
           >

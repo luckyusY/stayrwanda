@@ -138,20 +138,22 @@ export function SiteHeader({
             })}
           </nav>
 
-          <div className="hidden items-center gap-2 md:flex">
+          {/* Always visible: currency · alerts · account (compact icons on mobile) */}
+          <div className="flex items-center gap-0.5 sm:gap-1">
             <CurrencyControl light={onLight} />
-            <div className="h-4 w-px bg-current opacity-20" />
+            <div className="mx-0.5 hidden h-5 w-px bg-current opacity-20 sm:block" />
             <NotificationPopout light={onLight} />
             <AccountPopout light={onLight} />
+            <button
+              onClick={() => setOpen(true)}
+              className={`ml-0.5 grid size-10 place-items-center rounded-lg lg:hidden ${
+                onLight ? "text-white hover:bg-white/10" : "text-[var(--ink)] hover:bg-[var(--parchment)]"
+              }`}
+              aria-label="Open menu"
+            >
+              <Menu size={22} />
+            </button>
           </div>
-
-          <button
-            onClick={() => setOpen(true)}
-            className={`grid size-11 place-items-center lg:hidden ${onLight ? "text-white" : "text-[var(--ink)]"}`}
-            aria-label="Open menu"
-          >
-            <Menu />
-          </button>
         </div>
       </div>
 
@@ -173,7 +175,7 @@ export function SiteHeader({
               exit={{ x: "100%" }}
               transition={softSpring}
             >
-              <div className="mb-8 flex items-center justify-between">
+              <div className="mb-6 flex items-center justify-between">
                 <Wordmark imgClass="h-12" />
                 <button
                   onClick={() => setOpen(false)}
@@ -183,6 +185,30 @@ export function SiteHeader({
                   <X />
                 </button>
               </div>
+
+              {/* Quick account actions on mobile drawer */}
+              <div className="mb-6 grid grid-cols-2 gap-2">
+                <Link
+                  href="/sign-in"
+                  onClick={() => setOpen(false)}
+                  className="button-3d flex items-center justify-center bg-[var(--ink)] px-3 py-3 text-center text-[11px] font-semibold uppercase tracking-[0.14em] text-white"
+                >
+                  Sign in
+                </Link>
+                <Link
+                  href="/register"
+                  onClick={() => setOpen(false)}
+                  className="interactive-3d flex items-center justify-center px-3 py-3 text-center text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--ink)]"
+                >
+                  Register
+                </Link>
+              </div>
+              <p className="mb-4 text-[11px] leading-relaxed text-[var(--muted)]">
+                Use the <strong className="text-[var(--ink)]">bell</strong> and{" "}
+                <strong className="text-[var(--ink)]">account</strong> icons in the header for notifications and
+                sign-in.
+              </p>
+
               <motion.ul
                 className="flex flex-col"
                 initial="hidden"
@@ -205,13 +231,23 @@ export function SiteHeader({
                   </motion.li>
                 ))}
               </motion.ul>
-              <Link
-                href="/sign-in"
-                onClick={() => setOpen(false)}
-                className="button-3d mt-auto bg-[var(--ink)] px-4 py-4 text-center text-xs font-semibold uppercase tracking-[0.18em] text-white"
-              >
-                Sign in
-              </Link>
+
+              <div className="mt-auto space-y-2 border-t border-[var(--line)] pt-5">
+                <Link
+                  href="/account/bookings"
+                  onClick={() => setOpen(false)}
+                  className="block text-sm font-medium text-[var(--ink)] hover:text-[var(--gold-deep)]"
+                >
+                  My bookings
+                </Link>
+                <Link
+                  href="/help"
+                  onClick={() => setOpen(false)}
+                  className="block text-sm font-medium text-[var(--ink)] hover:text-[var(--gold-deep)]"
+                >
+                  Help centre
+                </Link>
+              </div>
             </motion.nav>
           </motion.div>
         )}
