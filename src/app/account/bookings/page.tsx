@@ -8,8 +8,27 @@ import { getDb } from "@/lib/mongodb";
 export default async function BookingsPage() {
   const identity = await currentIdentity();
   if (!identity) redirect("/sign-in");
-  const db = await getDb();
-  const bookings = await db.collection("bookings").find({ userId: identity.userId }).sort({ createdAt: -1 }).toArray();
+
+  let bookings;
+  try {
+    const db = await getDb();
+    bookings = await db.collection("bookings").find({ userId: identity.userId }).sort({ createdAt: -1 }).toArray();
+  } catch (error) {
+    console.error("Unable to load account bookings.", {
+      message: error instanceof Error ? error.message : "Unknown database error",
+    });
+    return (
+      <AccountShell title="Bookings and requests">
+        <EmptyState
+          icon={CalendarCheck}
+          title="Booking history is temporarily unavailable"
+          copy="We could not load your booking history right now. Please try again shortly."
+          action="Find a stay"
+          href="/stays"
+        />
+      </AccountShell>
+    );
+  }
 
   return (
     <AccountShell title="Bookings and requests">

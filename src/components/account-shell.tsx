@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { CalendarCheck, Heart, Home, LogOut, Settings, UserRound } from "lucide-react";
+import { CalendarCheck, Heart, Home, LogOut, UserRound } from "lucide-react";
+import { SignOutButton } from "@clerk/nextjs";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { motion } from "framer-motion";
 import { TiltCard } from "@/components/tilt-card";
@@ -13,8 +14,6 @@ export function AccountShell({ children, title }: { children: React.ReactNode; t
     [UserRound, "Personal details", "/account"],
     [CalendarCheck, "Bookings", "/account/bookings"],
     [Heart, "Saved properties", "/account/favorites"],
-    [Settings, "Preferences", "/account"],
-    [LogOut, "Sign out", "/sign-in"]
   ] as const;
 
   return (
@@ -59,6 +58,12 @@ export function AccountShell({ children, title }: { children: React.ReactNode; t
                   </Link>
                 );
               })}
+              <SignOutButton>
+                <button className="flex w-full items-center gap-3 rounded-lg px-4 py-3 text-left text-sm text-[var(--ink)] transition-colors hover:text-[var(--gold-deep)]">
+                  <LogOut size={19} />
+                  <span>Sign out</span>
+                </button>
+              </SignOutButton>
             </nav>
           </aside>
           
