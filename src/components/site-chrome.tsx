@@ -4,11 +4,42 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { CalendarDays, ChevronDown, Facebook, Instagram, MapPin, Menu, Search, Twitter, Users, X } from "lucide-react";
+import { CalendarDays, ChevronDown, MapPin, Menu, Search, Users, X } from "lucide-react";
 import { EASE, softSpring } from "@/lib/motion";
 import { CurrencyControl } from "@/components/currency-provider";
 import { AccountPopout } from "@/components/account-popout";
 import { NotificationPopout } from "@/components/notification-popout";
+
+/** Brand social glyphs (lucide no longer ships Facebook/Instagram/Twitter). */
+function IconInstagram({ size = 18 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden>
+      <rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" strokeWidth="1.75" />
+      <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.75" />
+      <circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" />
+    </svg>
+  );
+}
+function IconX({ size = 18 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        d="M4 4l6.5 8.2L4.3 20h2.4l5-6.1L16.8 20H20l-6.7-8.5L19.5 4h-2.4l-4.6 5.6L7.2 4H4z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
+function IconFacebook({ size = 18 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        d="M14 9h3V6h-3c-2.2 0-4 1.8-4 4v2H8v3h2v7h3v-7h2.6l.4-3H13v-1.5c0-.8.4-1.5 1-1.5z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
 
 const NAV = [
   { label: "Stays", href: "/stays" },
@@ -311,9 +342,9 @@ export function SiteFooter() {
   ] as const;
 
   const socials = [
-    { label: "Instagram", href: "https://instagram.com", Icon: Instagram },
-    { label: "X (Twitter)", href: "https://x.com", Icon: Twitter },
-    { label: "Facebook", href: "https://facebook.com", Icon: Facebook },
+    { label: "Instagram", href: "https://instagram.com", Icon: IconInstagram },
+    { label: "X (Twitter)", href: "https://x.com", Icon: IconX },
+    { label: "Facebook", href: "https://facebook.com", Icon: IconFacebook },
   ] as const;
 
   return (
@@ -387,7 +418,7 @@ export function SiteFooter() {
                   title={label}
                   className="grid size-10 place-items-center rounded-full border border-white/15 text-white/70 transition-colors hover:border-[var(--gold)] hover:bg-white/5 hover:text-[var(--gold)]"
                 >
-                  <Icon size={18} strokeWidth={1.75} />
+                  <Icon size={18} />
                 </a>
               ))}
             </div>
