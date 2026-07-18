@@ -217,7 +217,7 @@ export async function getSafeFavorites(userId: string): Promise<{ data: GuestFav
       }
     }
 
-    const hotels: GuestFavorite[] = rows.map((row) => {
+    const dbHotels: GuestFavorite[] = rows.map((row) => {
       const location = (row.location || {}) as { neighborhood?: string; city?: string };
       const slug = String(row.slug || row._id);
       const id = String(row._id);
@@ -235,6 +235,33 @@ export async function getSafeFavorites(userId: string): Promise<{ data: GuestFav
         startingPriceRwf,
       };
     });
+
+    const foundSlugs = new Set(dbHotels.map(h => h.slug));
+    const foundIds = new Set(dbHotels.map(h => h.id));
+    const missingFavorites = favourites.filter(fav => {
+      const id = fav.hotelId;
+      const slug = fav.hotelSlug;
+      return (!id || (!foundIds.has(id) && !foundSlugs.has(id))) && (!slug || !foundSlugs.has(slug));
+    });
+
+    const { featuredProperties } = await import("./properties");
+    const fallbackHotels = missingFavorites.map(fav => {
+      const slug = fav.hotelSlug || fav.hotelId;
+      const seed = featuredProperties.find(p => p.slug === slug);
+      if (!seed) return null;
+      return {
+        id: seed.slug,
+        name: seed.title,
+        slug: seed.slug,
+        neighborhood: seed.neighborhood,
+        city: "Kigali",
+        heroImage: seed.image,
+        amenities: seed.amenities || [],
+        startingPriceRwf: seed.price || seededNightlyRateRwf(seed.slug),
+      };
+    }).filter(Boolean) as GuestFavorite[];
+
+    const hotels = [...dbHotels, ...fallbackHotels];
 
     return { data: hotels, error: false };
   } catch (err) {
