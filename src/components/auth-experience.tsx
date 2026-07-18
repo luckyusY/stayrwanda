@@ -1,9 +1,8 @@
 "use client";
 
 import { SignIn, SignUp } from "@clerk/nextjs";
-import { Check, LockKeyhole, ShieldCheck, UserCircle2 } from "lucide-react";
+import { Check, ShieldCheck, UserCircle2 } from "lucide-react";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
-import { clerkConfigured } from "@/lib/env";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { EASE } from "@/lib/motion";
@@ -38,7 +37,7 @@ const appearance = {
   },
 } as const;
 
-export function AuthExperience({ mode }: { mode: "sign-in" | "sign-up" }) {
+export function AuthExperience({ mode, clerkEnabled }: { mode: "sign-in" | "sign-up"; clerkEnabled: boolean }) {
   const signingIn = mode === "sign-in";
   const [index, setIndex] = useState(0);
 
@@ -116,7 +115,7 @@ export function AuthExperience({ mode }: { mode: "sign-in" | "sign-up" }) {
           {/* Form Right Panel (3D elevated form wrapper) */}
           <div className="grid min-h-[620px] place-items-center p-5 sm:p-10 bg-[var(--parchment)]">
             <div className="w-full max-w-md form-card-3d bg-white p-6 rounded-xl border border-[var(--line)]">
-              {clerkConfigured ? (
+              {clerkEnabled ? (
                 signingIn ? (
                   <SignIn
                     path="/sign-in"
