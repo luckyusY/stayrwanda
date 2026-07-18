@@ -311,25 +311,37 @@ export function SiteFooter() {
   ] as const;
 
   return (
-    <footer className="mt-20">
-      {/* Newsletter band on warm sand */}
-      <div className="bg-[var(--cream)] py-14">
-        <div className="mx-auto max-w-3xl px-4 text-center sm:px-6">
+    <footer className="site-footer-3d mt-20">
+      {/* Raised newsletter shelf */}
+      <div className="relative overflow-hidden bg-[var(--cream)] px-4 py-16 sm:px-6">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-40"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 20% 30%, rgba(176,141,87,0.14), transparent 45%), radial-gradient(circle at 80% 70%, rgba(20,34,58,0.06), transparent 40%)",
+          }}
+        />
+        <div className="surface-3d-floating relative mx-auto max-w-3xl border-t-2 border-t-[var(--gold)] px-6 py-10 text-center sm:px-10">
           <p className="eyebrow">The StayRwanda Letter</p>
-          <h2 className="mt-3 font-serif text-3xl font-semibold text-[var(--ink)] sm:text-4xl">
+          <div className="mx-auto mt-3 rule-gold" />
+          <h2 className="mt-5 font-serif text-3xl font-semibold text-[var(--ink)] sm:text-4xl">
             Inspiration for your next Rwandan stay
           </h2>
-          <p className="mt-3 text-sm text-[var(--muted)]">
+          <p className="mx-auto mt-3 max-w-lg text-sm leading-relaxed text-[var(--muted)]">
             Quietly curated apartments, residences and seasonal offers — delivered now and then.
           </p>
-          <div className="surface-3d mx-auto mt-6 flex max-w-md gap-px overflow-hidden bg-[var(--line)]">
+          <div className="surface-3d mx-auto mt-7 flex max-w-md overflow-hidden shadow-[var(--depth-raised)]">
             <input
-              className="min-h-13 flex-1 bg-white px-4 text-sm outline-none"
+              className="search-field-input min-h-13 flex-1 rounded-none border-0 bg-white px-4 shadow-none"
               placeholder="Your email address"
+              type="email"
+              aria-label="Email for newsletter"
             />
-            <button 
+            <button
+              type="button"
               onClick={() => window.dispatchEvent(new Event("open-newsletter"))}
-              className="button-3d !rounded-none bg-[var(--gold)] px-6 text-xs font-semibold uppercase tracking-[0.18em] text-white hover:bg-[var(--gold-deep)] shimmer-gold"
+              className="button-3d relative shrink-0 !rounded-none bg-[var(--gold)] px-6 text-xs font-semibold uppercase tracking-[0.18em] text-white hover:bg-[var(--gold-deep)] shimmer-gold"
             >
               Subscribe
             </button>
@@ -337,28 +349,38 @@ export function SiteFooter() {
         </div>
       </div>
 
-      {/* Link columns on deep ink */}
-      <div className="bg-[var(--ink)] text-white/80">
-        <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
-          <div className="flex flex-col items-start justify-between gap-6 border-b border-white/10 pb-10 sm:flex-row sm:items-center">
-            <Wordmark light />
+      {/* Deep ink 3D base */}
+      <div className="site-footer-3d__base relative text-white/80">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[var(--gold-mid)] to-transparent opacity-70"
+        />
+        <div className="relative mx-auto max-w-6xl px-4 py-14 sm:px-6">
+          <div className="surface-3d-dark flex flex-col items-start justify-between gap-6 rounded-[var(--radius-panel)] border border-white/10 p-6 sm:flex-row sm:items-center sm:p-7">
+            <Wordmark light imgClass="h-14" />
             <Link
               href="/list-property"
-              className="border border-[var(--gold)] px-6 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--gold)] hover:bg-[var(--gold)] hover:text-[var(--ink)]"
+              className="button-3d border border-[var(--gold)] bg-transparent px-6 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--gold)] transition-colors hover:bg-[var(--gold)] hover:text-[var(--ink)]"
             >
               List your property
             </Link>
           </div>
-          <div className="mt-10 grid grid-cols-2 gap-8 text-sm sm:grid-cols-3 lg:grid-cols-5">
+
+          <div className="mt-8 grid grid-cols-2 gap-4 text-sm sm:grid-cols-3 lg:grid-cols-5">
             {columns.map(([title, links]) => (
-              <div key={title}>
-                <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--gold)]">{title}</h3>
-                <ul className="mt-4 space-y-2.5">
+              <div
+                key={title}
+                className="site-footer-3d__column rounded-[var(--radius-control)] border border-white/[0.08] bg-gradient-to-b from-white/[0.06] to-transparent p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]"
+              >
+                <h3 className="text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-[var(--gold)]">
+                  {title}
+                </h3>
+                <ul className="mt-3.5 space-y-2.5">
                   {links.map(([label, href]) => (
                     <li key={label}>
                       <Link
                         href={href}
-                        className="text-white/70 hover:text-white"
+                        className="text-white/70 transition-colors hover:text-white hover:drop-shadow-[0_0_8px_rgba(201,165,90,0.35)]"
                       >
                         {label}
                       </Link>
@@ -368,14 +390,21 @@ export function SiteFooter() {
               </div>
             ))}
           </div>
-          <div className="mt-12 border-t border-white/10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="text-xs text-white/50">
+
+          <div className="mt-10 flex flex-col items-center justify-between gap-4 rounded-[var(--radius-control)] border border-white/10 bg-black/20 px-5 py-4 shadow-[inset_0_2px_8px_rgba(0,0,0,0.25)] sm:flex-row">
+            <div className="text-center text-xs text-white/50 sm:text-left">
               © {new Date().getFullYear()} StayRwanda — Rwanda-first furnished stays, reserved with confidence.
             </div>
-            <div className="flex items-center gap-5 text-white/40">
-              <a href="#" className="text-xs font-medium hover:text-[var(--gold)] transition-colors">Instagram</a>
-              <a href="#" className="text-xs font-medium hover:text-[var(--gold)] transition-colors">Twitter</a>
-              <a href="#" className="text-xs font-medium hover:text-[var(--gold)] transition-colors">Facebook</a>
+            <div className="flex items-center gap-2">
+              {["Instagram", "Twitter", "Facebook"].map((name) => (
+                <a
+                  key={name}
+                  href="#"
+                  className="interactive-3d !border-white/15 !bg-white/5 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-white/70 transition-colors hover:!border-[var(--gold)] hover:text-[var(--gold)]"
+                >
+                  {name}
+                </a>
+              ))}
             </div>
           </div>
         </div>
