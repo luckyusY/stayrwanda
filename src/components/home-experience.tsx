@@ -180,18 +180,27 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
         >
           <div className="surface-3d-floating p-1.5 border-t-2 border-t-[var(--gold)]">
             <div className="grid grid-cols-[minmax(0,1fr)] gap-px bg-[var(--line)] md:grid-cols-[1.3fr_1.2fr_1fr_auto]">
-              <label className="flex min-h-16 items-center gap-3 bg-white px-5 transition-colors focus-within:bg-[var(--parchment)]">
+              <label className="flex min-h-16 cursor-text items-center gap-3 bg-white px-5 transition-colors focus-within:bg-[var(--parchment)]">
                 <MapPin size={20} className="shrink-0 text-[var(--gold-deep)]" />
                 <span className="min-w-0 flex-1">
-                  <span className="block text-[0.65rem] uppercase tracking-[0.18em] text-[var(--muted)]">
+                  <span className="block text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
                     Destination
                   </span>
-                  <input
-                    value={query}
-                    onChange={(event) => setQuery(event.target.value)}
-                    placeholder="Where are you going?"
-                    className="w-full text-sm font-medium outline-none placeholder:font-normal placeholder:text-[var(--muted)] bg-transparent"
-                  />
+                  {/* Visible input well so guests know this is typeable */}
+                  <span className="search-field-well mt-1 flex items-center gap-2 px-2.5 py-1.5">
+                    <input
+                      value={query}
+                      onChange={(event) => setQuery(event.target.value)}
+                      placeholder="Type a city or area…"
+                      autoComplete="off"
+                      className="search-field-input min-h-[1.35rem]"
+                    />
+                    {!query && (
+                      <span className="pointer-events-none hidden shrink-0 text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--gold-deep)] sm:inline">
+                        Type
+                      </span>
+                    )}
+                  </span>
                 </span>
               </label>
 

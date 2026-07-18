@@ -124,51 +124,65 @@ export function CurrencyControl({ light = false }: { light?: boolean }) {
         </div>
       }
       align="right"
-      className="z-[60] w-[280px] max-w-[min(280px,90vw)] p-3"
+      className="z-[60] w-[280px] max-w-[min(280px,90vw)] overflow-hidden p-0"
     >
-      <div className="mb-3 font-serif text-lg font-semibold text-[var(--ink)]">Select currency</div>
-      <div className="field-3d mb-3 flex items-center gap-2 rounded px-2 py-1.5">
-        <Search size={14} className="shrink-0 text-[var(--muted)]" />
-        <input
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search currency…"
-          className="w-full bg-transparent text-xs outline-none"
-          autoFocus
+      {/* Brand header — logo always visible */}
+      <div className="flex items-center justify-center border-b border-[var(--line)] bg-[var(--parchment)] px-4 py-3">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/brand/stayrwanda-logo.png"
+          alt="StayRwanda"
+          width={1093}
+          height={607}
+          className="h-9 w-auto object-contain"
         />
       </div>
-      <div className="flex max-h-64 flex-col gap-0.5 overflow-y-auto overscroll-contain pr-0.5" role="listbox">
-        {filtered.length === 0 ? (
-          <p className="px-3 py-4 text-center text-xs text-[var(--muted)]">No currencies match</p>
-        ) : (
-          filtered.map((c) => {
-            const isActive = c.code === currency;
-            return (
-              <button
-                key={c.code}
-                type="button"
-                role="option"
-                aria-selected={isActive}
-                onClick={() => {
-                  setCurrency(c.code);
-                  setOpen(false);
-                  setSearch("");
-                }}
-                className={`flex w-full items-center justify-between rounded-md px-3 py-2.5 text-left text-sm transition-colors hover:bg-[var(--parchment)] ${
-                  isActive
-                    ? "border-l-2 border-[var(--gold)] bg-[var(--gold-pale)] font-semibold text-[var(--gold-deep)]"
-                    : "text-[var(--ink)]"
-                }`}
-              >
-                <span className="flex items-center gap-2">
-                  <span className="text-base leading-none">{c.flag}</span>
-                  <span>{c.name}</span>
-                </span>
-                <span className="text-xs font-medium text-[var(--muted)]">{c.code}</span>
-              </button>
-            );
-          })
-        )}
+
+      <div className="p-3">
+        <div className="mb-3 font-serif text-lg font-semibold text-[var(--ink)]">Select currency</div>
+        <div className="search-field-well mb-3 flex items-center gap-2 px-2.5 py-2">
+          <Search size={14} className="shrink-0 text-[var(--gold-deep)]" />
+          <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Type to filter currencies…"
+            className="search-field-input text-xs"
+            autoFocus
+          />
+        </div>
+        <div className="flex max-h-64 flex-col gap-0.5 overflow-y-auto overscroll-contain pr-0.5" role="listbox">
+          {filtered.length === 0 ? (
+            <p className="px-3 py-4 text-center text-xs text-[var(--muted)]">No currencies match</p>
+          ) : (
+            filtered.map((c) => {
+              const isActive = c.code === currency;
+              return (
+                <button
+                  key={c.code}
+                  type="button"
+                  role="option"
+                  aria-selected={isActive}
+                  onClick={() => {
+                    setCurrency(c.code);
+                    setOpen(false);
+                    setSearch("");
+                  }}
+                  className={`flex w-full items-center justify-between rounded-md px-3 py-2.5 text-left text-sm transition-colors hover:bg-[var(--parchment)] ${
+                    isActive
+                      ? "border-l-2 border-[var(--gold)] bg-[var(--gold-pale)] font-semibold text-[var(--gold-deep)]"
+                      : "text-[var(--ink)]"
+                  }`}
+                >
+                  <span className="flex items-center gap-2">
+                    <span className="text-base leading-none">{c.flag}</span>
+                    <span>{c.name}</span>
+                  </span>
+                  <span className="text-xs font-medium text-[var(--muted)]">{c.code}</span>
+                </button>
+              );
+            })
+          )}
+        </div>
       </div>
     </Popout>
   );

@@ -262,14 +262,22 @@ export function CompactSearch({ destination = "Kigali" }: { destination?: string
     <div className="bg-[var(--cream)] py-6">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="surface-3d-floating grid grid-cols-[minmax(0,1fr)] gap-px overflow-hidden bg-[var(--line)] md:grid-cols-[1.3fr_1.1fr_1fr_auto]">
-          <label className="flex min-h-15 min-w-0 items-center gap-3 bg-white px-4 hover:bg-[var(--parchment)] transition-colors cursor-pointer">
+          <label className="flex min-h-15 min-w-0 cursor-text items-center gap-3 bg-white px-4 transition-colors focus-within:bg-[var(--parchment)]">
             <MapPin size={20} className="shrink-0 text-[var(--gold-deep)]" />
-            <input
-              value={place}
-              onChange={(event) => setPlace(event.target.value)}
-              className="min-w-0 flex-1 text-sm outline-none cursor-pointer bg-transparent"
-              placeholder="Where are you going?"
-            />
+            <span className="min-w-0 flex-1">
+              <span className="block text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
+                Destination
+              </span>
+              <span className="search-field-well mt-1 flex items-center gap-2 px-2.5 py-1.5">
+                <input
+                  value={place}
+                  onChange={(event) => setPlace(event.target.value)}
+                  className="search-field-input min-h-[1.35rem]"
+                  placeholder="Type a city or area…"
+                  autoComplete="off"
+                />
+              </span>
+            </span>
           </label>
           <div className="flex min-h-15 min-w-0 items-center gap-2 bg-white px-4">
             <CalendarDays size={20} className="shrink-0 text-[var(--gold-deep)]" />

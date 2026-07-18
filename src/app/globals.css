@@ -144,6 +144,7 @@ input[type="datetime-local"] {
 
 /* Typeable search cell — clear editable affordance */
 .search-field-well {
+  min-height: 2.25rem;
   border: 1px solid var(--control-border);
   border-radius: var(--radius-control);
   background: linear-gradient(180deg, #fbfaf7 0%, #fff 40%);
@@ -166,9 +167,10 @@ input[type="datetime-local"] {
   color: var(--ink);
 }
 .search-field-input::placeholder {
-  color: var(--muted);
+  color: color-mix(in srgb, var(--muted) 88%, var(--ink));
   font-weight: 400;
   opacity: 1;
+  font-style: italic;
 }
 
 /* Refined small-caps eyebrow used above section titles */
