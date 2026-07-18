@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -22,15 +21,28 @@ const NAV = [
 ] as const;
 
 export function Wordmark({ light = false, imgClass = "h-16" }: { light?: boolean; imgClass?: string }) {
+  // Use a plain <img> for the brand mark so the global Cloudinary next/image
+  // loader cannot interfere, and apply invert via inline style (reliable across
+  // Tailwind v4 filter composition). Dark PNG on light chrome; white when light.
   return (
-    <Link href="/" className="flex items-center" aria-label="StayRwanda home">
-      <Image
+    <Link href="/" className="relative z-10 flex shrink-0 items-center" aria-label="StayRwanda home">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
         src="/brand/stayrwanda-logo.png"
         alt="StayRwanda — Your Home in Rwanda"
         width={1093}
         height={607}
-        priority
-        className={`${imgClass} w-auto object-contain transition-[height,filter] duration-300 ${light ? "logo-invert" : ""}`}
+        decoding="async"
+        fetchPriority="high"
+        className={`${imgClass} w-auto max-w-[min(220px,46vw)] object-contain transition-[height,filter,opacity] duration-300`}
+        style={
+          light
+            ? {
+                filter: "brightness(0) invert(1) drop-shadow(0 1px 3px rgba(0,0,0,.35))",
+                WebkitFilter: "brightness(0) invert(1) drop-shadow(0 1px 3px rgba(0,0,0,.35))",
+              }
+            : { filter: "none", WebkitFilter: "none" }
+        }
       />
     </Link>
   );

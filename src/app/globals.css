@@ -862,8 +862,17 @@ select:-webkit-autofill {
   .heading-overhang { margin-left: -2.5rem; }
 }
 
-/* logo invert filter (black to white) */
+/* logo invert filter (black/dark PNG → white) for dark headers/heroes */
 .logo-invert {
   filter: brightness(0) invert(1) !important;
+  -webkit-filter: brightness(0) invert(1) !important;
+}
+
+/* Ensure brand wordmark never collapses in flex headers */
+header a[aria-label="StayRwanda home"] img {
+  display: block;
+  flex-shrink: 0;
+  opacity: 1;
+  visibility: visible;
 }
 
