@@ -198,7 +198,8 @@ export function Popout({
                 transition={softSpring}
               >
                 {header}
-                <div className="flex-1 overflow-y-auto">{children}</div>
+                {/* min-h-0 so nested scroll regions (e.g. notifications) can own overflow */}
+                <div className="flex min-h-0 flex-1 flex-col overflow-hidden">{children}</div>
                 {footer && (
                   <div className="sticky bottom-0 border-t border-[var(--line)] bg-white p-4">{footer}</div>
                 )}

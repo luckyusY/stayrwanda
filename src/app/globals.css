@@ -637,7 +637,7 @@ select:-webkit-autofill {
 
 /* ── Popout primitive ─────────────────────────────────── */
 .popout-backdrop { position: fixed; inset: 0; z-index: var(--z-overlay); background: rgba(20,34,58,.42); backdrop-filter: blur(6px); }
-.popout-sheet    { position: fixed; inset-y: 0; right: 0; z-index: var(--z-modal); width: min(480px, 100vw); background: white; box-shadow: var(--shadow-xl); overflow-y: auto; }
+.popout-sheet    { position: fixed; inset-y: 0; right: 0; z-index: var(--z-modal); display: flex; flex-direction: column; width: min(480px, 100vw); background: white; box-shadow: var(--shadow-xl); overflow: hidden; }
 .popout-dialog   { position: fixed; inset: 0; z-index: var(--z-modal); display: grid; place-items: center; padding: 1.5rem; }
 .popout-panel    { background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-xl); max-width: 640px; width: 100%; }
 .popout-dropdown { position: absolute; z-index: var(--z-modal); background: white; border-radius: var(--radius-md); box-shadow: var(--shadow-lg); border: 1px solid var(--line); }
@@ -866,6 +866,28 @@ select:-webkit-autofill {
 .logo-invert {
   filter: brightness(0) invert(1) !important;
   -webkit-filter: brightness(0) invert(1) !important;
+}
+
+/* Notification sheet scroll area — thin gold-tinted scrollbar */
+.notification-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--gold) 55%, var(--line)) transparent;
+}
+.notification-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+.notification-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.notification-scroll::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--gold-mid) 45%, var(--line));
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+.notification-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--gold-mid);
+  background-clip: padding-box;
 }
 
 /* Ensure brand wordmark never collapses in flex headers */

@@ -9,7 +9,6 @@ import { EASE, softSpring } from "@/lib/motion";
 import { CurrencyControl } from "@/components/currency-provider";
 import { AccountPopout } from "@/components/account-popout";
 import { NotificationPopout } from "@/components/notification-popout";
-import { SearchCommand } from "@/components/search-command";
 
 const NAV = [
   { label: "Stays", href: "/stays", icon: BedDouble },
@@ -96,10 +95,6 @@ export function SiteHeader({
           }`}
         >
           <Wordmark light={onLight} imgClass={compact ? "h-12" : "h-16"} />
-
-          <div className="hidden flex-1 max-w-sm px-8 lg:block">
-            <SearchCommand light={onLight} />
-          </div>
 
           <nav className="hidden items-center gap-6 lg:flex">
             {NAV.map((item, i) => (
