@@ -13,6 +13,8 @@ interface PopoutProps {
   trigger?: React.ReactNode;
   isOpen?: boolean;
   onClose?: () => void;
+  /** Preferred controlled API — called with true/false when the panel should open or close. */
+  onOpenChange?: (open: boolean) => void;
   children: React.ReactNode;
   className?: string;
   wrapperClassName?: string;
@@ -42,6 +44,7 @@ export function Popout({
   trigger,
   isOpen: controlledIsOpen,
   onClose,
+  onOpenChange,
   children,
   className = "",
   wrapperClassName = "relative inline-block",
@@ -58,11 +61,18 @@ export function Popout({
   const handleClose = useCallback(() => {
     if (!isControlled) setUncontrolledIsOpen(false);
     onClose?.();
-  }, [isControlled, onClose]);
+    onOpenChange?.(false);
+  }, [isControlled, onClose, onOpenChange]);
 
+  const handleOpen = useCallback(() => {
+    if (!isControlled) setUncontrolledIsOpen(true);
+    onOpenChange?.(true);
+  }, [isControlled, onOpenChange]);
+
+  // Controlled mode previously never opened: toggle only set state when uncontrolled.
   const handleToggle = () => {
     if (open) handleClose();
-    else if (!isControlled) setUncontrolledIsOpen(true);
+    else handleOpen();
   };
 
   const containerRef = useRef<HTMLDivElement>(null);
