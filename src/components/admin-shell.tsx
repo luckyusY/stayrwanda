@@ -55,7 +55,7 @@ export function AdminShell({
         <div className="surface-3d-dark relative flex h-full w-64 flex-col !rounded-none border-y-0 border-l-0 text-white md:sticky md:top-0 md:h-screen md:w-auto">
           <div className="flex h-16 items-center justify-between px-5">
             <Link href="/admin" className="flex items-center gap-2">
-              <Image src="/brand/stayrwanda-logo.png" alt="StayRwanda" width={1093} height={607} className="h-12 w-auto brightness-0 invert" />
+              <Image src="/brand/stayrwanda-logo.png" alt="StayRwanda" width={1093} height={607} className="h-12 w-auto logo-invert" />
               <span className="text-xs font-semibold uppercase tracking-wider text-[var(--gold)]">admin</span>
             </Link>
             <button className="md:hidden" onClick={() => setOpen(false)} aria-label="Close menu">

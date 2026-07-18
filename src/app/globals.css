@@ -862,3 +862,8 @@ select:-webkit-autofill {
   .heading-overhang { margin-left: -2.5rem; }
 }
 
+/* logo invert filter (black to white) */
+.logo-invert {
+  filter: brightness(0) invert(1) !important;
+}
+

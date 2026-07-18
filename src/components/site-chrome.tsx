@@ -30,7 +30,7 @@ export function Wordmark({ light = false, imgClass = "h-16" }: { light?: boolean
         width={1093}
         height={607}
         priority
-        className={`${imgClass} w-auto object-contain transition-[height,filter] duration-300 ${light ? "brightness-0 invert" : ""}`}
+        className={`${imgClass} w-auto object-contain transition-[height,filter] duration-300 ${light ? "logo-invert" : ""}`}
       />
     </Link>
   );
