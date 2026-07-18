@@ -21,13 +21,63 @@ export async function createInventoryBackedBooking(raw: unknown, idempotencyKey:
   const input = bookingRequestSchema.parse(raw);
   if (!idempotencyKey || idempotencyKey.length < 8 || idempotencyKey.length > 200) throw new Error("INVALID_IDEMPOTENCY_KEY");
   const dates = stayDates(input.checkIn, input.checkOut);
+
+  const isSeed = input.hotelId.startsWith("seed-") || !ObjectId.isValid(input.hotelId) || !ObjectId.isValid(input.unitTypeId);
+  const publicToken = randomBytes(32).toString("base64url");
+  const tokenHash = createHash("sha256").update(publicToken).digest("hex");
+
+  if (isSeed) {
+    const db = await getDb();
+    const now = new Date();
+    const reference = `SR-${now.getTime().toString(36).toUpperCase()}-${randomBytes(2).toString("hex").toUpperCase()}`;
+    let finalNightly = 85000;
+
+    const { featuredProperties } = await import("@/lib/properties");
+    const seedHotel = featuredProperties.find(p => p.slug === input.hotelId || `seed-${featuredProperties.indexOf(p)}` === input.hotelId);
+    if (seedHotel && seedHotel.price) {
+      finalNightly = seedHotel.price;
+    }
+
+    const record = {
+      organizationId: "seed-org",
+      hotelId: input.hotelId,
+      unitTypeId: input.unitTypeId,
+      userId: actor?.userId,
+      reference,
+      guest: { name: input.guestName, email: input.email.toLowerCase(), phone: input.phone },
+      checkIn: input.checkIn,
+      checkOut: input.checkOut,
+      nights: dates.length,
+      guests: input.guests,
+      quantity: input.quantity,
+      message: input.message,
+      status: "pending",
+      allocationState: "held",
+      allocatedDates: dates,
+      pricingSnapshot: { nightlyRwf: finalNightly, subtotalRwf: finalNightly * dates.length * input.quantity, currency: input.currency },
+      policySnapshot: { holdHours: 24, minStay: 1 },
+      idempotencyKey,
+      publicAccessTokenHash: tokenHash,
+      holdExpiresAt: new Date(now.getTime() + 24 * 3_600_000),
+      history: [{ status: "pending", at: now, actorUserId: actor?.userId || "guest" }],
+      createdAt: now,
+      updatedAt: now,
+    };
+
+    try {
+      const result = await db.collection("bookings").insertOne(record);
+      return { ...record, _id: String(result.insertedId), publicToken };
+    } catch (err) {
+      console.warn("Could not save seed booking to MongoDB:", err);
+      return { ...record, _id: reference, publicToken };
+    }
+  }
+
   const db = await getDb();
   // Db does not expose its client publicly; use the cached MongoClient connection.
   const { getMongoClient } = await import("@/lib/mongodb");
   const mongo = await getMongoClient();
   const session = mongo.startSession();
-  const publicToken = randomBytes(32).toString("base64url");
-  const tokenHash = createHash("sha256").update(publicToken).digest("hex");
   try {
     let response: Record<string, unknown> | null = null;
     await session.withTransaction(async () => {

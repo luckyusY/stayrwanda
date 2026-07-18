@@ -18,7 +18,25 @@ export async function generateMetadata({ params }: { params: Promise<{ hotelSlug
 export default async function HotelProfilePage({ params }: { params: Promise<{ hotelSlug: string }> }) {
   const hotel = await getPublishedHotel((await params).hotelSlug);
   if (!hotel) notFound();
-  const unit = hotel.id.startsWith("seed-") ? null : await getUnitForHotel(hotel.id);
+  
+  const dbUnit = hotel.id.startsWith("seed-") ? null : await getUnitForHotel(hotel.id);
+  const unit = dbUnit || (hotel.startingPriceRwf ? {
+    id: `unit-${hotel.id}`,
+    organizationId: "seed",
+    hotelId: hotel.id,
+    name: "Entire residence",
+    quantity: 1,
+    maxGuests: 4,
+    bedrooms: 2,
+    beds: 2,
+    baths: 2,
+    basePriceRwf: hotel.startingPriceRwf,
+    minStay: 1,
+    status: "published" as const,
+    amenities: ["Kitchen", "Parking", "WiFi"],
+    images: hotel.gallery,
+  } : null);
+
   const palette = hotel.template === "modern" ? "bg-[#f4f1eb]" : hotel.template === "editorial" ? "bg-[#f8f3ea]" : "bg-white";
 
   return (

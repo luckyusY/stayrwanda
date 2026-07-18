@@ -20,6 +20,8 @@ import {
   Users,
   KeyRound,
   CheckCircle2,
+  Heart,
+  ArrowRight,
 } from "lucide-react";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { SmartImage } from "@/components/smart-image";
@@ -28,7 +30,7 @@ import { TiltCard } from "@/components/tilt-card";
 import { Popout } from "@/components/popout";
 import { SlotCounter } from "@/components/slot-counter";
 import { CountUp } from "@/components/count-up";
-import { DragScrollStrip } from "@/components/drag-scroll-strip";
+import { PriceDisplay } from "@/components/price-display";
 import type { Property } from "@/lib/properties";
 
 const stayTypes = ["All stays", "Furnished apartment", "Serviced apartment", "Furnished home"];
@@ -305,12 +307,84 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
             </select>
           </div>
 
-          <div className="mt-10 overflow-hidden">
-            <DragScrollStrip
-              properties={filtered}
-              favourites={favourites}
-              toggleFavourite={toggleFavourite}
-            />
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {filtered.map((property) => {
+              const isSaved = favourites.includes(property.slug);
+              return (
+                <article
+                  key={property.slug}
+                  className="surface-3d surface-3d-lift group flex flex-col overflow-hidden bg-white rounded-xl border border-[var(--line)] shadow-sm hover:shadow-md transition-all duration-300"
+                >
+                  <div className="relative aspect-[4/3] w-full overflow-hidden">
+                    <span className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-0.5 origin-left scale-x-0 bg-[var(--gold)] transition-transform duration-500 group-hover:scale-x-100" />
+                    <SmartImage
+                      src={property.image}
+                      alt={property.title}
+                      fill
+                      className="pointer-events-none object-cover transition duration-700 group-hover:scale-105"
+                      sizes="(max-width: 768px) 100vw, 320px"
+                    />
+                    <span className="pointer-events-none absolute left-4 top-4 z-20 bg-white/90 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-[var(--ink)]">
+                      {property.type}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        toggleFavourite(property.slug);
+                      }}
+                      className="absolute right-4 top-4 z-20 grid size-9 place-items-center rounded-full bg-white/90 shadow transition hover:scale-110 cursor-pointer"
+                      aria-label={`Save ${property.title}`}
+                    >
+                      <Heart
+                        size={18}
+                        fill={isSaved ? "#b08d57" : "transparent"}
+                        className={isSaved ? "text-[var(--gold)]" : "text-[var(--ink)]"}
+                      />
+                    </button>
+                  </div>
+                  <div className="p-5 flex flex-col justify-between flex-1">
+                    <div>
+                      <p className="flex items-center gap-1.5 text-xs uppercase tracking-[0.16em] text-[var(--muted)]">
+                        <MapPin size={13} className="text-[var(--gold-deep)]" /> {property.neighborhood}
+                      </p>
+                      <Link
+                        href={`/stays/${property.slug}`}
+                        className="mt-2 block font-serif text-xl font-semibold text-[var(--ink)] transition group-hover:text-[var(--gold-deep)] line-clamp-1"
+                      >
+                        {property.title}
+                      </Link>
+                      <p className="mt-2 text-xs text-[var(--muted)] line-clamp-1">
+                        {property.amenities.slice(0, 3).join(" · ")}
+                      </p>
+                    </div>
+                    <div className="mt-4 pt-4 border-t border-[var(--line)]">
+                      <div className="flex items-center justify-between mb-4">
+                        <PriceDisplay amountRwf={property.price} className="font-serif text-lg font-semibold text-[var(--ink)]" />
+                        <span className="text-[10px] uppercase tracking-[0.16em] text-[var(--muted)]">
+                          {property.photoCount} photos
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-2 gap-3">
+                        <Link
+                          href={`/stays/${property.slug}`}
+                          className="button-3d bg-[var(--ink)] py-2.5 text-center text-[10px] font-semibold uppercase tracking-wider text-white hover:bg-[var(--ink-2)]"
+                        >
+                          Book stay
+                        </Link>
+                        <Link
+                          href={`/stays/${property.slug}`}
+                          className="button-3d bg-[var(--parchment)] py-2.5 text-center text-[10px] font-semibold uppercase tracking-wider text-[var(--ink)] hover:bg-[var(--line)]"
+                        >
+                          View stay
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
           </div>
 
           {!filtered.length && (
