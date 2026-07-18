@@ -5,24 +5,70 @@ import { AccountShell, EmptyState } from "@/components/account-shell";
 import { currentIdentity } from "@/lib/auth";
 import { getDb } from "@/lib/mongodb";
 
+type BookingRow = {
+  id: string;
+  reference: string;
+  checkIn: string;
+  checkOut: string;
+  nights: number | string;
+  guests: number | string;
+  status: string;
+};
+
 export default async function BookingsPage() {
-  const identity = await currentIdentity();
+  let identity;
+  try {
+    identity = await currentIdentity();
+  } catch (error) {
+    console.error("Unable to resolve identity for bookings page.", {
+      message: error instanceof Error ? error.message : "Unknown auth error",
+    });
+    redirect("/sign-in");
+  }
   if (!identity) redirect("/sign-in");
 
-  let bookings;
+  let bookings: BookingRow[] = [];
+  let loadError = false;
+
   try {
     const db = await getDb();
-    bookings = await db.collection("bookings").find({ userId: identity.userId }).sort({ createdAt: -1 }).toArray();
+    // Match either Clerk user id or email, depending on how bookings were stored
+    const rows = await db
+      .collection("bookings")
+      .find({
+        $or: [
+          { userId: identity.userId },
+          { clerkUserId: identity.userId },
+          ...(identity.email ? [{ email: identity.email }, { guestEmail: identity.email }] : []),
+        ],
+      })
+      .sort({ createdAt: -1 })
+      .limit(50)
+      .toArray();
+
+    bookings = rows.map((booking) => ({
+      id: String(booking._id),
+      reference: String(booking.reference || booking._id),
+      checkIn: String(booking.checkIn || "—"),
+      checkOut: String(booking.checkOut || "—"),
+      nights: (booking.nights as number | string | undefined) ?? "—",
+      guests: (booking.guests as number | string | undefined) ?? "—",
+      status: String(booking.status || "pending"),
+    }));
   } catch (error) {
+    loadError = true;
     console.error("Unable to load account bookings.", {
       message: error instanceof Error ? error.message : "Unknown database error",
     });
+  }
+
+  if (loadError) {
     return (
       <AccountShell title="Bookings and requests">
         <EmptyState
           icon={CalendarCheck}
           title="Booking history is temporarily unavailable"
-          copy="We could not load your booking history right now. Please try again shortly."
+          copy="We could not reach the booking database. If this continues, the site administrator may need to set MONGODB_URI on the deployment."
           action="Find a stay"
           href="/stays"
         />
@@ -35,21 +81,38 @@ export default async function BookingsPage() {
       {bookings.length ? (
         <div className="space-y-4">
           {bookings.map((booking) => (
-            <article key={String(booking._id)} className="surface-3d surface-3d-lift p-5">
+            <article key={booking.id} className="surface-3d surface-3d-lift p-5">
               <div className="flex justify-between gap-4">
                 <div>
-                  <span className="text-xs text-[#667085]">{booking.reference}</span>
-                  <h2 className="mt-1 text-lg font-bold">{booking.checkIn} → {booking.checkOut}</h2>
-                  <p className="mt-1 text-sm text-[#595959]">{booking.nights} nights · {booking.guests} guests</p>
+                  <span className="text-xs text-[var(--muted)]">{booking.reference}</span>
+                  <h2 className="mt-1 text-lg font-bold text-[var(--ink)]">
+                    {booking.checkIn} → {booking.checkOut}
+                  </h2>
+                  <p className="mt-1 text-sm text-[var(--muted)]">
+                    {booking.nights} nights · {booking.guests} guests
+                  </p>
                 </div>
-                <span className="h-fit rounded-full bg-[#eef4ff] px-3 py-1 text-xs font-bold capitalize text-[#064f9d]">{booking.status}</span>
+                <span className="h-fit rounded-full bg-[var(--gold-pale)] px-3 py-1 text-xs font-bold capitalize text-[var(--gold-deep)]">
+                  {booking.status}
+                </span>
               </div>
-              <Link href={`/bookings/${booking.reference}`} className="mt-4 inline-block text-sm font-bold text-[#006ce4]">View details</Link>
+              <Link
+                href={`/bookings/${booking.reference}`}
+                className="mt-4 inline-block text-sm font-bold text-[var(--gold-deep)] hover:text-[var(--ink)]"
+              >
+                View details
+              </Link>
             </article>
           ))}
         </div>
       ) : (
-        <EmptyState icon={CalendarCheck} title="No booking requests yet" copy="When you request a property, its confirmation status appears here." action="Find a stay" href="/stays" />
+        <EmptyState
+          icon={CalendarCheck}
+          title="No booking requests yet"
+          copy="When you request a property, its confirmation status appears here."
+          action="Find a stay"
+          href="/stays"
+        />
       )}
     </AccountShell>
   );
