@@ -174,11 +174,11 @@ export function HotelBookingPanel({ hotel, unit }: { hotel: Hotel; unit: UnitTyp
           </p>
         </div>
         <h2 className="mt-2 font-serif text-2xl font-semibold text-[var(--ink)]">
-          {unit ? format(unit.basePriceRwf) : "Rate on request"}
+          {unit ? format(unit.basePriceRwf) : hotel.startingPriceRwf ? format(hotel.startingPriceRwf) : "Rate on request"}
         </h2>
         <p className="mt-1 flex items-center gap-1.5 text-xs text-[var(--muted)]">
           <CreditCard size={13} className="text-[var(--gold-mid)]" />
-          {unit ? "per night · no payment collected now" : "Contact the property for current availability"}
+          {unit ? "per night · no payment collected now" : hotel.startingPriceRwf ? "indicative nightly rate · contact the property for availability" : "Contact the property for current availability"}
         </p>
         <button
           type="button"

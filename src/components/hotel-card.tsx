@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight, MapPin, BedDouble, Bath, Users, Wifi, Car, ChefHat, Eye } from "lucide-react";
 import type { Hotel } from "@/lib/platform-types";
 import { FavoriteButton } from "@/components/favorite-button";
+import { PriceDisplay } from "@/components/price-display";
 
 export function HotelCard({ hotel, onQuickView }: { hotel: Hotel; onQuickView?: () => void }) {
   return <article className="surface-3d surface-3d-lift group overflow-hidden relative">
@@ -48,7 +49,10 @@ export function HotelCard({ hotel, onQuickView }: { hotel: Hotel; onQuickView?: 
       
       <p className="mt-4 line-clamp-2 text-sm leading-6 text-[var(--muted)]">{hotel.description}</p>
       
-      <Link href={`/hotels/${hotel.slug}`} className="mt-5 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[.16em] text-[var(--gold-deep)] transition-transform hover:translate-x-1">View profile <ArrowRight size={14} /></Link>
+      <div className="mt-5 flex items-end justify-between gap-3">
+        <PriceDisplay amountRwf={hotel.startingPriceRwf} className="font-serif text-lg font-semibold text-[var(--ink)]" />
+        <Link href={`/hotels/${hotel.slug}`} className="inline-flex shrink-0 items-center gap-2 text-xs font-semibold uppercase tracking-[.16em] text-[var(--gold-deep)] transition-transform hover:translate-x-1">View profile <ArrowRight size={14} /></Link>
+      </div>
     </div>
   </article>;
 }

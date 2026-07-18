@@ -44,6 +44,8 @@ export type Hotel = {
   gallery: string[];
   amenities: string[];
   description: string;
+  /** Computed from the cheapest published unit, or the seeded catalogue fallback. */
+  startingPriceRwf?: number;
   publishedVersionId?: string;
   draftVersionId?: string;
   legacySlug?: string;

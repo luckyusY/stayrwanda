@@ -2,6 +2,7 @@ import { ObjectId } from "mongodb";
 import { getDb } from "@/lib/mongodb";
 import type { Hotel, Organization, UnitType } from "@/lib/platform-types";
 import { featuredProperties } from "@/lib/properties";
+import { seededNightlyRateRwf } from "@/lib/pricing";
 
 function clean<T>(row: Record<string, unknown>): T {
   const { _id, ...rest } = row;
@@ -15,7 +16,22 @@ export async function listPublishedHotels(category?: Hotel["category"]): Promise
       status: "published",
       ...(category ? { category } : {}),
     }).sort({ publishedAt: -1, name: 1 }).toArray();
-    if (rows.length) return rows.map((row) => clean<Hotel>(row));
+    if (rows.length) {
+      const hotelIds = rows.map((row) => String(row._id));
+      const units = await db.collection("unitTypes").find({ hotelId: { $in: hotelIds }, status: "published" }).toArray();
+      const lowestRateByHotel = new Map<string, number>();
+      for (const unit of units) {
+        const rate = Number(unit.basePriceRwf || 0);
+        const hotelId = String(unit.hotelId || "");
+        if (rate > 0 && (!lowestRateByHotel.has(hotelId) || rate < (lowestRateByHotel.get(hotelId) || rate))) {
+          lowestRateByHotel.set(hotelId, rate);
+        }
+      }
+      return rows.map((row) => {
+        const hotel = clean<Hotel>(row);
+        return { ...hotel, startingPriceRwf: lowestRateByHotel.get(hotel.id) || seededNightlyRateRwf(hotel.slug) };
+      });
+    }
   } catch (error) {
     const isConfigured = process.env.MONGODB_URI?.startsWith("mongodb://") || process.env.MONGODB_URI?.startsWith("mongodb+srv://");
     if (process.env.NODE_ENV === "production" && isConfigured) throw error;
@@ -34,6 +50,7 @@ export async function listPublishedHotels(category?: Hotel["category"]): Promise
     gallery: property.images,
     amenities: property.amenities,
     description: property.description,
+    startingPriceRwf: property.price || seededNightlyRateRwf(property.slug),
     createdAt: new Date(0).toISOString(),
     updatedAt: new Date(0).toISOString(),
   }));

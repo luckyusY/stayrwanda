@@ -6,6 +6,7 @@ import { Check, ChevronRight, MapPin } from "lucide-react";
 import { HotelBookingPanel } from "@/components/hotel-booking-panel";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { getPublishedHotel, getUnitForHotel } from "@/lib/platform-data";
+import { PriceDisplay } from "@/components/price-display";
 
 export const revalidate = 300;
 
@@ -71,8 +72,14 @@ export default async function HotelProfilePage({ params }: { params: Promise<{ h
                       Up to {unit.maxGuests} guests · {unit.bedrooms} bedrooms · {unit.baths} bathrooms
                     </p>
                   </div>
-                  <strong className="text-[var(--gold-deep)]">RWF {unit.basePriceRwf.toLocaleString()}</strong>
+                  <PriceDisplay amountRwf={unit.basePriceRwf} prefix="" className="font-serif text-lg font-semibold text-[var(--gold-deep)]" />
                 </div>
+              </div>
+            )}
+            {!unit && hotel.startingPriceRwf && (
+              <div className="surface-3d mt-6 p-6">
+                <p className="text-sm text-[var(--muted)]">Indicative nightly rate</p>
+                <PriceDisplay amountRwf={hotel.startingPriceRwf} className="mt-2 block font-serif text-2xl font-semibold text-[var(--gold-deep)]" />
               </div>
             )}
           </section>

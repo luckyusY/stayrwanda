@@ -54,7 +54,7 @@ export function AdminLoginForm() {
       <button
         type="submit"
         disabled={loading}
-        className="button-3d flex min-h-12 w-full items-center justify-center gap-2 bg-[var(--ink)] text-xs font-semibold uppercase tracking-[0.16em] text-white hover:bg-[var(--ink-2)] disabled:opacity-60"
+        className="flex min-h-12 w-full items-center justify-center gap-2 bg-[var(--ink)] text-xs font-semibold uppercase tracking-[0.16em] text-white hover:bg-[var(--ink-2)] disabled:opacity-60"
       >
         {loading && <Loader2 size={18} className="animate-spin" />}
         {loading ? "Signing in…" : "Sign in"}

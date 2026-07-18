@@ -6,19 +6,38 @@ import { CalendarCheck, Heart, Home, LogOut, UserRound } from "lucide-react";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { motion } from "framer-motion";
 import { TiltCard } from "@/components/tilt-card";
+import { useClerk } from "@clerk/nextjs";
+
+function useSafeClerk() {
+  try {
+    return useClerk();
+  } catch {
+    return null;
+  }
+}
 
 export function AccountShell({ children, title }: { children: React.ReactNode; title: string }) {
   const pathname = usePathname();
+  const clerk = useSafeClerk();
+
   const links = [
-    [UserRound, "Personal details", "/account"],
+    [UserRound, "Overview", "/account"],
     [CalendarCheck, "Bookings", "/account/bookings"],
     [Heart, "Saved properties", "/account/favorites"],
   ] as const;
 
-  // Never import @clerk/nextjs SignOutButton here — without a valid
-  // NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY / ClerkProvider it crashes the whole
-  // account tree. Sign-in handles session end via Clerk when configured.
-  const signOutHref = "/sign-in";
+  const handleSignOut = async () => {
+    if (clerk) {
+      try {
+        await clerk.signOut();
+      } catch (err) {
+        console.error("Clerk sign out failed, redirecting to sign-in:", err);
+        window.location.href = "/sign-in";
+      }
+    } else {
+      window.location.href = "/sign-in";
+    }
+  };
 
   return (
     <main className="flex min-h-screen flex-col justify-between bg-[var(--parchment)]">
@@ -64,13 +83,13 @@ export function AccountShell({ children, title }: { children: React.ReactNode; t
                   </Link>
                 );
               })}
-              <Link
-                href={signOutHref}
+              <button
+                onClick={handleSignOut}
                 className="flex w-full items-center gap-3 rounded-lg px-4 py-3 text-left text-sm text-[var(--ink)] transition-colors hover:text-[var(--gold-deep)]"
               >
                 <LogOut size={19} />
-                <span>Sign in / out</span>
-              </Link>
+                <span>Sign out</span>
+              </button>
             </nav>
           </aside>
 

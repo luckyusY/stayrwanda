@@ -5,7 +5,7 @@ import { Popout } from "./popout";
 import { PropertyImageSlider } from "./property-image-slider";
 import { CheckCircle2, MapPin, ShieldCheck } from "lucide-react";
 import type { Property } from "@/lib/properties";
-import { useCurrency } from "@/components/currency-provider";
+import { PriceDisplay } from "@/components/price-display";
 
 export function PropertyQuickView({
   slug,
@@ -17,7 +17,6 @@ export function PropertyQuickView({
   onClose: () => void;
 }) {
   const property = properties.find(p => p.slug === slug);
-  const { format } = useCurrency();
 
   return (
     <Popout
@@ -87,11 +86,7 @@ export function PropertyQuickView({
           
           <div className="absolute bottom-0 inset-x-0 shrink-0 border-t border-[var(--line)] bg-white/95 backdrop-blur-md p-5 shadow-[0_-10px_30px_rgba(0,0,0,0.06)] flex items-center justify-between z-20">
             <div>
-              <p className="text-[10px] uppercase tracking-wider text-[var(--muted)] mb-1">Starting from</p>
-              <div className="font-serif text-2xl font-semibold text-[var(--ink)]">
-                {format(property.price || 85000)}
-                <span className="text-sm font-sans font-normal text-[var(--muted)] ml-1">/ night</span>
-              </div>
+              <PriceDisplay amountRwf={property.price} className="font-serif text-2xl font-semibold text-[var(--ink)]" />
             </div>
             <Link 
               href={`/stays/${property.slug}`} 

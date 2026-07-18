@@ -7,6 +7,7 @@ import { FavoriteButton } from "@/components/favorite-button";
 import { FilterDialog, FilterGroup } from "@/components/filter-dialog";
 import { PropertyImageSlider } from "@/components/property-image-slider";
 import { PropertyQuickView } from "@/components/property-quick-view";
+import { PriceDisplay } from "@/components/price-display";
 import { Reveal, RevealGroup } from "@/components/reveal";
 import type { Property } from "@/lib/properties";
 
@@ -192,8 +193,8 @@ export function SearchResults({
                       </span>
                     </div>
                     <div className="text-right">
-                      <span className="block text-xs text-[var(--muted)]">Rates confirmed by host</span>
-                      <strong className="mt-1 block font-serif text-xl text-[var(--ink)]">On request</strong>
+                      <span className="block text-xs text-[var(--muted)]">Indicative nightly rate</span>
+                      <PriceDisplay amountRwf={property.price} className="mt-1 block font-serif text-xl font-semibold text-[var(--ink)]" />
                       <Link
                         href={`/stays/${property.slug}`}
                         className="button-3d group/cta mt-3 inline-flex items-center gap-1.5 bg-[var(--ink)] px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.16em] text-white hover:bg-[var(--ink-2)]"
@@ -234,5 +235,4 @@ export function SearchResults({
     </div>
   );
 }
-
 

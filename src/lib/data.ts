@@ -1,6 +1,7 @@
 import type { Db } from "mongodb";
 import { getDb } from "@/lib/mongodb";
 import { featuredProperties, type Property } from "@/lib/properties";
+import { seededNightlyRateRwf } from "@/lib/pricing";
 
 export type PropertyStatus = "active" | "pending" | "inactive" | "rejected";
 
@@ -79,26 +80,107 @@ function normalizeProperty(doc: Record<string, unknown>): StoredProperty {
 /** Admin view: every listing regardless of status, seed fallback when offline. */
 export async function listProperties(): Promise<StoredProperty[]> {
   const db = await tryDb();
-  if (!db) return seedProperties();
+  if (!db) {
+    return seedProperties().map((p) => ({
+      ...p,
+      price: seededNightlyRateRwf(p.slug) || p.price,
+    }));
+  }
   await ensureSeeded(db);
   const docs = await db.collection(PROPERTIES).find({}).sort({ createdAt: -1 }).toArray();
-  return docs.map((doc) => normalizeProperty(doc as Record<string, unknown>));
+  const properties = docs.map((doc) => normalizeProperty(doc as Record<string, unknown>));
+
+  try {
+    const hotels = await db.collection("hotels").find({ status: "published" }).toArray();
+    const hotelIds = hotels.map((h) => String(h._id));
+    const { ObjectId } = await import("mongodb");
+    const objectIds = hotelIds.filter((id) => ObjectId.isValid(id)).map((id) => new ObjectId(id));
+    
+    const units = await db.collection("unitTypes").find({
+      hotelId: { $in: [...hotelIds, ...objectIds] },
+      status: "published",
+    }).toArray();
+
+    const lowestRateByHotelId = new Map<string, number>();
+    for (const unit of units) {
+      const rate = Number(unit.basePriceRwf || 0);
+      const hotelId = String(unit.hotelId || "");
+      if (rate > 0 && (!lowestRateByHotelId.has(hotelId) || rate < (lowestRateByHotelId.get(hotelId) || rate))) {
+        lowestRateByHotelId.set(hotelId, rate);
+      }
+    }
+
+    const hotelRatesBySlug = new Map<string, number>();
+    for (const hotel of hotels) {
+      const rate = lowestRateByHotelId.get(String(hotel._id));
+      if (rate) {
+        hotelRatesBySlug.set(hotel.slug, rate);
+      }
+    }
+
+    return properties.map((p) => {
+      const dbRate = hotelRatesBySlug.get(p.slug);
+      const fallbackRate = seededNightlyRateRwf(p.slug);
+      return {
+        ...p,
+        price: dbRate || fallbackRate || p.price,
+      };
+    });
+  } catch (err) {
+    console.error("Failed to resolve dynamic prices for properties:", err);
+    return properties.map((p) => ({
+      ...p,
+      price: seededNightlyRateRwf(p.slug) || p.price,
+    }));
+  }
 }
 
 /** Public view: only listings that are live. */
 export async function listPublicProperties(): Promise<StoredProperty[]> {
   const all = await listProperties();
   const live = all.filter((property) => property.status === "active");
-  return live.length ? live : seedProperties();
+  return live.length ? live : seedProperties().map((p) => ({
+    ...p,
+    price: seededNightlyRateRwf(p.slug) || p.price,
+  }));
 }
 
 export async function getPropertyBySlug(slug: string): Promise<StoredProperty | null> {
   const db = await tryDb();
-  if (!db) return seedProperties().find((property) => property.slug === slug) ?? null;
+  if (!db) {
+    const p = seedProperties().find((property) => property.slug === slug) ?? null;
+    if (p) {
+      p.price = seededNightlyRateRwf(p.slug) || p.price;
+    }
+    return p;
+  }
   await ensureSeeded(db);
   const doc = await db.collection(PROPERTIES).findOne({ slug });
   if (!doc) return null;
-  return normalizeProperty(doc as Record<string, unknown>);
+  const property = normalizeProperty(doc as Record<string, unknown>);
+
+  try {
+    const hotel = await db.collection("hotels").findOne({ slug, status: "published" });
+    if (hotel) {
+      const { ObjectId } = await import("mongodb");
+      const query = ObjectId.isValid(String(hotel._id)) 
+        ? { hotelId: { $in: [String(hotel._id), new ObjectId(String(hotel._id))] } } 
+        : { hotelId: String(hotel._id) };
+      const unit = await db.collection("unitTypes").findOne(
+        { ...query, status: "published" },
+        { sort: { basePriceRwf: 1 } }
+      );
+      if (unit && unit.basePriceRwf) {
+        property.price = unit.basePriceRwf;
+        return property;
+      }
+    }
+  } catch (err) {
+    console.error("Failed to resolve dynamic price for property slug:", slug, err);
+  }
+
+  property.price = seededNightlyRateRwf(property.slug) || property.price;
+  return property;
 }
 
 export async function updatePropertyStatus(slug: string, status: PropertyStatus) {
