@@ -15,10 +15,12 @@ export function MagneticCursor() {
   const cursorYSpring = useSpring(cursorY, springConfig);
 
   useEffect(() => {
-    setMounted(true);
+    const mountFrame = window.requestAnimationFrame(() => setMounted(true));
     
     const isCoarse = window.matchMedia("(pointer: coarse)").matches;
-    if (isCoarse) return;
+    if (isCoarse) {
+      return () => window.cancelAnimationFrame(mountFrame);
+    }
 
     const moveCursor = (e: MouseEvent) => {
       cursorX.set(e.clientX);
@@ -46,6 +48,7 @@ export function MagneticCursor() {
     window.addEventListener("mouseover", handleMouseOver);
 
     return () => {
+      window.cancelAnimationFrame(mountFrame);
       window.removeEventListener("mousemove", moveCursor);
       window.removeEventListener("mouseover", handleMouseOver);
     };

@@ -3,7 +3,6 @@ import { redirect } from "next/navigation";
 import { AccountShell, EmptyState } from "@/components/account-shell";
 import { currentIdentity } from "@/lib/auth";
 import { getSafeProfile, getSafeFavorites } from "@/lib/guest-account";
-import { GuestFavoriteCard } from "@/components/guest-favorite-card";
 import { FavoritesGrid } from "@/components/favorites-grid";
 
 export default async function FavoritesPage() {

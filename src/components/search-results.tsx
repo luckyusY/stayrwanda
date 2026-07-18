@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { Check, ChevronDown, MapPin, SlidersHorizontal, Search, CheckCircle2, ShieldCheck, LockKeyhole, Eye } from "lucide-react";
+import { ChevronDown, MapPin, Search, CheckCircle2, ShieldCheck, Eye } from "lucide-react";
 import { FavoriteButton } from "@/components/favorite-button";
 import { FilterDialog, FilterGroup } from "@/components/filter-dialog";
 import { PropertyImageSlider } from "@/components/property-image-slider";
@@ -20,7 +20,7 @@ export function SearchResults({
 }) {
   const [destination, setDestination] = useState(initialDestination);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
-  const [mobileFilters, setMobileFilters] = useState(false);
+  const [mobileFilters] = useState(false);
   const [quickViewSlug, setQuickViewSlug] = useState<string | null>(null);
 
   const results = useMemo(
@@ -235,4 +235,3 @@ export function SearchResults({
     </div>
   );
 }
-

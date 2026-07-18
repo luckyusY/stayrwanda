@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { EASE, maskUp } from "@/lib/motion";
 import {
   CalendarDays,
@@ -19,13 +19,11 @@ import {
   Sparkles,
   Users,
   KeyRound,
-  CheckCircle2,
   Heart,
-  ArrowRight,
 } from "lucide-react";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { SmartImage } from "@/components/smart-image";
-import { Reveal, RevealGroup } from "@/components/reveal";
+import { Reveal } from "@/components/reveal";
 import { TiltCard } from "@/components/tilt-card";
 import { Popout } from "@/components/popout";
 import { SlotCounter } from "@/components/slot-counter";

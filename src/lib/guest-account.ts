@@ -103,7 +103,7 @@ export async function getSafeBookings(userId: string, email?: string): Promise<{
     const objectIds = hotelIds.filter((id) => ObjectId.isValid(id)).map((id) => new ObjectId(id));
     const stringIds = hotelIds.filter((id) => !ObjectId.isValid(id));
 
-    let hotels: Record<string, { name: string; slug: string; heroImage?: string }> = {};
+    const hotels: Record<string, { name: string; slug: string; heroImage?: string }> = {};
 
     try {
       const hotelRows = await db.collection("hotels").find({

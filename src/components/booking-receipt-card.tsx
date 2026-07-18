@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { CalendarDays, Users, Clock3, ChevronDown, ChevronUp, ArrowRight, Bed } from "lucide-react";
+import { CalendarDays, Users, ChevronDown, ChevronUp, ArrowRight, Bed } from "lucide-react";
 import { formatRwf, formatDate } from "@/lib/pricing";
 import { CountdownBadge } from "@/components/countdown-badge";
 import type { GuestBooking } from "@/lib/guest-account";

@@ -6,6 +6,7 @@ import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { TiltCard } from "@/components/tilt-card";
 import { Reveal, RevealGroup } from "@/components/reveal";
 import { SmartImage } from "@/components/smart-image";
+import type { Hotel } from "@/lib/platform-types";
 
 type DestinationItem = {
   slug: string;
@@ -20,7 +21,7 @@ export function DestinationsExperience({
   properties,
 }: {
   destinations: DestinationItem[];
-  properties: any[];
+  properties: Hotel[];
 }) {
   return (
     <main className="min-h-screen bg-[var(--parchment)]">

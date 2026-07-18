@@ -32,12 +32,21 @@ export function CurrencyProvider({ children }: { children: React.ReactNode }) {
   const [currency, setCurrencyState] = useState<CurrencyCode>("RWF");
 
   useEffect(() => {
+    let restoreTimer: ReturnType<typeof setTimeout> | undefined;
+
     try {
       const saved = localStorage.getItem("stayrwanda-currency") as CurrencyCode | null;
-      if (saved && CURRENCIES.some((c) => c.code === saved)) setCurrencyState(saved);
+      if (saved && CURRENCIES.some((c) => c.code === saved)) {
+        // Restore after hydration so server and client initially render the same currency.
+        restoreTimer = setTimeout(() => setCurrencyState(saved), 0);
+      }
     } catch {
       // ignore private-mode / SSR storage errors
     }
+
+    return () => {
+      if (restoreTimer) clearTimeout(restoreTimer);
+    };
   }, []);
 
   const value = useMemo<Value>(() => {

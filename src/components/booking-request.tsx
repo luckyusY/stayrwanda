@@ -3,12 +3,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { Check, ChevronLeft, LockKeyhole, Mail, Send, ShieldCheck, CheckCircle2, Clock, CalendarCheck, CreditCard, ClipboardList, Home } from "lucide-react";
+import { motion } from "framer-motion";
+import { Check, ChevronLeft, LockKeyhole, Mail, CheckCircle2, Clock, CalendarCheck, CreditCard, ClipboardList, Home } from "lucide-react";
 import type { Property } from "@/lib/properties";
-import { Button, ButtonLink } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { FloatingField } from "@/components/ui/field";
-import { EASE, softSpring } from "@/lib/motion";
+import { EASE } from "@/lib/motion";
 
 type Form = {
   firstName: string;
