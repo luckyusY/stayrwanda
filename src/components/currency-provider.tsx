@@ -81,6 +81,15 @@ export function CurrencyControl({ light = false }: { light?: boolean }) {
   const { currency, setCurrency } = useCurrency();
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 639px)");
+    setIsMobile(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
 
   const filtered = CURRENCIES.filter(
     (c) =>
@@ -93,6 +102,7 @@ export function CurrencyControl({ light = false }: { light?: boolean }) {
   return (
     <Popout
       variant="dropdown"
+      mobileVariant="dialog"
       isOpen={open}
       onOpenChange={(next) => {
         setOpen(next);
@@ -133,19 +143,23 @@ export function CurrencyControl({ light = false }: { light?: boolean }) {
         </div>
       }
       align="right"
-      className="z-[60] w-[280px] max-w-[min(280px,90vw)] overflow-hidden p-0"
+      title="Currency"
+      showLogo={false}
+      className="z-[60] w-full sm:w-[280px] p-0"
     >
       {/* Brand header — logo always visible */}
-      <div className="flex items-center justify-center border-b border-[var(--line)] bg-[var(--parchment)] px-4 py-3">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/brand/stayrwanda-logo.png"
-          alt="StayRwanda"
-          width={1093}
-          height={607}
-          className="h-9 w-auto object-contain"
-        />
-      </div>
+      {!isMobile && (
+        <div className="flex items-center justify-center border-b border-[var(--line)] bg-[var(--parchment)] px-4 py-3">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/brand/stayrwanda-logo.png"
+            alt="StayRwanda"
+            width={1093}
+            height={607}
+            className="h-9 w-auto object-contain"
+          />
+        </div>
+      )}
 
       <div className="p-3">
         <div className="mb-3 font-serif text-lg font-semibold text-[var(--ink)]">Select currency</div>
@@ -156,10 +170,10 @@ export function CurrencyControl({ light = false }: { light?: boolean }) {
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Type to filter currencies…"
             className="search-field-input text-xs"
-            autoFocus
+            autoFocus={!isMobile}
           />
         </div>
-        <div className="flex max-h-64 flex-col gap-0.5 overflow-y-auto overscroll-contain pr-0.5" role="listbox">
+        <div className="flex max-h-64 sm:max-h-64 max-h-[50dvh] flex-col gap-0.5 overflow-y-auto overscroll-contain pr-0.5" role="listbox">
           {filtered.length === 0 ? (
             <p className="px-3 py-4 text-center text-xs text-[var(--muted)]">No currencies match</p>
           ) : (

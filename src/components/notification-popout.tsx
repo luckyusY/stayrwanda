@@ -175,14 +175,15 @@ export function NotificationPopout({ light = false }: { light?: boolean }) {
 
   return (
     <Popout
-      variant={isMobile ? "dialog" : "sheet"}
+      variant="sheet"
+      mobileVariant="dialog"
       isOpen={open}
       onClose={() => setOpen(false)}
+      onOpenChange={setOpen}
       trigger={trigger}
       title="Notifications"
       className="flex h-full max-h-[100dvh] w-full flex-col bg-white sm:w-[420px]"
     >
-      {/* Sticky toolbar */}
       <div className="sticky top-0 z-10 shrink-0 border-b border-[var(--line)] bg-[var(--parchment)]">
         <div className="flex items-center justify-between gap-3 px-4 py-3">
           <div>

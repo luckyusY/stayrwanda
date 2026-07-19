@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Popout } from "./popout";
 import { UserCircle2, Heart, ClipboardList, Settings, Building2, LogOut, LogIn, Mail } from "lucide-react";
@@ -22,6 +22,15 @@ function AccountBrandHeader() {
 
 export function AccountPopout({ light = false }: { light?: boolean }) {
   const [open, setOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 639px)");
+    setIsMobile(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
 
   // Mocked state for presentation purposes. In production, this would use a real auth context.
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -54,14 +63,17 @@ export function AccountPopout({ light = false }: { light?: boolean }) {
   return (
     <Popout
       variant="dropdown"
+      mobileVariant="dialog"
       isOpen={open}
       onClose={() => setOpen(false)}
       onOpenChange={setOpen}
       trigger={trigger}
       align="right"
-      className="w-72 overflow-hidden p-0"
+      title="Account"
+      showLogo={false}
+      className="w-full sm:w-72 p-0"
     >
-      <AccountBrandHeader />
+      {!isMobile && <AccountBrandHeader />}
 
       {isLoggedIn ? (
         <div className="p-2">

@@ -978,8 +978,16 @@ header a[aria-label="StayRwanda home"] img {
     width: 100% !important;
     max-width: 100% !important;
     margin: 0 !important;
-    padding-bottom: env(safe-area-inset-bottom, 0px) !important;
+    padding-bottom: env(safe-area-inset-bottom, 16px) !important;
   }
+}
+
+/* iOS momentum scroll & overscroll containment */
+.popout-sheet,
+.popout-panel,
+.notification-scroll {
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* WCAG 2.5.5 touch target helper */

@@ -10,6 +10,7 @@ type PopoutVariant = "dropdown" | "sheet" | "dialog";
 
 interface PopoutProps {
   variant: PopoutVariant;
+  mobileVariant?: PopoutVariant;
   trigger?: React.ReactNode;
   isOpen?: boolean;
   onClose?: () => void;
@@ -40,7 +41,8 @@ function BrandMark({ className = "h-8" }: { className?: string }) {
 }
 
 export function Popout({
-  variant,
+  variant: desktopVariant,
+  mobileVariant,
   trigger,
   isOpen: controlledIsOpen,
   onClose,
@@ -55,6 +57,17 @@ export function Popout({
   hideHeader = false,
 }: PopoutProps) {
   const [uncontrolledIsOpen, setUncontrolledIsOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 639px)");
+    setIsMobile(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
+  const variant = isMobile && mobileVariant ? mobileVariant : desktopVariant;
   const isControlled = controlledIsOpen !== undefined;
   const open = isControlled ? controlledIsOpen : uncontrolledIsOpen;
 
@@ -120,22 +133,29 @@ export function Popout({
   }, [open]);
 
   const header = !hideHeader && (
-    <div className="sticky top-0 z-10 flex items-center gap-3 border-b border-[var(--line)] bg-[var(--parchment)] px-4 py-3.5">
-      {showLogo && <BrandMark className="h-8 shrink-0" />}
-      {title ? (
-        <h2 className="min-w-0 flex-1 font-serif text-lg font-semibold text-[var(--ink)] sm:text-xl">
-          {title}
-        </h2>
-      ) : (
-        <div className="flex-1" />
+    <div className="sticky top-0 z-10 flex flex-col border-b border-[var(--line)] bg-[var(--parchment)]">
+      {isMobile && (
+        <div className="flex justify-center pt-2">
+          <div className="h-1 w-12 rounded-full bg-[var(--gold-mid)]/45" />
+        </div>
       )}
-      <button
-        onClick={handleClose}
-        aria-label="Close"
-        className="grid size-11 sm:size-9 shrink-0 place-items-center rounded-full border border-[var(--gold-mid)] bg-white text-[var(--ink)] transition-colors hover:bg-[var(--gold-pale)] hover:text-[var(--gold-deep)]"
-      >
-        <X size={18} />
-      </button>
+      <div className="flex items-center gap-3 px-4 py-3.5">
+        {showLogo && <BrandMark className="h-8 shrink-0" />}
+        {title ? (
+          <h2 className="min-w-0 flex-1 font-serif text-lg font-semibold text-[var(--ink)] sm:text-xl">
+            {title}
+          </h2>
+        ) : (
+          <div className="flex-1" />
+        )}
+        <button
+          onClick={handleClose}
+          aria-label="Close"
+          className="grid size-11 sm:size-9 shrink-0 place-items-center rounded-full border border-[var(--gold-mid)] bg-white text-[var(--ink)] transition-colors hover:bg-[var(--gold-pale)] hover:text-[var(--gold-deep)]"
+        >
+          <X size={18} />
+        </button>
+      </div>
     </div>
   );
 

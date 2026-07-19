@@ -190,14 +190,14 @@ export function SiteHeader({
           </nav>
 
           {/* Always visible: currency · alerts · account (compact icons on mobile) */}
-          <div className="flex items-center gap-0.5 sm:gap-1">
+          <div className="flex items-center gap-1 sm:gap-2">
             <CurrencyControl light={onLight} />
             <div className="mx-0.5 hidden h-5 w-px bg-current opacity-20 sm:block" />
             <NotificationPopout light={onLight} />
             <AccountPopout light={onLight} />
             <button
               onClick={() => setOpen(true)}
-              className={`ml-0.5 grid size-10 place-items-center rounded-lg lg:hidden ${
+              className={`ml-1 grid size-11 place-items-center rounded-lg lg:hidden ${
                 onLight ? "text-white hover:bg-white/10" : "text-[var(--ink)] hover:bg-[var(--parchment)]"
               }`}
               aria-label="Open menu"
@@ -230,7 +230,7 @@ export function SiteHeader({
                 <Wordmark imgClass="h-12" />
                 <button
                   onClick={() => setOpen(false)}
-                  className="grid size-10 place-items-center text-[var(--ink)]"
+                  className="grid size-11 place-items-center text-[var(--ink)]"
                   aria-label="Close menu"
                 >
                   <X />
