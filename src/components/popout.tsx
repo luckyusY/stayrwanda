@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
 import { EASE, softSpring } from "@/lib/motion";
@@ -209,9 +210,10 @@ export function Popout({
           {trigger}
         </div>
       )}
-      <AnimatePresence>
-        {open && (
-          <div className="fixed inset-0 z-[var(--z-modal)]" ref={containerRef}>
+      {typeof document !== "undefined" && createPortal(
+        <AnimatePresence>
+          {open && (
+            <div className="fixed inset-0 z-[var(--z-toast)]" ref={containerRef}>
             <motion.div
               className="popout-backdrop"
               initial={{ opacity: 0 }}
@@ -266,9 +268,11 @@ export function Popout({
                 </motion.div>
               </div>
             )}
-          </div>
-        )}
-      </AnimatePresence>
+            </div>
+          )}
+        </AnimatePresence>,
+        document.body,
+      )}
     </>
   );
 }
