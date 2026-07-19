@@ -14,6 +14,8 @@ const publicTabs = [
 export function MobileBottomNav() {
   const pathname = usePathname();
 
+  if (!pathname) return null;
+
   // Hide on admin, host, or account sub-routes (account shell already has AccountBottomNav)
   const isExcluded =
     pathname.startsWith("/admin") ||

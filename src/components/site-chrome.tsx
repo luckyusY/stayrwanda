@@ -117,7 +117,7 @@ export function SiteHeader({
   const compact = variant === "transparent" && scrolled;
 
   // Highlight the first nav item that matches the current route (ignores query).
-  const activeIndex = NAV.findIndex((item) => pathname !== "/" && (pathname === item.href || pathname.startsWith(`${item.href}/`)));
+  const activeIndex = NAV.findIndex((item) => pathname && pathname !== "/" && (pathname === item.href || pathname.startsWith(`${item.href}/`)));
 
   return (
     <header
