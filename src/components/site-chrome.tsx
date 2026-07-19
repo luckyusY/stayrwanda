@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { CalendarDays, ChevronDown, MapPin, Menu, Search, Users, X } from "lucide-react";
 import { EASE, softSpring } from "@/lib/motion";
@@ -89,6 +90,8 @@ export function SiteHeader({
   const [scrolled, setScrolled] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const drawerLayer = useOverlayLayer(open);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const drawerRef = useRef<HTMLElement>(null);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -104,6 +107,21 @@ export function SiteHeader({
       .then((data) => setIsAdmin(!!data.isAdmin))
       .catch(() => {});
   }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && drawerLayer.isTop()) setOpen(false);
+    };
+    document.addEventListener("keydown", closeOnEscape);
+    requestAnimationFrame(() => drawerRef.current?.focus({ preventScroll: true }));
+    return () => document.removeEventListener("keydown", closeOnEscape);
+  }, [drawerLayer, open]);
+
+  const closeMenu = () => {
+    setOpen(false);
+    requestAnimationFrame(() => menuButtonRef.current?.focus({ preventScroll: true }));
+  };
 
   const onLight = variant === "transparent" && !scrolled; // white logo/text over the hero image
   // Only the home (transparent) header shrinks — inner pages keep a fixed
@@ -189,14 +207,20 @@ export function SiteHeader({
           <div className="flex items-center gap-1 sm:gap-2">
             <CurrencyControl light={onLight} />
             <div className="mx-0.5 hidden h-5 w-px bg-current opacity-20 sm:block" />
-            <NotificationPopout light={onLight} />
+            <div className="hidden sm:block">
+              <NotificationPopout light={onLight} />
+            </div>
             <AccountPopout light={onLight} />
             <button
+              ref={menuButtonRef}
+              type="button"
               onClick={() => setOpen(true)}
-              className={`ml-1 grid size-11 place-items-center rounded-lg lg:hidden ${
+              className={`ml-0.5 grid size-11 shrink-0 place-items-center rounded-lg lg:hidden ${
                 onLight ? "text-white hover:bg-white/10" : "text-[var(--ink)] hover:bg-[var(--parchment)]"
               }`}
               aria-label="Open menu"
+              aria-controls="mobile-main-menu"
+              aria-expanded={open}
             >
               <Menu size={22} />
             </button>
@@ -204,19 +228,23 @@ export function SiteHeader({
         </div>
       </div>
 
-      {/* Mobile drawer */}
-      <AnimatePresence>
-        {open && (
+      {/* Mobile drawer is portalled so sticky/fixed header geometry cannot clip it. */}
+      {typeof document !== "undefined" && createPortal(
+        <AnimatePresence>
+          {open && (
           <motion.div
-            className="fixed inset-0 z-50 lg:hidden"
+            className="fixed inset-0 z-[var(--z-toast)] lg:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3, ease: EASE }}
           >
-            <div className="absolute inset-0 bg-[var(--ink)]/50 backdrop-blur-sm" onClick={() => drawerLayer.isTop() && setOpen(false)} />
+            <div className="absolute inset-0 bg-[var(--ink)]/50 backdrop-blur-sm" onClick={() => drawerLayer.isTop() && closeMenu()} />
             <motion.nav
-              className="surface-3d-floating absolute right-0 top-0 flex h-[100dvh] max-h-[100dvh] w-80 max-w-[85%] touch-pan-y flex-col overflow-y-auto overscroll-contain !rounded-none border-y-0 border-r-0 p-6 [-webkit-overflow-scrolling:touch]"
+              ref={drawerRef}
+              id="mobile-main-menu"
+              tabIndex={-1}
+              className="surface-3d-floating absolute inset-y-0 right-0 flex h-[100dvh] max-h-[100dvh] w-80 max-w-[88vw] touch-pan-y flex-col overflow-y-auto overscroll-contain !rounded-none border-y-0 border-r-0 px-5 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-[max(1.25rem,env(safe-area-inset-top))] outline-none [-webkit-overflow-scrolling:touch]"
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
@@ -228,7 +256,8 @@ export function SiteHeader({
               <div className="mb-6 flex items-center justify-between">
                 <Wordmark imgClass="h-12" />
                 <button
-                  onClick={() => setOpen(false)}
+                  type="button"
+                  onClick={closeMenu}
                   className="grid size-11 place-items-center text-[var(--ink)]"
                   aria-label="Close menu"
                 >
@@ -240,14 +269,14 @@ export function SiteHeader({
               <div className="mb-6 grid grid-cols-2 gap-2">
                 <Link
                   href="/sign-in"
-                  onClick={() => setOpen(false)}
+                  onClick={closeMenu}
                   className="button-3d flex items-center justify-center bg-[var(--ink)] px-3 py-3 text-center text-[11px] font-semibold uppercase tracking-[0.14em] text-white"
                 >
                   Sign in
                 </Link>
                 <Link
                   href="/register"
-                  onClick={() => setOpen(false)}
+                  onClick={closeMenu}
                   className="interactive-3d flex items-center justify-center px-3 py-3 text-center text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--ink)]"
                 >
                   Register
@@ -273,7 +302,7 @@ export function SiteHeader({
                   >
                     <Link
                       href={item.href}
-                      onClick={() => setOpen(false)}
+                      onClick={closeMenu}
                       className="block border-b border-[var(--line)] py-4 font-serif text-2xl font-medium tracking-tight text-[var(--ink)] transition-colors hover:text-[var(--gold-deep)]"
                     >
                       {item.label}
@@ -285,14 +314,14 @@ export function SiteHeader({
               <div className="mt-auto space-y-2 border-t border-[var(--line)] pt-5">
                 <Link
                   href="/account/bookings"
-                  onClick={() => setOpen(false)}
+                  onClick={closeMenu}
                   className="block text-sm font-medium text-[var(--ink)] hover:text-[var(--gold-deep)]"
                 >
                   My bookings
                 </Link>
                 <Link
                   href="/help"
-                  onClick={() => setOpen(false)}
+                  onClick={closeMenu}
                   className="block text-sm font-medium text-[var(--ink)] hover:text-[var(--gold-deep)]"
                 >
                   Help centre
@@ -300,8 +329,10 @@ export function SiteHeader({
               </div>
             </motion.nav>
           </motion.div>
-        )}
-      </AnimatePresence>
+          )}
+        </AnimatePresence>,
+        document.body,
+      )}
     </header>
   );
 }

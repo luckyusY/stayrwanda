@@ -1,5 +1,29 @@
 import { expect, test } from "@playwright/test";
 
+test("mobile hamburger menu opens above the page and scrolls independently", async ({ page }, testInfo) => {
+  test.skip(!testInfo.project.name.startsWith("mobile"), "Phone interaction coverage");
+  await page.goto("/", { waitUntil: "domcontentloaded" });
+  await page.evaluate(() => window.scrollTo(0, 360));
+  const originalScroll = await page.evaluate(() => window.scrollY);
+
+  const menuButton = page.getByRole("button", { name: "Open menu" });
+  await expect(menuButton).toBeVisible();
+  await expect(menuButton).toBeInViewport();
+  await menuButton.click();
+
+  const menu = page.getByRole("dialog", { name: "Main menu" });
+  await expect(menu).toBeVisible();
+  await expect(menu.getByLabel("StayRwanda home")).toBeVisible();
+  await menu.evaluate((element) => element.scrollTo({ top: element.scrollHeight }));
+  await expect(menu.getByRole("link", { name: "Help centre" })).toBeVisible();
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
+
+  await menu.getByRole("button", { name: "Close menu" }).click();
+  await expect(menu).toBeHidden();
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(originalScroll);
+  await expect(menuButton).toBeFocused();
+});
+
 test("mobile account and currency dialogs show branding and restore scroll", async ({ page }, testInfo) => {
   test.skip(!testInfo.project.name.startsWith("mobile"), "Phone interaction coverage");
   await page.goto("/", { waitUntil: "domcontentloaded" });
