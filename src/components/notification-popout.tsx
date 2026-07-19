@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Popout } from "./popout";
 import {
   Bell,
@@ -112,15 +112,6 @@ const MOCK_NOTIFICATIONS: Notification[] = [
 
 export function NotificationPopout({ light = false }: { light?: boolean }) {
   const [open, setOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 639px)");
-    setIsMobile(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
-  }, []);
 
   const [notifications, setNotifications] = useState(MOCK_NOTIFICATIONS);
   const [filter, setFilter] = useState<"all" | "unread">("all");
@@ -145,8 +136,8 @@ export function NotificationPopout({ light = false }: { light?: boolean }) {
   };
 
   const trigger = (
-    <div
-      onClick={() => setOpen(!open)}
+    <button
+      type="button"
       className={`relative flex cursor-pointer flex-col items-center gap-0.5 rounded-lg px-1.5 py-1.5 transition-colors md:min-w-[4.25rem] md:px-2 ${
         light
           ? "text-white/90 hover:bg-white/10 hover:text-white"
@@ -170,7 +161,7 @@ export function NotificationPopout({ light = false }: { light?: boolean }) {
       >
         Updates
       </span>
-    </div>
+    </button>
   );
 
   return (

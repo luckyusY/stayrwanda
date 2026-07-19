@@ -43,7 +43,8 @@ export function CalendarPopout({
       variant="dialog"
       isOpen={open}
       onClose={() => setOpen(false)}
-      trigger={<div onClick={() => setOpen(true)} className="w-full">{children}</div>}
+      onOpenChange={setOpen}
+      trigger={<div className="w-full">{children}</div>}
       title="Select dates"
       className="w-[90vw] max-w-[680px] rounded-xl bg-white shadow-2xl"
       wrapperClassName="relative w-full"

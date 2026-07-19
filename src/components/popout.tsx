@@ -5,6 +5,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
 import { EASE, softSpring } from "@/lib/motion";
+import { useIsMobile } from "@/hooks/use-is-mobile";
 
 type PopoutVariant = "dropdown" | "sheet" | "dialog";
 
@@ -57,15 +58,7 @@ export function Popout({
   hideHeader = false,
 }: PopoutProps) {
   const [uncontrolledIsOpen, setUncontrolledIsOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 639px)");
-    setIsMobile(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
-  }, []);
+  const isMobile = useIsMobile();
 
   const variant = isMobile && mobileVariant ? mobileVariant : desktopVariant;
   const isControlled = controlledIsOpen !== undefined;
@@ -90,6 +83,7 @@ export function Popout({
 
   const containerRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+  const lockedScrollY = useRef(0);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -106,7 +100,15 @@ export function Popout({
       document.addEventListener("keydown", handleKeyDown);
       document.addEventListener("mousedown", handleClickOutside);
       if (variant !== "dropdown") {
-        document.body.style.overflow = "hidden";
+        // iOS and Chrome Android can reset the document position when only
+        // `overflow: hidden` is toggled. Pin the body at its current offset so
+        // closing a header dialog returns the visitor to exactly the same spot.
+        const body = document.body;
+        lockedScrollY.current = window.scrollY;
+        body.style.position = "fixed";
+        body.style.top = `-${lockedScrollY.current}px`;
+        body.style.width = "100%";
+        body.style.overflow = "hidden";
       }
     }
 
@@ -114,7 +116,12 @@ export function Popout({
       document.removeEventListener("keydown", handleKeyDown);
       document.removeEventListener("mousedown", handleClickOutside);
       if (variant !== "dropdown") {
-        document.body.style.overflow = "";
+        const body = document.body;
+        body.style.position = "";
+        body.style.top = "";
+        body.style.width = "";
+        body.style.overflow = "";
+        window.scrollTo(0, lockedScrollY.current);
       }
     };
   }, [open, variant, handleClose]);
@@ -125,9 +132,9 @@ export function Popout({
         'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
       );
       if (focusable.length) {
-        (focusable[0] as HTMLElement).focus();
+        (focusable[0] as HTMLElement).focus({ preventScroll: true });
       } else {
-        panelRef.current.focus();
+        panelRef.current.focus({ preventScroll: true });
       }
     }
   }, [open]);

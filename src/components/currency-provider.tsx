@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { Popout } from "./popout";
 import { ChevronDown, Globe2, Search } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-is-mobile";
 
 export const CURRENCIES = [
   { code: "RWF", name: "Rwandan Franc", flag: "🇷🇼", rate: 1 },
@@ -81,15 +82,7 @@ export function CurrencyControl({ light = false }: { light?: boolean }) {
   const { currency, setCurrency } = useCurrency();
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 639px)");
-    setIsMobile(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
-  }, []);
+  const isMobile = useIsMobile();
 
   const filtered = CURRENCIES.filter(
     (c) =>
@@ -113,7 +106,8 @@ export function CurrencyControl({ light = false }: { light?: boolean }) {
         setSearch("");
       }}
       trigger={
-        <div
+        <button
+          type="button"
           className={`flex flex-col items-center gap-0.5 rounded-lg px-1.5 py-1.5 transition-colors md:min-w-[4.25rem] md:px-2 ${
             light
               ? "text-white/90 hover:bg-white/10 hover:text-white"
@@ -140,7 +134,7 @@ export function CurrencyControl({ light = false }: { light?: boolean }) {
           >
             Currency
           </span>
-        </div>
+        </button>
       }
       align="right"
       title="Currency"
@@ -148,7 +142,7 @@ export function CurrencyControl({ light = false }: { light?: boolean }) {
       className="z-[60] w-full sm:w-[280px] p-0"
     >
       {/* Brand header — logo always visible */}
-      {!isMobile && (
+      <div className="hidden sm:block">
         <div className="flex items-center justify-center border-b border-[var(--line)] bg-[var(--parchment)] px-4 py-3">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -159,7 +153,7 @@ export function CurrencyControl({ light = false }: { light?: boolean }) {
             className="h-9 w-auto object-contain"
           />
         </div>
-      )}
+      </div>
 
       <div className="p-3">
         <div className="mb-3 font-serif text-lg font-semibold text-[var(--ink)]">Select currency</div>

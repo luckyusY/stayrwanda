@@ -20,7 +20,7 @@ export function SearchResults({
 }) {
   const [destination, setDestination] = useState(initialDestination);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
-  const [mobileFilters, setMobileFilters] = useState(false);
+  const mobileFilters = false;
   const [quickViewSlug, setQuickViewSlug] = useState<string | null>(null);
 
   const results = useMemo(

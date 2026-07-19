@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { Popout } from "./popout";
 import { UserCircle2, Heart, ClipboardList, Settings, Building2, LogOut, LogIn, Mail } from "lucide-react";
@@ -22,23 +22,14 @@ function AccountBrandHeader() {
 
 export function AccountPopout({ light = false }: { light?: boolean }) {
   const [open, setOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 639px)");
-    setIsMobile(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
-  }, []);
 
   // Mocked state for presentation purposes. In production, this would use a real auth context.
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isHost] = useState(true);
 
   const trigger = (
-    <div
-      onClick={() => setOpen(!open)}
+    <button
+      type="button"
       className={`flex flex-col items-center gap-0.5 rounded-lg px-1.5 py-1.5 transition-colors md:min-w-[4.25rem] md:px-2 ${
         light
           ? "text-white/90 hover:bg-white/10 hover:text-white"
@@ -57,7 +48,7 @@ export function AccountPopout({ light = false }: { light?: boolean }) {
       >
         {isLoggedIn ? "Profile" : "Sign in"}
       </span>
-    </div>
+    </button>
   );
 
   return (
@@ -73,7 +64,7 @@ export function AccountPopout({ light = false }: { light?: boolean }) {
       showLogo={false}
       className="w-full sm:w-72 p-0"
     >
-      {!isMobile && <AccountBrandHeader />}
+      <div className="hidden sm:block"><AccountBrandHeader /></div>
 
       {isLoggedIn ? (
         <div className="p-2">

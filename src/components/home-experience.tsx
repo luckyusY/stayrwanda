@@ -240,12 +240,13 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
                 variant="dropdown"
                 isOpen={guestOpen}
                 onClose={() => setGuestOpen(false)}
+                onOpenChange={setGuestOpen}
                 wrapperClassName="relative w-full"
                 className="surface-3d-floating w-[320px] p-5 text-[var(--foreground)]"
                 align="right"
                 trigger={
-                  <div
-                    onClick={() => setGuestOpen(!guestOpen)}
+                  <button
+                    type="button"
                     aria-expanded={guestOpen}
                     className="flex min-h-[52px] md:min-h-16 w-full items-center gap-3 bg-white px-5 text-left transition-colors hover:bg-[var(--parchment)] cursor-pointer"
                   >
@@ -262,7 +263,7 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
                       size={16}
                       className={`text-[var(--muted)] transition-transform duration-300 ${guestOpen ? "rotate-180" : ""}`}
                     />
-                  </div>
+                  </button>
                 }
               >
                 <Counter label="Adults" value={adults} min={1} setValue={setAdults} />
