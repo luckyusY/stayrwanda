@@ -642,7 +642,7 @@ select:-webkit-autofill {
 .popout-sheet    { position: fixed; inset-y: 0; right: 0; z-index: var(--z-modal); display: flex; flex-direction: column; width: min(480px, 100vw); background: white; box-shadow: var(--shadow-xl); overflow: hidden; }
 .popout-dialog   { position: fixed; inset: 0; z-index: var(--z-modal); display: grid; place-items: center; padding: 1.5rem; }
 .popout-panel    { background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-xl); max-width: 640px; width: 100%; }
-.popout-dropdown { position: absolute; z-index: var(--z-modal); background: white; border-radius: var(--radius-md); box-shadow: var(--shadow-lg); border: 1px solid var(--line); }
+.popout-dropdown { position: absolute; z-index: var(--z-modal); background: white; border-radius: var(--radius-md); box-shadow: var(--shadow-lg); border: 1px solid var(--line); max-height: calc(100dvh - 5rem); overflow-y: auto; }
 
 /* ── Icon premium ─────────────────────────────────────── */
 .icon-premium { filter: drop-shadow(0 2px 6px rgba(176,141,87,.22)); transition: transform .25s, filter .25s; }
@@ -968,17 +968,26 @@ header a[aria-label="StayRwanda home"] img {
 
 /* On mobile viewports, Popout dialogs slide up as bottom sheets */
 @media (max-width: 639px) {
+  /* Switch grid → flex so justify-content actually works */
   .popout-dialog {
-    align-items: flex-end !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-end !important;
     padding: 0 !important;
   }
   .popout-panel {
     border-radius: var(--radius-lg) var(--radius-lg) 0 0 !important;
-    max-height: 92dvh !important;
+    max-height: 90dvh !important;
     width: 100% !important;
     max-width: 100% !important;
     margin: 0 !important;
     padding-bottom: env(safe-area-inset-bottom, 16px) !important;
+    overflow-y: auto !important;
+  }
+  /* Also cap dropdown height in case it falls back on mobile */
+  .popout-dropdown {
+    max-height: calc(100dvh - 5rem) !important;
+    overflow-y: auto !important;
   }
 }
 
