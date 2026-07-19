@@ -56,7 +56,7 @@ export function FilterDialog({
 
   const trigger = (
     <button
-      onClick={() => setOpen(true)}
+      type="button"
       className="interactive-3d flex items-center gap-2 !border-[var(--gold)] px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--gold-deep)] lg:hidden shadow-sm bg-white"
     >
       <SlidersHorizontal size={16} /> Filters
@@ -73,6 +73,7 @@ export function FilterDialog({
       variant="sheet"
       isOpen={open}
       onClose={() => setOpen(false)}
+      onOpenChange={setOpen}
       trigger={trigger}
       title="Filters"
       showLogo={false}

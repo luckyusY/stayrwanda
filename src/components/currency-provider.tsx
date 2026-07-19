@@ -17,6 +17,17 @@ export const CURRENCIES = [
 
 export type CurrencyCode = (typeof CURRENCIES)[number]["code"];
 
+// Unicode escapes keep the country flags intact regardless of source-file encoding.
+const CURRENCY_COUNTRIES: Record<CurrencyCode, { country: string; flag: string }> = {
+  RWF: { country: "Rwanda", flag: "\u{1F1F7}\u{1F1FC}" },
+  USD: { country: "United States", flag: "\u{1F1FA}\u{1F1F8}" },
+  EUR: { country: "European Union", flag: "\u{1F1EA}\u{1F1FA}" },
+  GBP: { country: "United Kingdom", flag: "\u{1F1EC}\u{1F1E7}" },
+  KES: { country: "Kenya", flag: "\u{1F1F0}\u{1F1EA}" },
+  UGX: { country: "Uganda", flag: "\u{1F1FA}\u{1F1EC}" },
+  TZS: { country: "Tanzania", flag: "\u{1F1F9}\u{1F1FF}" },
+};
+
 type Value = {
   currency: CurrencyCode;
   setCurrency: (code: CurrencyCode) => void;
@@ -91,6 +102,7 @@ export function CurrencyControl({ light = false }: { light?: boolean }) {
   );
 
   const activeMeta = CURRENCIES.find((c) => c.code === currency) || CURRENCIES[0];
+  const activeCountry = CURRENCY_COUNTRIES[activeMeta.code];
 
   return (
     <Popout
@@ -121,7 +133,7 @@ export function CurrencyControl({ light = false }: { light?: boolean }) {
             <Globe2 size={18} className="shrink-0 opacity-90 md:size-4" />
           </span>
           <span className="hidden items-center gap-0.5 text-[11px] font-semibold leading-none tracking-wide md:inline-flex">
-            {activeMeta.flag} {currency}
+            {activeCountry.flag} {currency}
             <ChevronDown
               size={11}
               className={`opacity-70 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
@@ -138,23 +150,10 @@ export function CurrencyControl({ light = false }: { light?: boolean }) {
       }
       align="right"
       title="Currency"
-      showLogo={false}
+      showLogo
       className="z-[60] w-full sm:w-[280px] p-0"
     >
       {/* Brand header — logo always visible */}
-      <div className="hidden sm:block">
-        <div className="flex items-center justify-center border-b border-[var(--line)] bg-[var(--parchment)] px-4 py-3">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/brand/stayrwanda-logo.png"
-            alt="StayRwanda"
-            width={1093}
-            height={607}
-            className="h-9 w-auto object-contain"
-          />
-        </div>
-      </div>
-
       <div className="p-3">
         <div className="mb-3 font-serif text-lg font-semibold text-[var(--ink)]">Select currency</div>
         <div className="search-field-well mb-3 flex items-center gap-2 px-2.5 py-2">
@@ -190,9 +189,12 @@ export function CurrencyControl({ light = false }: { light?: boolean }) {
                       : "text-[var(--ink)]"
                   }`}
                 >
-                  <span className="flex items-center gap-2">
-                    <span className="text-base leading-none">{c.flag}</span>
-                    <span>{c.name}</span>
+                  <span className="flex min-w-0 items-center gap-2.5">
+                    <span className="text-xl leading-none" aria-hidden>{CURRENCY_COUNTRIES[c.code].flag}</span>
+                    <span className="flex min-w-0 flex-col">
+                      <span>{c.name}</span>
+                      <span className="text-[11px] font-normal text-[var(--muted)]">{CURRENCY_COUNTRIES[c.code].country}</span>
+                    </span>
                   </span>
                   <span className="text-xs font-medium text-[var(--muted)]">{c.code}</span>
                 </button>

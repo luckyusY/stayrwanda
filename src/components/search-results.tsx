@@ -43,8 +43,8 @@ export function SearchResults({
     );
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
-      <nav className="mb-6 text-xs uppercase tracking-[0.16em] text-[var(--muted)]">
+    <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
+      <nav className="mb-5 truncate text-[10px] uppercase tracking-[0.14em] text-[var(--muted)] sm:mb-6 sm:text-xs sm:tracking-[0.16em]">
         <Link href="/" className="hover:text-[var(--gold-deep)]">
           Home
         </Link>
@@ -54,7 +54,7 @@ export function SearchResults({
         <span className="text-[var(--ink)]">Search</span>
       </nav>
 
-      <div className="grid gap-8 lg:grid-cols-[280px_1fr]">
+      <div className="grid gap-6 lg:gap-8 lg:grid-cols-[280px_1fr]">
         {/* Sidebar Filters */}
         <aside className={`${mobileFilters ? "block" : "hidden"} h-fit lg:block lg:sticky lg:top-24`}>
           <div className="surface-3d glass-white p-5 rounded-xl shadow-md">
@@ -112,44 +112,39 @@ export function SearchResults({
 
         {/* Results grid */}
         <section>
-          <div className="flex items-start justify-between gap-4">
-            <div>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+            <div className="min-w-0">
               <p className="eyebrow">{results.length} residences</p>
-              <h1 className="mt-2 font-serif text-3xl font-semibold text-[var(--ink)]">
+              <h1 className="mt-1 font-serif text-3xl font-semibold text-[var(--ink)] sm:mt-2">
                 {destination || "Kigali"}
               </h1>
               <p className="mt-1 text-sm text-[var(--muted)]">Furnished stays matching your search</p>
             </div>
-            <FilterDialog
-              selectedTypes={selectedTypes}
-              toggleType={toggle}
-              onClear={() => setSelectedTypes([])}
-              resultCount={results.length}
-            />
+            <div className="self-start"><FilterDialog selectedTypes={selectedTypes} toggleType={toggle} onClear={() => setSelectedTypes([])} resultCount={results.length} /></div>
           </div>
 
-          <div className="surface-3d mt-5 flex items-center justify-between bg-[var(--parchment)] px-4 py-3 rounded-lg">
+          <div className="surface-3d mt-5 flex flex-col gap-2 rounded-lg bg-[var(--parchment)] px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
             <span className="text-sm text-[var(--muted)]">Sorted by our recommendations</span>
             <button className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--gold-deep)]">
               Top picks <ChevronDown size={15} />
             </button>
           </div>
 
-          <RevealGroup className="mt-5 space-y-6">
+          <RevealGroup className="mt-5 space-y-4 sm:space-y-6">
             {results.map((property) => (
               <Reveal
                 variant="depth"
                 as="article"
                 key={property.slug}
-                className="surface-3d surface-3d-lift grid min-w-0 gap-3 p-3 grid-cols-[120px_1fr] sm:gap-5 sm:p-5 sm:grid-cols-[240px_1fr] group rounded-xl overflow-hidden shadow-sm hover:shadow-md hover:border-[var(--gold)]"
+                className="surface-3d surface-3d-lift group flex min-w-0 flex-col overflow-hidden rounded-xl shadow-sm hover:border-[var(--gold)] hover:shadow-md sm:grid sm:grid-cols-[240px_1fr] sm:gap-5 sm:p-5"
               >
-                <div className="relative w-full min-w-0 rounded-lg overflow-hidden aspect-[3/4] sm:aspect-[4/3]">
+                <div className="relative w-full min-w-0 overflow-hidden aspect-[16/10] sm:aspect-[4/3] sm:rounded-lg">
                   <PropertyImageSlider
                     images={property.images?.length ? property.images : [property.image]}
                     alt={property.title}
                     href={`/stays/${property.slug}`}
-                    sizes="(max-width: 479px) 120px, (max-width: 639px) calc(100vw - 32px), 240px"
-                    aspect="aspect-[3/4] sm:aspect-[4/3]"
+                    sizes="(max-width: 639px) calc(100vw - 32px), 240px"
+                    aspect="aspect-[16/10] sm:aspect-[4/3]"
                   />
                   <div className="absolute right-3 top-3 z-30 flex flex-col gap-2">
                     <FavoriteButton
@@ -165,7 +160,7 @@ export function SearchResults({
                     </button>
                   </div>
                 </div>
-                <div className="flex min-w-0 flex-col sm:flex-row sm:justify-between sm:gap-6">
+                <div className="flex min-w-0 flex-col p-4 sm:flex-row sm:justify-between sm:gap-6 sm:p-0">
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
                       <span className="flex items-center gap-1 rounded bg-[var(--parchment)] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--ink)]">
@@ -179,17 +174,17 @@ export function SearchResults({
                       {property.title}
                     </Link>
                     <p className="mt-2 text-sm font-medium text-[var(--ink)]">{property.type}</p>
-                    <p className="mt-1 text-sm text-[var(--muted)]">
+                    <p className="mt-1 line-clamp-1 text-sm text-[var(--muted)] sm:line-clamp-none">
                       {property.amenities.slice(0, 3).join(" · ")}
                     </p>
-                    <div className="mt-4 flex flex-wrap items-center gap-2">
+                    <div className="mt-4 flex flex-wrap items-center gap-1.5 sm:gap-2">
                       <span className="flex items-center gap-1.5 rounded-full border border-[var(--line)] bg-[var(--parchment)] px-2.5 py-1 text-[11px] font-medium text-[var(--ink)]"><CheckCircle2 size={12} className="text-[var(--gold-deep)]" /> Free booking request</span>
                       <span className="flex items-center gap-1.5 rounded-full border border-[var(--line)] bg-[var(--parchment)] px-2.5 py-1 text-[11px] font-medium text-[var(--ink)]"><ShieldCheck size={12} className="text-[var(--gold-deep)]" /> No prepayment</span>
                     </div>
                   </div>
-                  <div className="mt-5 flex shrink-0 flex-row items-end justify-between sm:mt-0 sm:w-44 sm:flex-col sm:items-end">
+                  <div className="mt-5 flex shrink-0 flex-row items-end justify-between border-t border-[var(--line)] pt-4 sm:mt-0 sm:w-44 sm:flex-col sm:items-end sm:border-0 sm:pt-0">
                     <div className="text-right">
-                      <span className="text-xs uppercase tracking-[0.14em] text-[var(--muted)]">
+                      <span className="hidden text-xs uppercase tracking-[0.14em] text-[var(--muted)] sm:inline">
                         {property.photoCount} photographs
                       </span>
                     </div>
@@ -234,14 +229,6 @@ export function SearchResults({
         onClose={() => setQuickViewSlug(null)}
       />
 
-      <div className="fixed bottom-[calc(3.5rem+env(safe-area-inset-bottom,0px))] right-4 z-30 lg:hidden">
-        <FilterDialog
-          selectedTypes={selectedTypes}
-          toggleType={toggle}
-          onClear={() => setSelectedTypes([])}
-          resultCount={results.length}
-        />
-      </div>
     </div>
   );
 }
