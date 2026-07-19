@@ -86,6 +86,7 @@ export function SiteHeader({
 }) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -93,6 +94,13 @@ export function SiteHeader({
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/admin/status")
+      .then((res) => res.json())
+      .then((data) => setIsAdmin(!!data.isAdmin))
+      .catch(() => {});
   }, []);
 
   // Lock body scroll while the mobile drawer is open.
@@ -119,6 +127,18 @@ export function SiteHeader({
           : "sticky top-0 z-50 header-frost"
       }
     >
+      {isAdmin && (
+        <div className="bg-gradient-to-r from-[var(--ink)] via-[var(--gold-deep)] to-[var(--ink)] py-1.5 text-center text-[10px] font-bold uppercase tracking-[0.18em] text-white">
+          Admin connected ·{" "}
+          <Link href="/admin" className="underline hover:text-[var(--gold-pale)]">
+            Dashboard
+          </Link>{" "}
+          ·{" "}
+          <Link href="/admin-status" className="underline hover:text-[var(--gold-pale)]">
+            Check Status
+          </Link>
+        </div>
+      )}
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div
           className={`flex items-center justify-between gap-4 transition-[height] duration-300 ${
