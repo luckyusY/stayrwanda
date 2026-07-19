@@ -5,10 +5,10 @@ export function ContentPage({ eyebrow, title, intro, sections }: { eyebrow: stri
   return (
     <main>
       <SiteHeader />
-      <article className="mx-auto max-w-4xl px-4 py-20 sm:px-6">
+      <article className="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-20">
         <p className="eyebrow">{eyebrow}</p>
-        <h1 className="mt-3 font-serif text-6xl font-semibold text-[var(--ink)]">{title}</h1>
-        <p className="mt-6 text-xl leading-9 text-[var(--muted)]">{intro}</p>
+        <h1 className="mt-3 break-words font-serif text-4xl font-semibold text-[var(--ink)] sm:text-6xl">{title}</h1>
+        <p className="mt-5 text-lg leading-8 text-[var(--muted)] sm:mt-6 sm:text-xl sm:leading-9">{intro}</p>
         <div className="mt-12 divide-y divide-[var(--line)] border-y border-[var(--line)]">
           {sections.map((section) => (
             <section className="py-8" key={section.title}>
@@ -17,7 +17,7 @@ export function ContentPage({ eyebrow, title, intro, sections }: { eyebrow: stri
             </section>
           ))}
         </div>
-        <Link href="/contact" className="button-3d mt-9 inline-block bg-[var(--ink)] px-6 py-3 text-xs font-semibold uppercase tracking-wider text-white">Contact StayRwanda</Link>
+        <Link href="/contact" className="button-3d mt-9 inline-flex min-h-12 w-full items-center justify-center bg-[var(--ink)] px-6 py-3 text-xs font-semibold uppercase tracking-wider text-white sm:w-auto">Contact StayRwanda</Link>
       </article>
       <SiteFooter />
     </main>

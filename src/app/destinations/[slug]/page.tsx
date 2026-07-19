@@ -30,7 +30,7 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
       <SiteHeader />
       
       {/* Cinematic Hero */}
-      <section className="relative bg-[var(--ink)] py-24 text-center text-white overflow-hidden">
+      <section className="relative overflow-hidden bg-[var(--ink)] py-14 text-center text-white sm:py-24">
         {/* Decorative elements */}
         <div className="absolute inset-0 opacity-5 pointer-events-none" style={{
           backgroundImage: "repeating-linear-gradient(45deg, var(--gold) 0, var(--gold) 1px, transparent 0, transparent 50%)",
@@ -39,7 +39,7 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
 
         <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6">
           <p className="eyebrow !text-[var(--gold)]">{destination.kicker}</p>
-          <h1 className="mt-6 font-display text-5xl sm:text-7xl md:text-8xl font-light leading-none tracking-tight">
+          <h1 className="mt-6 font-display text-4xl font-light leading-none tracking-tight sm:text-7xl md:text-8xl">
             <span className="block">{destination.name}</span>
             <span className="block text-gradient-gold italic mt-2">Kigali, Rwanda</span>
           </h1>
@@ -54,7 +54,7 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
               <span className="text-[10px] uppercase tracking-wider text-white/50 block mt-1">Available properties</span>
             </div>
             <div>
-              <strong className="block text-3xl font-serif text-[var(--gold-pale)]">
+              <strong className="block break-words font-serif text-xl text-[var(--gold-pale)] sm:text-3xl">
                 {averagePrice ? `RWF ${averagePrice.toLocaleString()}` : "On request"}
               </strong>
               <span className="text-[10px] uppercase tracking-wider text-white/50 block mt-1">Average rate / night</span>
@@ -64,7 +64,7 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
       </section>
 
       {/* Directory Section */}
-      <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+      <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-16">
         <p className="eyebrow">Places to stay</p>
         <h2 className="mt-3 max-w-3xl font-serif text-4xl sm:text-5xl font-semibold text-[var(--ink)]">
           Stay in {destination.name}
@@ -83,13 +83,13 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
         </RevealGroup>
 
         {!hotels.length && (
-          <div className="surface-3d mt-12 bg-white p-12 text-center rounded-xl border border-[var(--line)] max-w-md mx-auto">
+          <div className="surface-3d mx-auto mt-12 max-w-md rounded-xl border border-[var(--line)] bg-white p-6 text-center sm:p-12">
             <MapPin className="mx-auto text-[var(--gold-deep)] size-8" />
             <h2 className="mt-4 font-serif text-2xl text-[var(--ink)]">More properties coming soon</h2>
             <p className="mt-2 text-sm text-[var(--muted)]">
               Our local vetting team is preparing new residence profiles in {destination.name} now.
             </p>
-            <Link href="/hotels" className="button-3d mt-6 inline-block bg-[var(--ink)] px-6 py-3 text-xs font-semibold uppercase tracking-wider text-white">
+            <Link href="/hotels" className="button-3d mt-6 inline-flex min-h-12 w-full items-center justify-center bg-[var(--ink)] px-6 py-3 text-xs font-semibold uppercase tracking-wider text-white sm:w-auto">
               Browse all stay options
             </Link>
           </div>

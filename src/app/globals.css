@@ -72,6 +72,8 @@
   --z-overlay:   40;
   --z-modal:     50;
   --z-toast:     60;
+  --z-mobile-nav: 35;
+  --mobile-nav-height: 4rem;
 
   /* Dimensional interaction system */
   --depth-soft: 0 1px 2px rgba(20, 34, 58, .06), 0 12px 32px rgba(20, 34, 58, .08);
@@ -932,6 +934,19 @@ header a[aria-label="StayRwanda home"] img {
 
 /* Disable 3D perspective form-card on mobile */
 @media (max-width: 767px) {
+  html,
+  body {
+    max-width: 100%;
+    overflow-x: clip;
+  }
+
+  .mobile-scroll-region {
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
   .form-card-3d {
     transform: none !important;
     box-shadow: var(--depth-soft) !important;
@@ -967,7 +982,7 @@ header a[aria-label="StayRwanda home"] img {
 }
 
 /* On mobile viewports, Popout dialogs slide up as bottom sheets */
-@media (max-width: 639px) {
+@media (max-width: 767px) {
   /* Switch grid → flex so justify-content actually works */
   .popout-dialog {
     display: flex !important;
@@ -977,17 +992,25 @@ header a[aria-label="StayRwanda home"] img {
   }
   .popout-panel {
     border-radius: var(--radius-lg) var(--radius-lg) 0 0 !important;
-    max-height: 90dvh !important;
+    max-height: 92dvh !important;
     width: 100% !important;
     max-width: 100% !important;
     margin: 0 !important;
     padding-bottom: env(safe-area-inset-bottom, 16px) !important;
-    overflow-y: auto !important;
+    overflow: hidden !important;
   }
   /* Also cap dropdown height in case it falls back on mobile */
   .popout-dropdown {
     max-height: calc(100dvh - 5rem) !important;
     overflow-y: auto !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .workspace-3d .overflow-x-auto {
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
   }
 }
 

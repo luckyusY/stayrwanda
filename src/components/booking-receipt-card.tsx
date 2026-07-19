@@ -64,7 +64,7 @@ export function BookingReceiptCard({ booking }: { booking: GuestBooking }) {
                 </span>
                 <CountdownBadge checkIn={booking.checkIn} />
               </div>
-              <span className="font-mono text-[10px] text-[var(--muted)]">{booking.reference}</span>
+              <span className="max-w-full break-all font-mono text-[10px] text-[var(--muted)]">{booking.reference}</span>
             </div>
 
             {/* Property name */}
@@ -86,7 +86,7 @@ export function BookingReceiptCard({ booking }: { booking: GuestBooking }) {
           </div>
 
           {/* Footer row */}
-          <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-[var(--line)] pt-4">
+          <div className="mt-4 flex flex-col gap-3 border-t border-[var(--line)] pt-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
             <div>
               {booking.totalRwf ? (
                 <p className="font-serif text-lg font-semibold text-[var(--ink)]">
@@ -102,11 +102,11 @@ export function BookingReceiptCard({ booking }: { booking: GuestBooking }) {
               )}
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="grid w-full grid-cols-2 gap-2 sm:flex sm:w-auto sm:items-center">
               <button
                 type="button"
                 onClick={() => setExpanded((v) => !v)}
-                className="flex items-center gap-1 rounded-lg border border-[var(--line)] px-3 py-2 text-xs font-semibold text-[var(--muted)] transition hover:border-[var(--gold)] hover:text-[var(--gold-deep)]"
+                className="flex min-h-11 items-center justify-center gap-1 rounded-lg border border-[var(--line)] px-3 py-2 text-xs font-semibold text-[var(--muted)] transition hover:border-[var(--gold)] hover:text-[var(--gold-deep)]"
                 aria-expanded={expanded}
               >
                 {expanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
@@ -114,7 +114,7 @@ export function BookingReceiptCard({ booking }: { booking: GuestBooking }) {
               </button>
               <Link
                 href={`/bookings/${booking.reference}`}
-                className="inline-flex items-center gap-1.5 rounded-lg bg-[var(--ink)] px-4 py-2 text-xs font-semibold uppercase tracking-wider text-white transition hover:bg-[var(--ink-2)]"
+                className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-lg bg-[var(--ink)] px-4 py-2 text-xs font-semibold uppercase tracking-wider text-white transition hover:bg-[var(--ink-2)]"
               >
                 View <ArrowRight size={13} />
               </Link>
@@ -125,9 +125,9 @@ export function BookingReceiptCard({ booking }: { booking: GuestBooking }) {
           {expanded && (
             <div className="mt-4 rounded-xl border border-[var(--line)] bg-[var(--parchment)] p-4 text-xs">
               <p className="mb-2 font-bold uppercase tracking-wider text-[var(--ink)]">Booking snapshot</p>
-              <div className="grid grid-cols-2 gap-x-8 gap-y-2 text-[var(--muted)]">
+              <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-x-3 gap-y-2 text-[var(--muted)] sm:gap-x-8">
                 <span>Reference</span>
-                <span className="font-mono font-semibold text-[var(--ink)]">{booking.reference}</span>
+                <span className="break-all font-mono font-semibold text-[var(--ink)]">{booking.reference}</span>
                 <span>Check-in</span>
                 <span className="font-semibold text-[var(--ink)]">{formatDate(booking.checkIn)}</span>
                 <span>Check-out</span>

@@ -27,10 +27,10 @@ export function DestinationsExperience({
     <main className="min-h-screen bg-[var(--parchment)]">
       <SiteHeader />
       
-      <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-        <div className="text-center max-w-3xl mx-auto mb-16">
+      <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-16">
+        <div className="mx-auto mb-10 max-w-3xl text-center sm:mb-16">
           <p className="eyebrow">The land of a thousand hills</p>
-          <h1 className="mt-3 font-serif text-5xl sm:text-6xl font-light text-[var(--ink)] leading-tight">
+          <h1 className="mt-3 font-serif text-4xl font-light leading-tight text-[var(--ink)] sm:text-6xl">
             Where will <span className="italic text-gradient-gold font-normal">Rwanda</span> take you?
           </h1>
           <p className="mt-4 text-[var(--muted)] text-sm sm:text-base leading-relaxed">
@@ -78,7 +78,7 @@ export function DestinationsExperience({
                       </h2>
                     </div>
 
-                    <div className="p-6 flex-1 flex flex-col justify-between">
+                    <div className="flex flex-1 flex-col justify-between p-4 sm:p-6">
                       <p className="text-sm leading-relaxed text-[var(--muted)] mb-6">
                         {item.copy}
                       </p>

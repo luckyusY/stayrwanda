@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { CalendarDays, ChevronDown, MapPin, Menu, Search, Users, X } from "lucide-react";
 import { EASE, softSpring } from "@/lib/motion";
 import { CurrencyControl } from "@/components/currency-provider";
 import { AccountPopout } from "@/components/account-popout";
 import { NotificationPopout } from "@/components/notification-popout";
+import { useOverlayLayer } from "@/components/overlay-stack";
 
 /** Brand social glyphs (lucide no longer ships Facebook/Instagram/Twitter). */
 function IconInstagram({ size = 18 }: { size?: number }) {
@@ -87,7 +88,7 @@ export function SiteHeader({
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-  const drawerScrollY = useRef(0);
+  const drawerLayer = useOverlayLayer(open);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -103,26 +104,6 @@ export function SiteHeader({
       .then((data) => setIsAdmin(!!data.isAdmin))
       .catch(() => {});
   }, []);
-
-  // Keep the page fixed while the drawer itself handles touch scrolling.
-  useEffect(() => {
-    if (!open) return;
-
-    const body = document.body;
-    drawerScrollY.current = window.scrollY;
-    body.style.position = "fixed";
-    body.style.top = `-${drawerScrollY.current}px`;
-    body.style.width = "100%";
-    body.style.overflow = "hidden";
-
-    return () => {
-      body.style.position = "";
-      body.style.top = "";
-      body.style.width = "";
-      body.style.overflow = "";
-      window.scrollTo(0, drawerScrollY.current);
-    };
-  }, [open]);
 
   const onLight = variant === "transparent" && !scrolled; // white logo/text over the hero image
   // Only the home (transparent) header shrinks — inner pages keep a fixed
@@ -231,7 +212,7 @@ export function SiteHeader({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3, ease: EASE }}
           >
-            <div className="absolute inset-0 bg-[var(--ink)]/50 backdrop-blur-sm" onClick={() => setOpen(false)} />
+            <div className="absolute inset-0 bg-[var(--ink)]/50 backdrop-blur-sm" onClick={() => drawerLayer.isTop() && setOpen(false)} />
             <motion.nav
               className="surface-3d-floating absolute right-0 top-0 flex h-[100dvh] max-h-[100dvh] w-80 max-w-[85%] touch-pan-y flex-col overflow-y-auto overscroll-contain !rounded-none border-y-0 border-r-0 p-6 [-webkit-overflow-scrolling:touch]"
               initial={{ x: "100%" }}

@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { SignOutButton } from "@clerk/nextjs";
 import { motion } from "framer-motion";
+import { useOverlayLayer } from "@/components/overlay-stack";
 
 const NAV = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
@@ -38,6 +39,7 @@ export function AdminShell({
 }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const drawerLayer = useOverlayLayer(open);
 
   const isActive = (href: string) =>
     href === "/admin" ? pathname === "/admin" : pathname.startsWith(href);
@@ -50,9 +52,9 @@ export function AdminShell({
       >
         <div
           className="absolute inset-0 bg-black/40 md:hidden"
-          onClick={() => setOpen(false)}
+          onClick={() => drawerLayer.isTop() && setOpen(false)}
         />
-        <div className="surface-3d-dark relative flex h-full w-64 flex-col !rounded-none border-y-0 border-l-0 text-white md:sticky md:top-0 md:h-screen md:w-auto">
+        <div className="surface-3d-dark mobile-scroll-region relative flex h-[100dvh] w-64 max-w-[86vw] flex-col !rounded-none border-y-0 border-l-0 text-white md:sticky md:top-0 md:h-screen md:w-auto md:max-w-none md:overflow-visible">
           <div className="flex h-16 items-center justify-between px-5">
             <Link href="/admin" className="flex items-center gap-2">
               <Image src="/brand/stayrwanda-logo.png" alt="StayRwanda" width={1093} height={607} className="h-12 w-auto logo-invert" />

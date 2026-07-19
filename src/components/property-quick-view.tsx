@@ -28,7 +28,7 @@ export function PropertyQuickView({
     >
       {property && (
         <div className="flex flex-col h-full overflow-hidden relative">
-          <div className="flex-1 overflow-y-auto pb-24">
+          <div className="flex-1 overflow-y-auto pb-40 sm:pb-24">
             <div className="aspect-[4/3] w-full relative bg-black/5">
               <PropertyImageSlider 
                  images={property.images?.length ? property.images : [property.image]}
@@ -38,7 +38,7 @@ export function PropertyQuickView({
               />
             </div>
             
-            <div className="p-6 space-y-6">
+            <div className="space-y-6 p-4 sm:p-6">
               <div>
                 <span className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--gold-deep)]">
                   <MapPin size={12} /> {property.neighborhood}, {property.location}
@@ -84,13 +84,13 @@ export function PropertyQuickView({
             </div>
           </div>
           
-          <div className="absolute bottom-0 inset-x-0 shrink-0 border-t border-[var(--line)] bg-white/95 backdrop-blur-md p-5 shadow-[0_-10px_30px_rgba(0,0,0,0.06)] flex items-center justify-between z-20">
+          <div className="absolute inset-x-0 bottom-0 z-20 flex shrink-0 flex-col gap-3 border-t border-[var(--line)] bg-white/95 p-4 shadow-[0_-10px_30px_rgba(0,0,0,0.06)] backdrop-blur-md sm:flex-row sm:items-center sm:justify-between sm:p-5">
             <div>
               <PriceDisplay amountRwf={property.price} className="font-serif text-2xl font-semibold text-[var(--ink)]" />
             </div>
             <Link 
               href={`/stays/${property.slug}`} 
-              className="button-3d bg-[var(--ink)] px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.16em] text-white hover:bg-[var(--ink-2)] shadow-md transition-colors"
+              className="button-3d flex min-h-12 w-full items-center justify-center bg-[var(--ink)] px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.16em] text-white shadow-md transition-colors hover:bg-[var(--ink-2)] sm:w-auto"
             >
               View full details
             </Link>

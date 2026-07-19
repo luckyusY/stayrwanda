@@ -74,7 +74,7 @@ export default async function AccountPage() {
       <div className="space-y-6">
 
         {/* ── Welcome Hero ─────────────────────────────────────────── */}
-        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[var(--ink)] to-[var(--ink-2)] p-7 shadow-lg">
+        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[var(--ink)] to-[var(--ink-2)] p-5 shadow-lg sm:p-7">
           {/* Decorative watermark */}
           <div className="pointer-events-none absolute inset-0 flex items-center justify-end pr-8 opacity-[0.04]">
             <svg width="220" height="220" viewBox="0 0 200 200" fill="white">
@@ -83,19 +83,19 @@ export default async function AccountPage() {
             </svg>
           </div>
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[var(--gold)]">{greeting}</p>
-          <h2 className="mt-1 font-serif text-4xl font-bold text-white">{firstName}</h2>
+          <h2 className="mt-1 break-words font-serif text-3xl font-bold text-white sm:text-4xl">{firstName}</h2>
           <p className="mt-2 text-sm text-white/60">Welcome to your StayRwanda guest hub.</p>
           <div className="mt-5 flex flex-wrap gap-3">
             <Link
               href="/stays"
-              className="inline-flex items-center gap-1.5 rounded-lg border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-white transition hover:bg-white/20"
+              className="inline-flex min-h-11 flex-1 items-center justify-center gap-1.5 rounded-lg border border-white/20 bg-white/10 px-4 py-2 text-center text-xs font-semibold uppercase tracking-wider text-white transition hover:bg-white/20 sm:flex-none"
             >
               Explore stays <ArrowRight size={12} />
             </Link>
             {nextStay && (
               <Link
                 href={`/bookings/${nextStay.reference}`}
-                className="inline-flex items-center gap-1.5 rounded-lg bg-[var(--gold)] px-4 py-2 text-xs font-semibold uppercase tracking-wider text-white transition hover:bg-[var(--gold-mid)]"
+                className="inline-flex min-h-11 flex-1 items-center justify-center gap-1.5 rounded-lg bg-[var(--gold)] px-4 py-2 text-center text-xs font-semibold uppercase tracking-wider text-white transition hover:bg-[var(--gold-mid)] sm:flex-none"
               >
                 Manage booking <ArrowRight size={12} />
               </Link>
@@ -161,7 +161,7 @@ export default async function AccountPage() {
         {/* ── Next Stay — Boarding Pass ─────────────────────────────── */}
         {!bookingsResult.error && (
           <div className="overflow-hidden rounded-2xl border border-[var(--line)] bg-white shadow-sm">
-            <div className="flex items-center justify-between border-b border-[var(--line)] bg-[var(--parchment)] px-6 py-4">
+            <div className="flex items-center justify-between gap-3 border-b border-[var(--line)] bg-[var(--parchment)] px-4 py-4 sm:px-6">
               <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--ink)]">Your next stay</h3>
               {nextStay && (
                 <Link
@@ -187,7 +187,7 @@ export default async function AccountPage() {
                     />
                   </div>
                 )}
-                <div className="flex flex-1 flex-col justify-between p-6">
+                <div className="flex flex-1 flex-col justify-between p-4 sm:p-6">
                   <div>
                     <div className="flex flex-wrap items-center gap-2">
                       <span className="rounded-full bg-[var(--green-light)] px-3 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[var(--rwanda-green)]">
@@ -224,7 +224,7 @@ export default async function AccountPage() {
                   <div className="mt-5">
                     <Link
                       href={`/bookings/${nextStay.reference}`}
-                      className="inline-flex items-center gap-1.5 rounded-xl bg-[var(--ink)] px-5 py-3 text-xs font-bold uppercase tracking-wider text-white transition hover:bg-[var(--ink-2)]"
+                      className="inline-flex min-h-12 w-full items-center justify-center gap-1.5 rounded-xl bg-[var(--ink)] px-5 py-3 text-xs font-bold uppercase tracking-wider text-white transition hover:bg-[var(--ink-2)] sm:w-auto"
                     >
                       Manage booking <ArrowRight size={13} />
                     </Link>
@@ -232,7 +232,7 @@ export default async function AccountPage() {
                 </div>
               </div>
             ) : (
-              <div className="px-6 py-12 text-center">
+              <div className="px-4 py-8 text-center sm:px-6 sm:py-12">
                 <div className="mx-auto grid size-16 place-items-center rounded-full bg-[var(--gold-pale)] text-[var(--gold-deep)]">
                   <Sparkles size={26} />
                 </div>
@@ -242,7 +242,7 @@ export default async function AccountPage() {
                 </p>
                 <Link
                   href="/stays"
-                  className="mt-5 inline-flex items-center gap-2 rounded-xl bg-[var(--ink)] px-6 py-3 text-xs font-bold uppercase tracking-wider text-white transition hover:bg-[var(--ink-2)]"
+                  className="mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[var(--ink)] px-6 py-3 text-xs font-bold uppercase tracking-wider text-white transition hover:bg-[var(--ink-2)] sm:w-auto"
                 >
                   Browse stays <ArrowRight size={13} />
                 </Link>
@@ -254,7 +254,7 @@ export default async function AccountPage() {
         {/* ── Recent Activity Feed ──────────────────────────────────── */}
         {!bookingsResult.error && recentActivity.length > 0 && (
           <div className="rounded-2xl border border-[var(--line)] bg-white shadow-sm">
-            <div className="flex items-center justify-between border-b border-[var(--line)] bg-[var(--parchment)] px-6 py-4">
+            <div className="flex items-center justify-between gap-3 border-b border-[var(--line)] bg-[var(--parchment)] px-4 py-4 sm:px-6">
               <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--ink)]">Recent activity</h3>
               <Link
                 href="/account/bookings"
@@ -268,7 +268,7 @@ export default async function AccountPage() {
                 const cfg = STATUS_DOT[b.status] ?? STATUS_DOT["pending"];
                 const Dot = cfg.icon;
                 return (
-                  <li key={b.id} className="flex items-center gap-4 px-6 py-4">
+                  <li key={b.id} className="flex items-center gap-3 px-4 py-4 sm:gap-4 sm:px-6">
                     <Dot size={16} className={`shrink-0 ${cfg.colour}`} />
                     <div className="flex-1 min-w-0">
                       <p className="truncate text-sm font-semibold text-[var(--ink)]">{b.hotelName}</p>
@@ -296,7 +296,7 @@ export default async function AccountPage() {
           </div>
         ) : (
           <div className="rounded-2xl border border-[var(--line)] bg-white shadow-sm">
-            <div className="flex items-center justify-between border-b border-[var(--line)] bg-[var(--parchment)] px-6 py-4">
+            <div className="flex items-center justify-between gap-3 border-b border-[var(--line)] bg-[var(--parchment)] px-4 py-4 sm:px-6">
               <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--ink)]">Personal details</h3>
               <a
                 href="https://accounts.clerk.com/user"
@@ -308,14 +308,14 @@ export default async function AccountPage() {
               </a>
             </div>
             <div className="divide-y divide-[var(--line)]">
-              <div className="grid grid-cols-[120px_1fr] items-center gap-3 px-6 py-4 text-sm">
+              <div className="grid gap-1 px-4 py-4 text-sm sm:grid-cols-[120px_1fr] sm:items-center sm:gap-3 sm:px-6">
                 <span className="font-semibold text-[var(--ink)]">Name</span>
                 <span className="text-[var(--muted)]">{profile?.name || "—"}</span>
               </div>
-              <div className="grid grid-cols-[120px_1fr] items-center gap-3 px-6 py-4 text-sm">
+              <div className="grid gap-1 px-4 py-4 text-sm sm:grid-cols-[120px_1fr] sm:items-center sm:gap-3 sm:px-6">
                 <span className="font-semibold text-[var(--ink)]">Email</span>
-                <div className="flex items-center gap-2">
-                  <span className="text-[var(--muted)]">{profile?.email || "—"}</span>
+                <div className="flex min-w-0 flex-wrap items-center gap-2">
+                  <span className="break-all text-[var(--muted)]">{profile?.email || "—"}</span>
                   {profile?.email && (
                     <span className="rounded-full bg-[var(--green-light)] px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-[var(--rwanda-green)]">
                       Verified
@@ -324,7 +324,7 @@ export default async function AccountPage() {
                 </div>
               </div>
               {profile?.phone && (
-                <div className="grid grid-cols-[120px_1fr] items-center gap-3 px-6 py-4 text-sm">
+                <div className="grid gap-1 px-4 py-4 text-sm sm:grid-cols-[120px_1fr] sm:items-center sm:gap-3 sm:px-6">
                   <span className="font-semibold text-[var(--ink)]">Phone</span>
                   <span className="text-[var(--muted)]">{profile.phone}</span>
                 </div>
@@ -334,8 +334,8 @@ export default async function AccountPage() {
         )}
 
         {/* ── Support Card ──────────────────────────────────────────── */}
-        <div className="rounded-2xl border border-[var(--gold)]/30 bg-gradient-to-br from-[var(--gold-pale)] to-[var(--cream)] p-6 shadow-sm">
-          <div className="flex items-start gap-4">
+        <div className="rounded-2xl border border-[var(--gold)]/30 bg-gradient-to-br from-[var(--gold-pale)] to-[var(--cream)] p-4 shadow-sm sm:p-6">
+          <div className="flex flex-col items-start gap-4 sm:flex-row">
             <div className="grid size-10 shrink-0 place-items-center rounded-xl bg-white text-[var(--gold-deep)] shadow-sm">
               <LifeBuoy size={20} />
             </div>

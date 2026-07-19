@@ -403,7 +403,7 @@ export function HotelBookingPanel({ hotel, unit }: { hotel: Hotel; unit: UnitTyp
           )}
         </div>
 
-        <div className="flex items-center justify-between gap-3 border-t border-[var(--line)] px-5 py-4">
+        <div className="sticky bottom-0 z-10 flex items-center justify-between gap-3 border-t border-[var(--line)] bg-white px-4 py-3 pb-[calc(.75rem+env(safe-area-inset-bottom,0px))] sm:px-5 sm:py-4">
           <Button
             type="button"
             variant="ghost"

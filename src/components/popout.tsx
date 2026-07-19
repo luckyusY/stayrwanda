@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
 import { EASE, softSpring } from "@/lib/motion";
 import { useIsMobile } from "@/hooks/use-is-mobile";
+import { useOverlayLayer } from "@/components/overlay-stack";
 
 type PopoutVariant = "dropdown" | "sheet" | "dialog";
 
@@ -64,6 +65,9 @@ export function Popout({
   const variant = isMobile && mobileVariant ? mobileVariant : desktopVariant;
   const isControlled = controlledIsOpen !== undefined;
   const open = isControlled ? controlledIsOpen : uncontrolledIsOpen;
+  const layer = useOverlayLayer(open, variant !== "dropdown");
+  const openerRef = useRef<HTMLElement | null>(null);
+  const wasOpen = useRef(false);
 
   const handleClose = useCallback(() => {
     if (!isControlled) setUncontrolledIsOpen(false);
@@ -72,6 +76,7 @@ export function Popout({
   }, [isControlled, onClose, onOpenChange]);
 
   const handleOpen = useCallback(() => {
+    openerRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     if (!isControlled) setUncontrolledIsOpen(true);
     onOpenChange?.(true);
   }, [isControlled, onOpenChange]);
@@ -84,15 +89,14 @@ export function Popout({
 
   const containerRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
-  const lockedScrollY = useRef(0);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && open) handleClose();
+      if (e.key === "Escape" && open && layer.isTop()) handleClose();
     };
 
     const handleClickOutside = (e: MouseEvent) => {
-      if (open && containerRef.current && !containerRef.current.contains(e.target as Node)) {
+      if (variant === "dropdown" && open && layer.isTop() && containerRef.current && !containerRef.current.contains(e.target as Node)) {
         handleClose();
       }
     };
@@ -100,32 +104,27 @@ export function Popout({
     if (open) {
       document.addEventListener("keydown", handleKeyDown);
       document.addEventListener("mousedown", handleClickOutside);
-      if (variant !== "dropdown") {
-        // iOS and Chrome Android can reset the document position when only
-        // `overflow: hidden` is toggled. Pin the body at its current offset so
-        // closing a header dialog returns the visitor to exactly the same spot.
-        const body = document.body;
-        lockedScrollY.current = window.scrollY;
-        body.style.position = "fixed";
-        body.style.top = `-${lockedScrollY.current}px`;
-        body.style.width = "100%";
-        body.style.overflow = "hidden";
-      }
     }
 
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
       document.removeEventListener("mousedown", handleClickOutside);
-      if (variant !== "dropdown") {
-        const body = document.body;
-        body.style.position = "";
-        body.style.top = "";
-        body.style.width = "";
-        body.style.overflow = "";
-        window.scrollTo(0, lockedScrollY.current);
-      }
     };
-  }, [open, variant, handleClose]);
+  }, [open, variant, handleClose, layer]);
+
+  useEffect(() => {
+    if (open && !wasOpen.current) {
+      openerRef.current ??= document.activeElement instanceof HTMLElement ? document.activeElement : null;
+      wasOpen.current = true;
+      return;
+    }
+    if (!open && wasOpen.current) {
+      wasOpen.current = false;
+      const opener = openerRef.current;
+      openerRef.current = null;
+      requestAnimationFrame(() => opener?.focus({ preventScroll: true }));
+    }
+  }, [open]);
 
   useEffect(() => {
     if (open && panelRef.current) {
@@ -220,7 +219,9 @@ export function Popout({
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3, ease: EASE }}
-              onClick={handleClose}
+              onClick={() => {
+                if (layer.isTop()) handleClose();
+              }}
             />
 
             {variant === "sheet" && (

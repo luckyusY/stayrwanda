@@ -9,6 +9,8 @@ import { MagneticCursor } from "@/components/magnetic-cursor";
 import { ToastProvider } from "@/components/toast";
 import { NewsletterModal } from "@/components/newsletter-modal";
 import { MobileBottomNav } from "@/components/mobile-bottom-nav";
+import { OverlayStackProvider } from "@/components/overlay-stack";
+import { AuthAvailabilityProvider } from "@/components/auth-availability";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -52,15 +54,19 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const content = (
-    <CurrencyProvider>
-      <ToastProvider>
-        <ScrollProgress />
-        <MagneticCursor />
-        {children}
-        <MobileBottomNav />
-        <NewsletterModal />
-      </ToastProvider>
-    </CurrencyProvider>
+    <OverlayStackProvider>
+      <AuthAvailabilityProvider enabled={clerkConfigured}>
+        <CurrencyProvider>
+          <ToastProvider>
+            <ScrollProgress />
+            <MagneticCursor />
+            {children}
+            <MobileBottomNav clerkEnabled={clerkConfigured} />
+            <NewsletterModal />
+          </ToastProvider>
+        </CurrencyProvider>
+      </AuthAvailabilityProvider>
+    </OverlayStackProvider>
   );
   return (
     <html lang="en" className={`${cormorant.variable} ${inter.variable}`}>

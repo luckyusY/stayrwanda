@@ -15,7 +15,6 @@ import {
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { motion } from "framer-motion";
 import { useClerk } from "@clerk/nextjs";
-import { AccountBottomNav } from "@/components/account-bottom-nav";
 
 function useSafeClerk() {
   try {
@@ -86,7 +85,7 @@ export function AccountShell({ children, title, userName, userEmail }: AccountSh
         </div>
       </div>
 
-      <div className="mx-auto w-full max-w-6xl flex-1 px-4 py-8 pb-24 sm:px-6 md:pb-8">
+      <div className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 pb-24 sm:px-6 sm:py-8 md:pb-8">
         <div className="grid gap-7 md:grid-cols-[240px_1fr]">
 
           {/* ─── Sidebar ──────────────────────────────────────────────── */}
@@ -171,9 +170,6 @@ export function AccountShell({ children, title, userName, userEmail }: AccountSh
         </div>
       </div>
 
-      {/* Mobile bottom nav */}
-      <AccountBottomNav onSignOut={handleSignOut} />
-
       <SiteFooter />
     </main>
   );
@@ -193,7 +189,7 @@ export function EmptyState({
   href: string;
 }) {
   return (
-    <div className="rounded-2xl border border-[var(--line)] bg-white p-12 text-center shadow-sm">
+    <div className="rounded-2xl border border-[var(--line)] bg-white p-6 text-center shadow-sm sm:p-12">
       <div className="mx-auto grid size-16 place-items-center rounded-full bg-[var(--gold-pale)] text-[var(--gold-deep)]">
         <Icon size={28} />
       </div>
@@ -201,7 +197,7 @@ export function EmptyState({
       <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-[var(--muted)]">{copy}</p>
       <Link
         href={href}
-        className="mt-6 inline-block rounded-xl bg-[var(--ink)] px-6 py-3 text-xs font-bold uppercase tracking-wider text-white transition hover:bg-[var(--ink-2)]"
+        className="mt-6 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[var(--ink)] px-6 py-3 text-xs font-bold uppercase tracking-wider text-white transition hover:bg-[var(--ink-2)] sm:w-auto"
       >
         {action}
       </Link>
