@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { CalendarDays, ChevronDown, MapPin, Menu, Search, Users, X } from "lucide-react";
 import { EASE, softSpring } from "@/lib/motion";
@@ -87,6 +87,7 @@ export function SiteHeader({
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const drawerScrollY = useRef(0);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -103,11 +104,23 @@ export function SiteHeader({
       .catch(() => {});
   }, []);
 
-  // Lock body scroll while the mobile drawer is open.
+  // Keep the page fixed while the drawer itself handles touch scrolling.
   useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "";
+    if (!open) return;
+
+    const body = document.body;
+    drawerScrollY.current = window.scrollY;
+    body.style.position = "fixed";
+    body.style.top = `-${drawerScrollY.current}px`;
+    body.style.width = "100%";
+    body.style.overflow = "hidden";
+
     return () => {
-      document.body.style.overflow = "";
+      body.style.position = "";
+      body.style.top = "";
+      body.style.width = "";
+      body.style.overflow = "";
+      window.scrollTo(0, drawerScrollY.current);
     };
   }, [open]);
 
@@ -220,11 +233,14 @@ export function SiteHeader({
           >
             <div className="absolute inset-0 bg-[var(--ink)]/50 backdrop-blur-sm" onClick={() => setOpen(false)} />
             <motion.nav
-              className="surface-3d-floating absolute right-0 top-0 flex h-full w-80 max-w-[85%] flex-col !rounded-none border-y-0 border-r-0 p-6"
+              className="surface-3d-floating absolute right-0 top-0 flex h-[100dvh] max-h-[100dvh] w-80 max-w-[85%] touch-pan-y flex-col overflow-y-auto overscroll-contain !rounded-none border-y-0 border-r-0 p-6 [-webkit-overflow-scrolling:touch]"
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={softSpring}
+              role="dialog"
+              aria-modal="true"
+              aria-label="Main menu"
             >
               <div className="mb-6 flex items-center justify-between">
                 <Wordmark imgClass="h-12" />
