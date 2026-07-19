@@ -309,10 +309,10 @@ export function SiteHeader({
 export function CompactSearch({ destination = "Kigali" }: { destination?: string }) {
   const [place, setPlace] = useState(destination);
   return (
-    <div className="bg-[var(--cream)] py-6">
+    <div className="bg-[var(--cream)] py-4 sm:py-6">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <div className="surface-3d-floating grid grid-cols-[minmax(0,1fr)] gap-px overflow-hidden bg-[var(--line)] md:grid-cols-[1.3fr_1.1fr_1fr_auto]">
-          <label className="flex min-h-15 min-w-0 cursor-text items-center gap-3 bg-white px-4 transition-colors focus-within:bg-[var(--parchment)]">
+        <div className="surface-3d-floating search-mobile-stack grid grid-cols-1 gap-2 overflow-hidden p-2 md:grid-cols-[1.3fr_1.1fr_1fr_auto] md:gap-px md:bg-[var(--line)] md:p-0">
+          <label className="flex min-h-14 min-w-0 cursor-text items-center gap-3 bg-white px-3 py-2 transition-colors focus-within:bg-[var(--parchment)] sm:min-h-15 sm:px-4 md:rounded-none">
             <MapPin size={20} className="shrink-0 text-[var(--gold-deep)]" />
             <span className="min-w-0 flex-1">
               <span className="block text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
@@ -322,26 +322,55 @@ export function CompactSearch({ destination = "Kigali" }: { destination?: string
                 <input
                   value={place}
                   onChange={(event) => setPlace(event.target.value)}
-                  className="search-field-input min-h-[1.35rem]"
+                  className="search-field-input min-h-[1.35rem] text-base sm:text-sm"
                   placeholder="Type a city or area…"
                   autoComplete="off"
+                  enterKeyHint="search"
                 />
               </span>
             </span>
           </label>
-          <div className="flex min-h-15 min-w-0 items-center gap-2 bg-white px-4">
-            <CalendarDays size={20} className="shrink-0 text-[var(--gold-deep)]" />
-            <input type="date" className="w-[110px] min-w-0 text-xs outline-none" />
-            <span className="text-[var(--muted)]">—</span>
-            <input type="date" className="w-[110px] min-w-0 text-xs outline-none" />
+          <div className="flex min-h-14 min-w-0 flex-col gap-2 bg-white px-3 py-2 sm:min-h-15 sm:flex-row sm:items-center sm:gap-2 sm:px-4 md:rounded-none">
+            <div className="flex min-w-0 flex-1 items-center gap-2">
+              <CalendarDays size={20} className="shrink-0 text-[var(--gold-deep)]" />
+              <span className="min-w-0 flex-1">
+                <span className="block text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
+                  Check-in
+                </span>
+                <input
+                  type="date"
+                  className="search-field-input mt-0.5 w-full min-w-0 text-base sm:text-xs"
+                />
+              </span>
+            </div>
+            <div className="flex min-w-0 flex-1 items-center gap-2 sm:border-l sm:border-[var(--line)] sm:pl-2">
+              <span className="min-w-0 flex-1 sm:pl-1">
+                <span className="block text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
+                  Check-out
+                </span>
+                <input
+                  type="date"
+                  className="search-field-input mt-0.5 w-full min-w-0 text-base sm:text-xs"
+                />
+              </span>
+            </div>
           </div>
-          <button className="flex min-h-15 items-center gap-3 bg-white px-4 text-sm text-[var(--ink)]">
-            <Users size={20} className="text-[var(--gold-deep)]" /> 2 guests · 1 room
-            <ChevronDown size={15} className="ml-auto" />
+          <button
+            type="button"
+            className="flex min-h-14 items-center gap-3 bg-white px-3 py-2 text-left text-sm text-[var(--ink)] sm:min-h-15 sm:px-4 md:rounded-none"
+          >
+            <Users size={20} className="shrink-0 text-[var(--gold-deep)]" />
+            <span className="min-w-0 flex-1">
+              <span className="block text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
+                Guests
+              </span>
+              <span className="mt-0.5 block font-medium">2 guests · 1 room</span>
+            </span>
+            <ChevronDown size={15} className="text-[var(--muted)]" />
           </button>
           <Link
             href={`/search?destination=${encodeURIComponent(place)}`}
-            className="button-3d flex min-h-15 items-center justify-center gap-2 !rounded-none bg-[var(--ink)] px-8 text-xs font-semibold uppercase tracking-[0.2em] text-white hover:bg-[var(--ink-2)]"
+            className="button-3d flex min-h-12 items-center justify-center gap-2 bg-[var(--ink)] px-6 text-xs font-semibold uppercase tracking-[0.2em] text-white hover:bg-[var(--ink-2)] sm:min-h-15 md:!rounded-none"
           >
             <Search size={17} /> Search
           </Link>

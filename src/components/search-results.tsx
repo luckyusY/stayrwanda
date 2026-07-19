@@ -138,10 +138,11 @@ export function SearchResults({
             </button>
           </div>
 
+          {/* Prefer simple fade (no blur) so mobile Safari never leaves cards at opacity:0 */}
           <RevealGroup className="mt-5 space-y-4 sm:space-y-6">
             {results.map((property) => (
               <Reveal
-                variant="depth"
+                variant="fade"
                 as="article"
                 key={property.slug}
                 className="surface-3d surface-3d-lift group flex min-w-0 flex-col overflow-hidden rounded-xl shadow-sm hover:border-[var(--gold)] hover:shadow-md sm:grid sm:grid-cols-[240px_1fr] sm:gap-5 sm:p-5"

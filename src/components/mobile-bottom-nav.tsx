@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useClerk } from "@clerk/nextjs";
 import { Home, Search, CalendarCheck, UserRound, Heart, LayoutDashboard, LogOut } from "lucide-react";
 import { getMobileNavigationMode } from "@/lib/mobile-navigation";
 
@@ -17,47 +16,44 @@ const accountTabs = [
   { Icon: LayoutDashboard, label: "Overview", href: "/account" },
   { Icon: CalendarCheck, label: "Bookings", href: "/account/bookings" },
   { Icon: Heart, label: "Saved", href: "/account/favorites" },
+  { Icon: LogOut, label: "Sign in", href: "/sign-in" },
 ] as const;
 
-function NavTab({ Icon, label, href, active }: { Icon: typeof Home; label: string; href: string; active: boolean }) {
+function NavTab({
+  Icon,
+  label,
+  href,
+  active,
+}: {
+  Icon: typeof Home;
+  label: string;
+  href: string;
+  active: boolean;
+}) {
   return (
     <Link
       href={href}
       aria-current={active ? "page" : undefined}
-      className={`relative flex min-h-14 flex-1 flex-col items-center justify-center gap-1 px-1 py-2 text-[9px] font-semibold uppercase tracking-[0.08em] transition-colors focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--gold)] ${
-        active ? "text-[var(--gold-deep)]" : "text-[var(--muted)] hover:text-[var(--ink)]"
+      className={`mobile-nav-tab group relative flex min-h-14 flex-1 flex-col items-center justify-center gap-0.5 px-1 py-2 text-[9px] font-semibold uppercase tracking-[0.1em] transition-all duration-200 active:scale-95 ${
+        active ? "text-[var(--gold-deep)]" : "text-[var(--muted)]"
       }`}
     >
-      <Icon size={20} strokeWidth={active ? 2.5 : 1.8} />
-      <span>{label}</span>
-      {active && <span aria-hidden className="absolute bottom-0 h-0.5 w-10 rounded-full bg-[var(--gold)]" />}
-    </Link>
-  );
-}
-
-function ClerkSignOutTab() {
-  const clerk = useClerk();
-  return (
-    <button
-      type="button"
-      onClick={async () => {
-        await clerk.signOut();
-        window.location.assign("/");
-      }}
-      className="relative flex min-h-14 flex-1 flex-col items-center justify-center gap-1 px-1 py-2 text-[9px] font-semibold uppercase tracking-[0.08em] text-[var(--muted)] transition-colors hover:text-[var(--terracotta)] focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--gold)]"
-    >
-      <LogOut size={20} strokeWidth={1.8} />
-      <span>Sign out</span>
-    </button>
-  );
-}
-
-function SignOutTab({ clerkEnabled }: { clerkEnabled: boolean }) {
-  if (clerkEnabled) return <ClerkSignOutTab />;
-  return (
-    <Link href="/sign-in" className="relative flex min-h-14 flex-1 flex-col items-center justify-center gap-1 px-1 py-2 text-[9px] font-semibold uppercase tracking-[0.08em] text-[var(--muted)]">
-      <LogOut size={20} strokeWidth={1.8} />
-      <span>Sign out</span>
+      <span
+        className={`grid size-9 place-items-center rounded-xl transition-all duration-200 ${
+          active
+            ? "bg-[var(--gold-pale)] shadow-[inset_0_1px_0_rgba(255,255,255,.9),0_4px_12px_rgba(176,141,87,.28)] ring-1 ring-[var(--gold)]/35"
+            : "bg-transparent group-hover:bg-[var(--parchment)]"
+        }`}
+      >
+        <Icon size={20} strokeWidth={active ? 2.4 : 1.85} />
+      </span>
+      <span className="leading-none">{label}</span>
+      {active && (
+        <span
+          aria-hidden
+          className="absolute bottom-1 h-1 w-1 rounded-full bg-[var(--gold)] shadow-[0_0_8px_rgba(176,141,87,.7)]"
+        />
+      )}
     </Link>
   );
 }
@@ -71,20 +67,36 @@ export function MobileBottomNav({ clerkEnabled = false }: { clerkEnabled?: boole
   if (mode === "hidden") return null;
 
   const isAccount = mode === "account";
-  const tabs = isAccount ? accountTabs : publicTabs;
+  // Avoid Clerk hooks in the bottom bar — they crash when ClerkProvider is missing.
+  // Sign-in route handles sessions; label stays simple.
+  const tabs = isAccount
+    ? accountTabs.map((tab) =>
+        tab.href === "/sign-in" ? { ...tab, label: clerkEnabled ? "Sign out" : "Sign in" } : tab,
+      )
+    : publicTabs;
 
   return (
     <>
-      <div aria-hidden className="h-[calc(var(--mobile-nav-height)+env(safe-area-inset-bottom,0px))] md:hidden" />
+      {/* Spacer so content isn’t hidden behind the dock */}
+      <div
+        aria-hidden
+        className="h-[calc(var(--mobile-nav-height)+env(safe-area-inset-bottom,0px)+0.75rem)] md:hidden"
+      />
       <nav
-        aria-label={isAccount ? "Guest account" : "Mobile"}
-        className="fixed inset-x-0 bottom-0 z-[var(--z-mobile-nav)] flex min-h-[var(--mobile-nav-height)] items-stretch border-t border-[var(--line)] bg-white/95 pb-[env(safe-area-inset-bottom,0px)] shadow-[0_-2px_12px_rgba(20,34,58,.08)] backdrop-blur-sm md:hidden"
+        aria-label={isAccount ? "Guest account" : "Primary mobile"}
+        className="mobile-bottom-nav-3d fixed inset-x-0 bottom-0 z-[var(--z-mobile-nav)] md:hidden"
       >
-        {tabs.map(({ Icon, label, href }) => {
-          const active = href === "/" || href === "/account" ? pathname === href : pathname.startsWith(href);
-          return <NavTab key={href} Icon={Icon} label={label} href={href} active={active} />;
-        })}
-        {isAccount && <SignOutTab clerkEnabled={clerkEnabled} />}
+        <div className="mobile-bottom-nav-3d__shell mx-2 mb-[max(0.35rem,env(safe-area-inset-bottom,0px))] flex min-h-[var(--mobile-nav-height)] items-stretch overflow-hidden rounded-2xl border border-[var(--line)]">
+          {tabs.map(({ Icon, label, href }) => {
+            const active =
+              href === "/" || href === "/account"
+                ? pathname === href
+                : href === "/sign-in"
+                  ? false
+                  : pathname.startsWith(href);
+            return <NavTab key={`${href}-${label}`} Icon={Icon} label={label} href={href} active={active} />;
+          })}
+        </div>
       </nav>
     </>
   );
