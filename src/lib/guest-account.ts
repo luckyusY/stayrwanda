@@ -40,8 +40,13 @@ export type GuestFavorite = {
   neighborhood: string;
   city: string;
   heroImage?: string;
+  gallery: string[];
   amenities: string[];
   startingPriceRwf?: number;
+  maxGuests?: number;
+  bedrooms?: number;
+  beds?: number;
+  baths?: number;
 };
 
 export async function getSafeProfile(userId: string, userEmail?: string): Promise<{ data: GuestProfile | null; error: boolean }> {
@@ -209,11 +214,13 @@ export async function getSafeFavorites(userId: string): Promise<{ data: GuestFav
     const hotelIdsForUnits = rows.map((row) => String(row._id));
     const units = await db.collection("unitTypes").find({ hotelId: { $in: hotelIdsForUnits }, status: "published" }).toArray();
     const lowestRateByHotel = new Map<string, number>();
+    const featuredUnitByHotel = new Map<string, (typeof units)[number]>();
     for (const unit of units) {
       const rate = Number(unit.basePriceRwf || 0);
       const hotelId = String(unit.hotelId || "");
       if (rate > 0 && (!lowestRateByHotel.has(hotelId) || rate < (lowestRateByHotel.get(hotelId) || rate))) {
         lowestRateByHotel.set(hotelId, rate);
+        featuredUnitByHotel.set(hotelId, unit);
       }
     }
 
@@ -223,6 +230,7 @@ export async function getSafeFavorites(userId: string): Promise<{ data: GuestFav
       const id = String(row._id);
 
       const startingPriceRwf = lowestRateByHotel.get(id) || seededNightlyRateRwf(slug);
+      const unit = featuredUnitByHotel.get(id);
 
       return {
         id,
@@ -231,8 +239,13 @@ export async function getSafeFavorites(userId: string): Promise<{ data: GuestFav
         neighborhood: String(location.neighborhood || "Kigali"),
         city: String(location.city || "Rwanda"),
         heroImage: typeof row.heroImage === "string" ? row.heroImage : undefined,
+        gallery: Array.isArray(row.gallery) ? row.gallery.map(String) : [],
         amenities: Array.isArray(row.amenities) ? row.amenities : [],
         startingPriceRwf,
+        maxGuests: Number(unit?.maxGuests || 0) || undefined,
+        bedrooms: Number(unit?.bedrooms || 0) || undefined,
+        beds: Number(unit?.beds || 0) || undefined,
+        baths: Number(unit?.baths || 0) || undefined,
       };
     });
 
@@ -256,8 +269,13 @@ export async function getSafeFavorites(userId: string): Promise<{ data: GuestFav
         neighborhood: seed.neighborhood,
         city: "Kigali",
         heroImage: seed.image,
+        gallery: seed.images,
         amenities: seed.amenities || [],
         startingPriceRwf: seed.price || seededNightlyRateRwf(seed.slug),
+        maxGuests: seed.guests,
+        bedrooms: seed.bedrooms,
+        beds: seed.beds,
+        baths: seed.baths,
       };
     }).filter(Boolean) as GuestFavorite[];
 

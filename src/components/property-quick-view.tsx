@@ -6,6 +6,7 @@ import { PropertyImageSlider } from "./property-image-slider";
 import { CheckCircle2, MapPin, ShieldCheck } from "lucide-react";
 import type { Property } from "@/lib/properties";
 import { PriceDisplay } from "@/components/price-display";
+import { PropertyFacts } from "@/components/property-facts";
 
 export function PropertyQuickView({
   slug,
@@ -44,6 +45,7 @@ export function PropertyQuickView({
                   <MapPin size={12} /> {property.neighborhood}, {property.location}
                 </span>
                 <h3 className="mt-2 font-serif text-3xl font-semibold text-[var(--ink)] leading-tight">{property.title}</h3>
+                <div className="mt-3"><PropertyFacts neighborhood={property.neighborhood} guests={property.guests} bedrooms={property.bedrooms} beds={property.beds} baths={property.baths} compact /></div>
                 <p className="mt-2 text-sm text-[var(--muted)]">{property.type} · Up to {property.guests || 2} guests</p>
               </div>
 

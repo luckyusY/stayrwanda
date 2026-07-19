@@ -1006,6 +1006,10 @@ header a[aria-label="StayRwanda home"] img {
   }
 }
 
+body[data-overlay-open="true"] .back-to-top {
+  display: none;
+}
+
 @media (max-width: 767px) {
   .workspace-3d .overflow-x-auto {
     overscroll-behavior-x: contain;

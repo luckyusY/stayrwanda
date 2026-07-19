@@ -8,6 +8,7 @@ import { FilterDialog, FilterGroup } from "@/components/filter-dialog";
 import { PropertyImageSlider } from "@/components/property-image-slider";
 import { PropertyQuickView } from "@/components/property-quick-view";
 import { PriceDisplay } from "@/components/price-display";
+import { PropertyFacts } from "@/components/property-facts";
 import { Reveal, RevealGroup } from "@/components/reveal";
 import type { Property } from "@/lib/properties";
 
@@ -20,7 +21,8 @@ export function SearchResults({
 }) {
   const [destination, setDestination] = useState(initialDestination);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
-  const mobileFilters = false;
+  const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
+  const [selectedNeighborhoods, setSelectedNeighborhoods] = useState<string[]>([]);
   const [quickViewSlug, setQuickViewSlug] = useState<string | null>(null);
 
   const results = useMemo(
@@ -32,15 +34,21 @@ export function SearchResults({
             .toLowerCase()
             .includes(destination.toLowerCase());
         const matchType = !selectedTypes.length || selectedTypes.includes(property.type);
-        return matchPlace && matchType;
+        const amenityText = property.amenities.join(" ").toLowerCase();
+        const matchAmenities = !selectedAmenities.length || selectedAmenities.every((amenity) => amenityText.includes(amenity.toLowerCase()));
+        const matchNeighborhood = !selectedNeighborhoods.length || selectedNeighborhoods.includes(property.neighborhood);
+        return matchPlace && matchType && matchAmenities && matchNeighborhood;
       }),
-    [properties, destination, selectedTypes],
+    [properties, destination, selectedTypes, selectedAmenities, selectedNeighborhoods],
   );
 
   const toggle = (type: string) =>
     setSelectedTypes((current) =>
       current.includes(type) ? current.filter((item) => item !== type) : [...current, type],
     );
+
+  const toggleValue = (value: string, setter: React.Dispatch<React.SetStateAction<string[]>>) => setter((current) => current.includes(value) ? current.filter((item) => item !== value) : [...current, value]);
+  const clearFilters = () => { setSelectedTypes([]); setSelectedAmenities([]); setSelectedNeighborhoods([]); };
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
@@ -56,7 +64,7 @@ export function SearchResults({
 
       <div className="grid gap-6 lg:gap-8 lg:grid-cols-[280px_1fr]">
         {/* Sidebar Filters */}
-        <aside className={`${mobileFilters ? "block" : "hidden"} h-fit lg:block lg:sticky lg:top-24`}>
+        <aside className="hidden h-fit lg:sticky lg:top-24 lg:block">
           <div className="surface-3d glass-white p-5 rounded-xl shadow-md">
             <h2 className="font-serif text-2xl font-semibold text-[var(--ink)]">Refine</h2>
             <label className="mt-4 block text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
@@ -97,15 +105,15 @@ export function SearchResults({
             />
             <FilterGroup
               title="Amenities"
-              options={["Fully furnished", "Private parking", "Kitchen", "Balcony"]}
-              selected={[]}
-              toggle={() => {}}
+              options={["Fully furnished", "Kitchen", "Parking", "Balcony"]}
+              selected={selectedAmenities}
+              toggle={(value) => toggleValue(value, setSelectedAmenities)}
             />
             <FilterGroup
               title="Neighbourhood"
               options={["Kibagabaga", "Kimironko", "Kagarama", "Kigali"]}
-              selected={[]}
-              toggle={() => {}}
+              selected={selectedNeighborhoods}
+              toggle={(value) => toggleValue(value, setSelectedNeighborhoods)}
             />
           </div>
         </aside>
@@ -120,7 +128,7 @@ export function SearchResults({
               </h1>
               <p className="mt-1 text-sm text-[var(--muted)]">Furnished stays matching your search</p>
             </div>
-            <div className="self-start"><FilterDialog selectedTypes={selectedTypes} toggleType={toggle} onClear={() => setSelectedTypes([])} resultCount={results.length} /></div>
+            <div className="self-start"><FilterDialog selectedTypes={selectedTypes} toggleType={toggle} selectedAmenities={selectedAmenities} toggleAmenity={(value) => toggleValue(value, setSelectedAmenities)} selectedNeighborhoods={selectedNeighborhoods} toggleNeighborhood={(value) => toggleValue(value, setSelectedNeighborhoods)} onClear={clearFilters} resultCount={results.length} /></div>
           </div>
 
           <div className="surface-3d mt-5 flex flex-col gap-2 rounded-lg bg-[var(--parchment)] px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
@@ -162,11 +170,7 @@ export function SearchResults({
                 </div>
                 <div className="flex min-w-0 flex-col p-4 sm:flex-row sm:justify-between sm:gap-6 sm:p-0">
                   <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-2">
-                      <span className="flex items-center gap-1 rounded bg-[var(--parchment)] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--ink)]">
-                        <MapPin size={10} className="text-[var(--gold-deep)]" /> {property.neighborhood}
-                      </span>
-                    </div>
+                    <PropertyFacts neighborhood={property.neighborhood} guests={property.guests} bedrooms={property.bedrooms} beds={property.beds} baths={property.baths} compact />
                     <Link
                       href={`/stays/${property.slug}`}
                       className="mt-2 block font-serif text-lg sm:text-2xl font-semibold text-[var(--ink)] transition group-hover:text-[var(--gold-deep)]"
@@ -212,7 +216,7 @@ export function SearchResults({
               <button
                 onClick={() => {
                   setDestination("");
-                  setSelectedTypes([]);
+                  clearFilters();
                 }}
                 className="button-3d mt-5 bg-[var(--ink)] px-6 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-white"
               >

@@ -83,7 +83,7 @@ export function SiteHeader({
   variant = "solid",
 }: {
   compact?: boolean;
-  variant?: "solid" | "transparent";
+  variant?: "solid" | "transparent" | "white";
 }) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -118,7 +118,9 @@ export function SiteHeader({
       className={
         variant === "transparent"
           ? `${scrolled ? "fixed header-frost shadow-[0_8px_30px_rgba(20,34,58,0.06)]" : "absolute"} inset-x-0 top-0 z-50`
-          : "sticky top-0 z-50 header-frost"
+          : variant === "white"
+            ? "sticky top-0 z-50 border-b border-[var(--line)] bg-white shadow-[0_5px_18px_rgba(20,34,58,.05)]"
+            : "sticky top-0 z-50 header-frost"
       }
     >
       {isAdmin && (

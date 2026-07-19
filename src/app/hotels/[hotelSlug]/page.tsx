@@ -7,6 +7,7 @@ import { HotelBookingPanel } from "@/components/hotel-booking-panel";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { getPublishedHotel, getUnitForHotel } from "@/lib/platform-data";
 import { PriceDisplay } from "@/components/price-display";
+import { PropertyFacts, propertyMapUrl } from "@/components/property-facts";
 
 export const revalidate = 300;
 
@@ -38,6 +39,9 @@ export default async function HotelProfilePage({ params }: { params: Promise<{ h
   } : null);
 
   const palette = hotel.template === "modern" ? "bg-[#f4f1eb]" : hotel.template === "editorial" ? "bg-[#f8f3ea]" : "bg-white";
+  const hasExactLocation = hotel.location.lat !== undefined && hotel.location.lng !== undefined;
+  const mapQuery = hasExactLocation ? `${hotel.location.lat},${hotel.location.lng}` : `${hotel.location.neighborhood}, ${hotel.location.city}, ${hotel.location.country}`;
+  const mapHref = hasExactLocation ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery)}` : propertyMapUrl(hotel.location.neighborhood, hotel.location.city);
 
   return (
     <main className={palette}>
@@ -86,10 +90,11 @@ export default async function HotelProfilePage({ params }: { params: Promise<{ h
                 <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:gap-4">
                   <div>
                     <strong className="font-serif text-xl text-[var(--ink)]">{unit.name}</strong>
-                    <p className="mt-2 text-sm text-[var(--muted)]">
+                    <p className="hidden">
                       Up to {unit.maxGuests} guests · {unit.bedrooms} bedrooms · {unit.baths} bathrooms
                     </p>
                   </div>
+                  <div className="sm:max-w-md"><PropertyFacts neighborhood={hotel.location.neighborhood} city={hotel.location.city} guests={unit.maxGuests} bedrooms={unit.bedrooms} beds={unit.beds} baths={unit.baths} /></div>
                   <PriceDisplay amountRwf={unit.basePriceRwf} prefix="" className="font-serif text-lg font-semibold text-[var(--gold-deep)]" />
                 </div>
               </div>
@@ -124,31 +129,27 @@ export default async function HotelProfilePage({ params }: { params: Promise<{ h
                 <span>{hotel.location.neighborhood}, {hotel.location.city}</span>
               </div>
               
-              {hotel.location.lat && hotel.location.lng ? (
+              <p className="text-xs text-[var(--muted)]">{hasExactLocation ? "Verified property location" : "Approximate neighbourhood location"}</p>
+              {(
                 <div className="relative h-72 w-full rounded-xl overflow-hidden shadow-md border border-[var(--line)]">
                   <iframe
                     title="Property Map Location"
                     width="100%"
                     height="100%"
                     frameBorder="0"
-                    src={`https://maps.google.com/maps?q=${hotel.location.lat},${hotel.location.lng}&z=15&output=embed`}
+                    src={`https://maps.google.com/maps?q=${encodeURIComponent(mapQuery)}&z=15&output=embed`}
                     style={{ filter: "grayscale(0.65) contrast(1.1) brightness(0.92)", pointerEvents: "none" }}
                   />
                   <div className="absolute bottom-4 right-4 z-10">
                     <a 
                       className="button-3d inline-block bg-[var(--ink)] px-5 py-2.5 text-[10px] font-semibold uppercase tracking-wider text-white" 
-                      href={`https://www.google.com/maps?q=${hotel.location.lat},${hotel.location.lng}`} 
+                      href={mapHref}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
                       Open in Google Maps
                     </a>
                   </div>
-                </div>
-              ) : (
-                <div className="surface-3d p-6 text-center">
-                  <MapPin className="mx-auto text-[var(--gold-deep)]" />
-                  <strong className="mt-2 block font-serif text-xl">{hotel.location.neighborhood}, {hotel.location.city}</strong>
                 </div>
               )}
             </div>

@@ -58,3 +58,40 @@ test("core phone routes have no horizontal page overflow", async ({ page }, test
     expect(dimensions.scrollWidth, `${route} overflows horizontally`).toBeLessThanOrEqual(dimensions.clientWidth + 1);
   }
 });
+
+test("homepage mobile hero and navigation remain clear", async ({ page }, testInfo) => {
+  test.skip(!testInfo.project.name.startsWith("mobile"), "Phone layout coverage");
+  await page.goto("/", { waitUntil: "domcontentloaded" });
+  const header = page.locator("header").first();
+  await expect(header).toBeVisible();
+  await expect(header).toHaveCSS("background-color", /rgb\(255, 255, 255\)|rgba\(255, 255, 255|color\(srgb 1 1 1/);
+  await expect(page.locator('[aria-roledescription="carousel"]')).toBeVisible();
+  await expect(page.getByRole("link", { name: "View stay" }).first()).toBeVisible();
+
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight * 0.45));
+  const backToTop = page.getByRole("button", { name: "Back to top" });
+  await expect(backToTop).toBeVisible();
+  const accountTab = page.getByRole("link", { name: "Account", exact: true });
+  const [topBox, accountBox] = await Promise.all([backToTop.boundingBox(), accountTab.boundingBox()]);
+  expect(topBox && accountBox && topBox.y + topBox.height < accountBox.y).toBeTruthy();
+});
+
+test("search cards expose swipe galleries and real property facts", async ({ page }, testInfo) => {
+  test.skip(!testInfo.project.name.startsWith("mobile"), "Phone catalogue coverage");
+  await page.goto("/search?destination=Kigali", { waitUntil: "domcontentloaded" });
+  const firstCard = page.locator("article").first();
+  await expect(firstCard).toBeVisible();
+  await expect(firstCard.getByLabel("Property details")).toBeVisible();
+  await expect(firstCard.getByText(/4 guests/i)).toBeVisible();
+  const gallery = firstCard.getByLabel(/photo gallery/i);
+  await expect(gallery).toBeVisible();
+  await expect(gallery.locator(":scope > div")).toHaveCount(8);
+});
+
+test("property profiles always expose a usable map", async ({ page }, testInfo) => {
+  test.skip(!testInfo.project.name.startsWith("mobile"), "Phone property coverage");
+  await page.goto("/hotels/kibagabaga-apartment-one", { waitUntil: "domcontentloaded" });
+  await expect(page.getByText(/Approximate neighbourhood location|Verified property location/)).toBeVisible();
+  await expect(page.getByTitle("Property Map Location")).toBeVisible();
+  await expect(page.getByRole("link", { name: "Open in Google Maps" })).toBeVisible();
+});

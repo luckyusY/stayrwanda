@@ -2,9 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { EASE, maskUp } from "@/lib/motion";
 import {
@@ -29,6 +27,9 @@ import { Popout } from "@/components/popout";
 import { SlotCounter } from "@/components/slot-counter";
 import { CountUp } from "@/components/count-up";
 import { PriceDisplay } from "@/components/price-display";
+import { PropertyImageSlider } from "@/components/property-image-slider";
+import { PropertyFacts } from "@/components/property-facts";
+import { HeroSlideshow } from "@/components/hero-slideshow";
 import type { Property } from "@/lib/properties";
 
 const stayTypes = ["All stays", "Furnished apartment", "Serviced apartment", "Furnished home"];
@@ -43,23 +44,6 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
   const [children, setChildren] = useState(0);
   const [rooms, setRooms] = useState(1);
   const [favourites, setFavourites] = useState<string[]>([]);
-  const heroImageRef = useRef<HTMLDivElement>(null);
-
-  // GSAP parallax on hero image
-  useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const el = heroImageRef.current;
-    if (!el) return;
-    gsap.registerPlugin(ScrollTrigger);
-    const ctx = gsap.context(() => {
-      gsap.to(el, {
-        yPercent: 12,
-        ease: "none",
-        scrollTrigger: { trigger: el, start: "top top", end: "bottom top", scrub: true },
-      });
-    });
-    return () => ctx.revert();
-  }, []);
 
   const filtered = useMemo(
     () =>
@@ -79,14 +63,16 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
     router.push(`/search?destination=${encodeURIComponent(destination)}`);
 
   const runSearch = () => router.push(`/search?destination=${encodeURIComponent(query || "Kigali")}`);
-
+  const heroImageRef = useRef<HTMLDivElement>(null);
   const hero = properties[0];
 
   return (
     <main className="min-h-screen bg-white text-[var(--foreground)] selection:bg-[var(--gold-pale)]">
+      <SiteHeader variant="white" />
       {/* ──────────────────────────────────────────────────────────────── Hero */}
       <section className="relative">
-        <SiteHeader variant="transparent" />
+        <HeroSlideshow properties={properties} />
+        {false && <div className="hidden" aria-hidden>
         <div className="hero-veil relative h-[85vh] min-h-[600px] w-full overflow-hidden">
           <div ref={heroImageRef} className="absolute inset-0 -bottom-24 will-change-transform">
             <SmartImage
@@ -181,6 +167,8 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
             <span className="animate-scroll-cue block h-1.5 w-1.5 rounded-full bg-white/80" />
           </span>
         </motion.a>
+
+        </div>}
 
         {/* Floating booking bar with gold hint */}
         <motion.div
@@ -334,13 +322,7 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
                 >
                   <div className="relative aspect-[4/3] w-full overflow-hidden">
                     <span className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-0.5 origin-left scale-x-0 bg-[var(--gold)] transition-transform duration-500 group-hover:scale-x-100" />
-                    <SmartImage
-                      src={property.image}
-                      alt={property.title}
-                      fill
-                      className="pointer-events-none object-cover transition duration-700 group-hover:scale-105"
-                      sizes="(max-width: 479px) calc(100vw - 32px), (max-width: 767px) calc(50vw - 28px), 320px"
-                    />
+                    <PropertyImageSlider images={property.images?.length ? property.images : [property.image]} alt={property.title} href={`/stays/${property.slug}`} sizes="(max-width: 479px) calc(100vw - 32px), (max-width: 767px) calc(50vw - 28px), 320px" />
                     <span className="pointer-events-none absolute left-4 top-4 z-20 bg-white/90 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-[var(--ink)]">
                       {property.type}
                     </span>
@@ -363,9 +345,7 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
                   </div>
                   <div className="p-5 flex flex-col justify-between flex-1">
                     <div>
-                      <p className="flex items-center gap-1.5 text-xs uppercase tracking-[0.16em] text-[var(--muted)]">
-                        <MapPin size={13} className="text-[var(--gold-deep)]" /> {property.neighborhood}
-                      </p>
+                      <PropertyFacts neighborhood={property.neighborhood} guests={property.guests} bedrooms={property.bedrooms} beds={property.beds} baths={property.baths} compact />
                       <Link
                         href={`/stays/${property.slug}`}
                         className="mt-2 block font-serif text-xl font-semibold text-[var(--ink)] transition group-hover:text-[var(--gold-deep)] line-clamp-1"

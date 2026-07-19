@@ -40,6 +40,7 @@ export function OverlayStackProvider({ children }: { children: React.ReactNode }
     body.style.position = "fixed";
     body.style.top = `-${scrollY}px`;
     body.style.width = "100%";
+    body.dataset.overlayOpen = "true";
     if (scrollbarWidth) body.style.paddingRight = `${scrollbarWidth}px`;
   }, []);
 
@@ -52,6 +53,7 @@ export function OverlayStackProvider({ children }: { children: React.ReactNode }
     body.style.top = snapshot.top;
     body.style.width = snapshot.width;
     body.style.paddingRight = snapshot.paddingRight;
+    delete body.dataset.overlayOpen;
     bodySnapshot.current = null;
     const root = document.documentElement;
     const previousScrollBehavior = root.style.scrollBehavior;
