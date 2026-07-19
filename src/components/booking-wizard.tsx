@@ -273,7 +273,7 @@ export function BookingWizard({
                       onClick={() =>
                         setForm((p) => ({ ...p, guests: String(Math.max(1, Number(p.guests) - 1)) }))
                       }
-                      className="interactive-3d grid size-9 place-items-center"
+                      className="interactive-3d grid size-11 place-items-center"
                       aria-label="Decrease guests"
                     >
                       <Minus size={14} />
@@ -286,7 +286,7 @@ export function BookingWizard({
                       onClick={() =>
                         setForm((p) => ({ ...p, guests: String(Math.min(20, Number(p.guests) + 1)) }))
                       }
-                      className="interactive-3d grid size-9 place-items-center"
+                      className="interactive-3d grid size-11 place-items-center"
                       aria-label="Increase guests"
                     >
                       <Plus size={14} />
@@ -389,7 +389,7 @@ export function BookingWizard({
       </div>
 
       {step !== "success" && (
-        <div className="flex items-center justify-between gap-3 border-t border-[var(--line)] px-5 py-4">
+        <div className="flex flex-wrap-reverse items-center justify-between gap-3 border-t border-[var(--line)] px-5 py-4">
           <Button
             type="button"
             variant="ghost"
@@ -417,11 +417,21 @@ export function BookingWizard({
       <main className="min-h-screen bg-[var(--parchment)] py-8 sm:py-12">
         <div className="mx-auto max-w-2xl px-4">
           <Link
-            href={`/hotels/${property.slug}`}
+            href={`/stays/${property.slug}`}
             className="mb-4 inline-block text-xs font-semibold uppercase tracking-[0.16em] text-[var(--gold-deep)] hover:text-[var(--ink)]"
           >
             ← Back to property
           </Link>
+          {/* Sticky identity header for mobile screen scrolling */}
+          <div className="sticky top-16 z-20 border-b border-[var(--line)] bg-white/95 backdrop-blur-sm px-4 py-2 flex items-center gap-3 sm:hidden mb-4 rounded-xl shadow-sm">
+            <div className="relative size-8 shrink-0 overflow-hidden rounded bg-[var(--cream)]">
+              <Image src={property.image} alt={property.title} fill className="object-cover" sizes="32px" />
+            </div>
+            <p className="truncate text-xs font-semibold text-[var(--ink)]">
+              {property.title}
+              {stayNights > 0 && <span className="ml-1 text-[var(--muted)] font-normal">· {stayNights} nights</span>}
+            </p>
+          </div>
           <div className="surface-3d-floating overflow-hidden bg-white">
             <div className="flex items-center gap-3 border-b border-[var(--line)] bg-[var(--parchment)] px-5 py-3.5">
               <Image

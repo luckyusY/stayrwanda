@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Popout } from "./popout";
 import {
   Bell,
@@ -112,6 +112,16 @@ const MOCK_NOTIFICATIONS: Notification[] = [
 
 export function NotificationPopout({ light = false }: { light?: boolean }) {
   const [open, setOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 639px)");
+    setIsMobile(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
   const [notifications, setNotifications] = useState(MOCK_NOTIFICATIONS);
   const [filter, setFilter] = useState<"all" | "unread">("all");
   const listRef = useRef<HTMLDivElement>(null);
@@ -165,7 +175,7 @@ export function NotificationPopout({ light = false }: { light?: boolean }) {
 
   return (
     <Popout
-      variant="sheet"
+      variant={isMobile ? "dialog" : "sheet"}
       isOpen={open}
       onClose={() => setOpen(false)}
       trigger={trigger}

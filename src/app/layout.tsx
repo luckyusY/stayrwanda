@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
 import { ScrollProgress } from "@/components/scroll-progress";
@@ -8,6 +8,7 @@ import { CurrencyProvider } from "@/components/currency-provider";
 import { MagneticCursor } from "@/components/magnetic-cursor";
 import { ToastProvider } from "@/components/toast";
 import { NewsletterModal } from "@/components/newsletter-modal";
+import { MobileBottomNav } from "@/components/mobile-bottom-nav";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -31,6 +32,22 @@ export const metadata: Metadata = {
   keywords: ["apartments in Kigali", "Rwanda apartments", "luxury stays Kigali", "furnished homes Rwanda"],
   openGraph: { title: "StayRwanda", description: "Timeless stays across Rwanda.", type: "website" },
   icons: { icon: "/brand/stayrwanda-mark.png", apple: "/brand/stayrwanda-mark.png" },
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "StayRwanda",
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#14223a" },
+    { media: "(prefers-color-scheme: dark)", color: "#0f1c2e" },
+  ],
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
@@ -40,13 +57,14 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <ScrollProgress />
         <MagneticCursor />
         {children}
+        <MobileBottomNav />
         <NewsletterModal />
       </ToastProvider>
     </CurrencyProvider>
   );
   return (
     <html lang="en" className={`${cormorant.variable} ${inter.variable}`}>
-      <body className={inter.className}>{clerkConfigured ? <ClerkProvider>{content}</ClerkProvider> : content}</body>
+      <body className={`${inter.className} pb-safe`}>{clerkConfigured ? <ClerkProvider>{content}</ClerkProvider> : content}</body>
     </html>
   );
 }

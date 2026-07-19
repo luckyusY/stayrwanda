@@ -132,7 +132,7 @@ export function Popout({
       <button
         onClick={handleClose}
         aria-label="Close"
-        className="grid size-9 shrink-0 place-items-center rounded-full border border-[var(--gold-mid)] bg-white text-[var(--ink)] transition-colors hover:bg-[var(--gold-pale)] hover:text-[var(--gold-deep)]"
+        className="grid size-11 sm:size-9 shrink-0 place-items-center rounded-full border border-[var(--gold-mid)] bg-white text-[var(--ink)] transition-colors hover:bg-[var(--gold-pale)] hover:text-[var(--gold-deep)]"
       >
         <X size={18} />
       </button>

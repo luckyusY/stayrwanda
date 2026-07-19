@@ -95,7 +95,7 @@ export function PropertyImageSlider({
           event.preventDefault();
           swiperRef.current?.slidePrev();
         }}
-        className="absolute left-3 top-1/2 z-20 grid size-9 -translate-y-1/2 place-items-center rounded-full bg-white/90 text-[var(--ink)] opacity-0 shadow transition hover:bg-white group-hover/slider:opacity-100"
+        className="absolute left-3 top-1/2 z-20 grid size-11 sm:size-9 -translate-y-1/2 place-items-center rounded-full bg-white/90 text-[var(--ink)] opacity-100 sm:opacity-0 shadow transition hover:bg-white group-hover/slider:opacity-100"
       >
         <ChevronLeft size={18} />
       </button>
@@ -106,7 +106,7 @@ export function PropertyImageSlider({
           event.preventDefault();
           swiperRef.current?.slideNext();
         }}
-        className="absolute right-3 top-1/2 z-20 grid size-9 -translate-y-1/2 place-items-center rounded-full bg-white/90 text-[var(--ink)] opacity-0 shadow transition hover:bg-white group-hover/slider:opacity-100"
+        className="absolute right-3 top-1/2 z-20 grid size-11 sm:size-9 -translate-y-1/2 place-items-center rounded-full bg-white/90 text-[var(--ink)] opacity-100 sm:opacity-0 shadow transition hover:bg-white group-hover/slider:opacity-100"
       >
         <ChevronRight size={18} />
       </button>

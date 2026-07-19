@@ -6,10 +6,10 @@ import { AnimatePresence, motion } from "framer-motion";
 import { softSpring } from "@/lib/motion";
 
 const SECTIONS = [
-  { id: "overview", label: "Overview" },
-  { id: "rooms", label: "Accommodation" },
-  { id: "amenities", label: "Facilities" },
-  { id: "location", label: "Location" },
+  { id: "overview", label: "Overview", short: "Overview" },
+  { id: "rooms", label: "Accommodation", short: "Rooms" },
+  { id: "amenities", label: "Facilities", short: "Amenities" },
+  { id: "location", label: "Location", short: "Location" },
 ] as const;
 
 /** Sticky sub-navigation with IntersectionObserver scroll-spy and sliding underline. */
@@ -43,7 +43,8 @@ export function StaySectionNav() {
               isActive ? "text-[var(--gold-deep)]" : "text-[var(--ink)] hover:text-[var(--gold-deep)]"
             }`}
           >
-            {s.label}
+            <span className="hidden sm:inline">{s.label}</span>
+            <span className="sm:hidden">{s.short}</span>
             {isActive && (
               <motion.span
                 layoutId="activeSectionNavIndicator"
@@ -85,7 +86,7 @@ export function StayReserveBar({
           animate={{ y: 0 }}
           exit={{ y: 96 }}
           transition={softSpring}
-          className="fixed inset-x-0 bottom-0 z-40 border-t border-[var(--line)] header-frost shadow-[0_-8px_30px_rgba(20,34,58,0.06)]"
+          className="fixed inset-x-0 bottom-[calc(3.5rem+env(safe-area-inset-bottom,0px))] lg:bottom-0 z-40 border-t border-[var(--line)] header-frost shadow-[0_-8px_30px_rgba(20,34,58,0.06)] lg:pb-[env(safe-area-inset-bottom,0px)]"
         >
           <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
             <div className="min-w-0">

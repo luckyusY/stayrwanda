@@ -1,0 +1,30 @@
+{
+  "name": "StayRwanda",
+  "short_name": "StayRwanda",
+  "description": "Timeless stays across Rwanda — reserve with confidence.",
+  "start_url": "/?source=pwa",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#14223a",
+  "theme_color": "#14223a",
+  "lang": "en",
+  "icons": [
+    {
+      "src": "/brand/stayrwanda-mark.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/brand/stayrwanda-mark.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    { "name": "Browse Stays", "url": "/stays", "description": "All properties" },
+    { "name": "My Bookings", "url": "/account/bookings", "description": "Track reservations" }
+  ],
+  "categories": ["travel", "lifestyle"]
+}

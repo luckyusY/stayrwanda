@@ -136,7 +136,7 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
 
             {/* Premium Stat strip */}
             <motion.div
-              className="mx-auto mt-8 max-w-md bg-[var(--ink)]/40 backdrop-blur-md border border-white/10 p-4 rounded-xl grid grid-cols-3 divide-x divide-white/10 shadow-lg"
+              className="mx-auto mt-8 max-w-sm sm:max-w-md bg-[var(--ink)]/40 backdrop-blur-md border border-white/10 p-3 sm:p-4 rounded-xl grid grid-cols-3 divide-x divide-white/10 shadow-lg"
               variants={{ hidden: { opacity: 0, y: 15 }, show: { opacity: 1, y: 0 } }}
               transition={{ duration: 0.6, ease: EASE }}
             >
@@ -153,6 +153,17 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
                 <span className="text-[9px] uppercase tracking-[0.16em] text-white/70 block mt-1">Districts</span>
               </div>
             </motion.div>
+
+            {/* Mobile Scroll CTA */}
+            <motion.a
+              href="#brand-intro"
+              className="mt-6 inline-flex sm:hidden items-center justify-center gap-1.5 text-white/70 text-xs uppercase tracking-widest"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.9, duration: 0.5 }}
+            >
+              Scroll to explore <ChevronDown size={14} className="animate-scroll-cue" />
+            </motion.a>
           </div>
         </motion.div>
 
@@ -173,14 +184,14 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
 
         {/* Floating booking bar with gold hint */}
         <motion.div
-          className="relative z-30 mx-auto -mt-20 max-w-5xl px-4 sm:px-6"
+          className="relative z-30 mx-auto -mt-10 sm:-mt-20 max-w-5xl px-4 sm:px-6"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.6, ease: EASE }}
         >
           <div className="surface-3d-floating p-1.5 border-t-2 border-t-[var(--gold)]">
             <div className="grid grid-cols-[minmax(0,1fr)] gap-px bg-[var(--line)] md:grid-cols-[1.3fr_1.2fr_1fr_auto]">
-              <label className="flex min-h-16 cursor-text items-center gap-3 bg-white px-5 transition-colors focus-within:bg-[var(--parchment)]">
+              <label className="flex min-h-[52px] md:min-h-16 cursor-text items-center gap-3 bg-white px-5 transition-colors focus-within:bg-[var(--parchment)]">
                 <MapPin size={20} className="shrink-0 text-[var(--gold-deep)]" />
                 <span className="min-w-0 flex-1">
                   <span className="block text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
@@ -204,18 +215,25 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
                 </span>
               </label>
 
-              <div className="flex min-h-16 min-w-0 items-center gap-3 bg-white px-5 transition-colors focus-within:bg-[var(--parchment)]">
-                <CalendarDays size={20} className="shrink-0 text-[var(--gold-deep)]" />
-                <span className="min-w-0 flex-1">
-                  <span className="block text-[0.65rem] uppercase tracking-[0.18em] text-[var(--muted)]">
-                    Dates
+              {/* Stacked dates on mobile, inline flex row on desktop */}
+              <div className="grid grid-cols-2 gap-px bg-[var(--line)] md:flex md:min-h-16 md:min-w-0 md:items-center md:gap-3 md:bg-white md:px-5 md:transition-colors md:focus-within:bg-[var(--parchment)]">
+                <div className="flex min-h-[52px] items-center gap-3 bg-white px-5 transition-colors focus-within:bg-[var(--parchment)] md:p-0 md:min-h-0 md:w-full md:bg-transparent">
+                  <CalendarDays size={20} className="shrink-0 text-[var(--gold-deep)] md:hidden lg:block" />
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-[0.65rem] uppercase tracking-[0.18em] text-[var(--muted)]">
+                      Check-in
+                    </span>
+                    <input type="date" className="w-full text-xs font-medium outline-none bg-transparent" />
                   </span>
-                  <span className="flex items-center gap-2">
-                    <input type="date" className="w-[104px] min-w-0 text-xs font-medium outline-none bg-transparent" />
-                    <span className="text-[var(--muted)]">—</span>
-                    <input type="date" className="w-[104px] min-w-0 text-xs font-medium outline-none bg-transparent" />
+                </div>
+                <div className="flex min-h-[52px] items-center gap-3 bg-white px-5 transition-colors focus-within:bg-[var(--parchment)] md:p-0 md:min-h-0 md:w-full md:bg-transparent border-l border-[var(--line)] md:border-l-0">
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-[0.65rem] uppercase tracking-[0.18em] text-[var(--muted)]">
+                      Check-out
+                    </span>
+                    <input type="date" className="w-full text-xs font-medium outline-none bg-transparent" />
                   </span>
-                </span>
+                </div>
               </div>
 
               <Popout
@@ -229,7 +247,7 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
                   <div
                     onClick={() => setGuestOpen(!guestOpen)}
                     aria-expanded={guestOpen}
-                    className="flex min-h-16 w-full items-center gap-3 bg-white px-5 text-left transition-colors hover:bg-[var(--parchment)] cursor-pointer"
+                    className="flex min-h-[52px] md:min-h-16 w-full items-center gap-3 bg-white px-5 text-left transition-colors hover:bg-[var(--parchment)] cursor-pointer"
                   >
                     <Users size={20} className="shrink-0 text-[var(--gold-deep)]" />
                     <span className="min-w-0 flex-1">
@@ -260,7 +278,7 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
 
               <button
                 onClick={runSearch}
-                className="button-3d flex min-h-16 items-center justify-center gap-2 bg-[var(--ink)] px-9 text-xs font-semibold uppercase tracking-[0.2em] text-white hover:bg-[var(--ink-2)]"
+                className="button-3d flex min-h-[52px] md:min-h-16 w-full items-center justify-center gap-2 bg-[var(--ink)] px-9 text-xs font-semibold uppercase tracking-[0.2em] text-white hover:bg-[var(--ink-2)]"
               >
                 <Search size={17} /> Search
               </button>
@@ -320,7 +338,7 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
                       alt={property.title}
                       fill
                       className="pointer-events-none object-cover transition duration-700 group-hover:scale-105"
-                      sizes="(max-width: 768px) 100vw, 320px"
+                      sizes="(max-width: 479px) calc(100vw - 32px), (max-width: 767px) calc(50vw - 28px), 320px"
                     />
                     <span className="pointer-events-none absolute left-4 top-4 z-20 bg-white/90 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-[var(--ink)]">
                       {property.type}
@@ -332,7 +350,7 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
                         e.stopPropagation();
                         toggleFavourite(property.slug);
                       }}
-                      className="absolute right-4 top-4 z-20 grid size-9 place-items-center rounded-full bg-white/90 shadow transition hover:scale-110 cursor-pointer"
+                      className="absolute right-4 top-4 z-20 grid size-11 sm:size-9 place-items-center rounded-full bg-white/90 shadow transition hover:scale-110 cursor-pointer"
                       aria-label={`Save ${property.title}`}
                     >
                       <Heart
@@ -432,7 +450,7 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
                         alt={destination}
                         fill
                         className="object-cover transition duration-700 group-hover:scale-105"
-                        sizes="(max-width: 768px) 100vw, 25vw"
+                        sizes="(max-width: 479px) calc(100vw - 32px), (max-width: 767px) calc(50vw - 32px), 25vw"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-[var(--ink)]/40 via-transparent to-transparent pointer-events-none" />
                     </div>

@@ -297,7 +297,7 @@ export function HotelBookingPanel({ hotel, unit }: { hotel: Hotel; unit: UnitTyp
                           }))
                         }
                         disabled={Number(form.guests) <= 1}
-                        className="interactive-3d grid size-9 place-items-center disabled:opacity-40"
+                        className="interactive-3d grid size-11 place-items-center disabled:opacity-40"
                       >
                         <Minus size={14} />
                       </button>
@@ -312,7 +312,7 @@ export function HotelBookingPanel({ hotel, unit }: { hotel: Hotel; unit: UnitTyp
                             guests: String(Math.min(unit?.maxGuests || 20, Number(prev.guests) + 1)),
                           }))
                         }
-                        className="interactive-3d grid size-9 place-items-center"
+                        className="interactive-3d grid size-11 place-items-center"
                       >
                         <Plus size={14} />
                       </button>

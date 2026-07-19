@@ -77,7 +77,7 @@ export function DragScrollStrip({
                   e.stopPropagation();
                   toggleFavourite(property.slug);
                 }}
-                className="absolute right-4 top-4 z-30 grid size-9 place-items-center rounded-full bg-white/90 shadow"
+                className="absolute right-4 top-4 z-30 grid size-11 sm:size-9 place-items-center rounded-full bg-white/90 shadow"
                 aria-label={`Save ${property.title}`}
               >
                 <Heart

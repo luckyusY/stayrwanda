@@ -359,15 +359,15 @@ export function SiteFooter() {
           <p className="mt-3 text-sm text-[var(--muted)]">
             Quietly curated apartments, residences and seasonal offers — delivered now and then.
           </p>
-          <div className="surface-3d mx-auto mt-6 flex max-w-md gap-px overflow-hidden bg-[var(--line)]">
+          <div className="surface-3d mx-auto mt-6 flex flex-col xs:flex-row max-w-md gap-px overflow-hidden bg-[var(--line)]">
             <input
-              className="min-h-13 flex-1 bg-white px-4 text-sm outline-none"
+              className="min-h-13 flex-1 bg-white px-4 text-sm outline-none w-full"
               placeholder="Your email address"
             />
             <button
               type="button"
               onClick={() => window.dispatchEvent(new Event("open-newsletter"))}
-              className="button-3d !rounded-none bg-[var(--gold)] px-6 text-xs font-semibold uppercase tracking-[0.18em] text-white hover:bg-[var(--gold-deep)] shimmer-gold"
+              className="button-3d !rounded-none bg-[var(--gold)] px-6 py-3.5 xs:py-0 text-xs font-semibold uppercase tracking-[0.18em] text-white hover:bg-[var(--gold-deep)] shimmer-gold w-full xs:w-auto"
             >
               Subscribe
             </button>

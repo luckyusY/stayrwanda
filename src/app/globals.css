@@ -922,3 +922,71 @@ header a[aria-label="StayRwanda home"] img {
   to   { width: 0%; }
 }
 
+/* ── Mobile Layout & Touch Target Polish ── */
+
+/* iOS safe area utils */
+.pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); }
+.pt-safe { padding-top: env(safe-area-inset-top, 0px); }
+.pl-safe { padding-left: env(safe-area-inset-left, 0px); }
+.pr-safe { padding-right: env(safe-area-inset-right, 0px); }
+
+/* Disable 3D perspective form-card on mobile */
+@media (max-width: 767px) {
+  .form-card-3d {
+    transform: none !important;
+    box-shadow: var(--depth-soft) !important;
+  }
+  .form-card-3d:focus-within,
+  .form-card-3d:hover {
+    transform: none !important;
+    box-shadow: var(--depth-raised) !important;
+  }
+}
+
+/* Move toast stack to bottom on mobile, above bottom nav */
+@media (max-width: 1023px) {
+  .toast-stack {
+    top: auto !important;
+    bottom: calc(4.5rem + env(safe-area-inset-bottom, 0px)) !important;
+    right: 1rem !important;
+    left: 1rem !important;
+    align-items: stretch !important;
+  }
+  .toast {
+    min-width: unset !important;
+    max-width: unset !important;
+    width: 100% !important;
+  }
+}
+
+/* Hide magnetic cursor on touch devices */
+@media (pointer: coarse) {
+  .cursor-ring {
+    display: none !important;
+  }
+}
+
+/* On mobile viewports, Popout dialogs slide up as bottom sheets */
+@media (max-width: 639px) {
+  .popout-dialog {
+    align-items: flex-end !important;
+    padding: 0 !important;
+  }
+  .popout-panel {
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0 !important;
+    max-height: 92dvh !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding-bottom: env(safe-area-inset-bottom, 0px) !important;
+  }
+}
+
+/* WCAG 2.5.5 touch target helper */
+@media (max-width: 1023px) and (pointer: coarse) {
+  button:not([class*="size-"]):not([class*="h-"]):not([class*="w-"]) {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+

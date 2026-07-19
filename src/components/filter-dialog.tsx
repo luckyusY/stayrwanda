@@ -20,11 +20,11 @@ export function FilterGroup({
       <h4 className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--ink)]">{title}</h4>
       <div className="mt-4 space-y-3.5">
         {options.map((option) => (
-          <label key={option} className="flex cursor-pointer items-center gap-3 text-sm group">
+          <label key={option} className="flex cursor-pointer items-center gap-3 py-2 text-sm group">
             <button
               type="button"
               onClick={() => toggle(option)}
-              className={`grid size-5 shrink-0 place-items-center rounded shadow-[inset_0_1px_2px_rgba(20,34,58,.12)] transition-colors ${
+              className={`grid size-6 sm:size-5 shrink-0 place-items-center rounded shadow-[inset_0_1px_2px_rgba(20,34,58,.12)] transition-colors ${
                 selected.includes(option)
                   ? "border-[var(--gold)] bg-[var(--gold)] text-white"
                   : "border-[var(--muted)] group-hover:border-[var(--gold-mid)]"
@@ -70,12 +70,13 @@ export function FilterDialog({
 
   return (
     <Popout
-      variant="dialog"
+      variant="sheet"
       isOpen={open}
       onClose={() => setOpen(false)}
       trigger={trigger}
       title="Filters"
-      className="flex max-h-[90vh] w-[95vw] max-w-[480px] flex-col rounded-2xl bg-white shadow-2xl"
+      showLogo={false}
+      className="flex h-full w-full flex-col bg-white"
       footer={
         <div className="flex items-center justify-between gap-3">
           <button

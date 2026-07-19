@@ -20,7 +20,7 @@ export function SearchResults({
 }) {
   const [destination, setDestination] = useState(initialDestination);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
-  const [mobileFilters] = useState(false);
+  const [mobileFilters, setMobileFilters] = useState(false);
   const [quickViewSlug, setQuickViewSlug] = useState<string | null>(null);
 
   const results = useMemo(
@@ -141,24 +141,25 @@ export function SearchResults({
                 variant="depth"
                 as="article"
                 key={property.slug}
-                className="surface-3d surface-3d-lift grid min-w-0 gap-5 p-5 sm:grid-cols-[240px_1fr] group rounded-xl overflow-hidden shadow-sm hover:shadow-md hover:border-[var(--gold)]"
+                className="surface-3d surface-3d-lift grid min-w-0 gap-3 p-3 grid-cols-[120px_1fr] sm:gap-5 sm:p-5 sm:grid-cols-[240px_1fr] group rounded-xl overflow-hidden shadow-sm hover:shadow-md hover:border-[var(--gold)]"
               >
-                <div className="relative w-full min-w-0 rounded-lg overflow-hidden">
+                <div className="relative w-full min-w-0 rounded-lg overflow-hidden aspect-[3/4] sm:aspect-[4/3]">
                   <PropertyImageSlider
                     images={property.images?.length ? property.images : [property.image]}
                     alt={property.title}
                     href={`/stays/${property.slug}`}
-                    sizes="(max-width: 640px) 100vw, 240px"
+                    sizes="(max-width: 479px) 120px, (max-width: 639px) calc(100vw - 32px), 240px"
+                    aspect="aspect-[3/4] sm:aspect-[4/3]"
                   />
                   <div className="absolute right-3 top-3 z-30 flex flex-col gap-2">
                     <FavoriteButton
                       hotelSlug={property.slug}
-                      className="grid size-9 place-items-center rounded-full bg-white/90 text-[var(--ink)] shadow transition-transform duration-200 hover:scale-110"
+                      className="grid size-11 sm:size-9 place-items-center rounded-full bg-white/90 text-[var(--ink)] shadow transition-transform duration-200 hover:scale-110"
                     />
                     <button
                       onClick={() => setQuickViewSlug(property.slug)}
                       aria-label="Quick view property"
-                      className="grid size-9 place-items-center rounded-full bg-white/90 text-[var(--ink)] opacity-0 shadow transition-all duration-200 hover:scale-110 group-hover:opacity-100 hover:text-[var(--gold-deep)]"
+                      className="grid size-11 sm:size-9 place-items-center rounded-full bg-white/90 text-[var(--ink)] opacity-100 sm:opacity-0 shadow transition-all duration-200 hover:scale-110 group-hover:opacity-100 hover:text-[var(--gold-deep)]"
                     >
                       <Eye size={18} />
                     </button>
@@ -173,7 +174,7 @@ export function SearchResults({
                     </div>
                     <Link
                       href={`/stays/${property.slug}`}
-                      className="mt-2 block font-serif text-2xl font-semibold text-[var(--ink)] transition group-hover:text-[var(--gold-deep)]"
+                      className="mt-2 block font-serif text-lg sm:text-2xl font-semibold text-[var(--ink)] transition group-hover:text-[var(--gold-deep)]"
                     >
                       {property.title}
                     </Link>
@@ -232,6 +233,15 @@ export function SearchResults({
         properties={properties}
         onClose={() => setQuickViewSlug(null)}
       />
+
+      <div className="fixed bottom-[calc(3.5rem+env(safe-area-inset-bottom,0px))] right-4 z-30 lg:hidden">
+        <FilterDialog
+          selectedTypes={selectedTypes}
+          toggleType={toggle}
+          onClear={() => setSelectedTypes([])}
+          resultCount={results.length}
+        />
+      </div>
     </div>
   );
 }
