@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronRight, MapPin } from "lucide-react";
+import { ChevronRight, CreditCard, Images, MapPin, ShieldCheck } from "lucide-react";
 import { HotelBookingPanel } from "@/components/hotel-booking-panel";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { getPublishedHotel, getUnitForHotel } from "@/lib/platform-data";
@@ -43,6 +43,7 @@ export default async function HotelProfilePage({ params }: { params: Promise<{ h
   const hasExactLocation = hotel.location.lat !== undefined && hotel.location.lng !== undefined;
   const mapQuery = hasExactLocation ? `${hotel.location.lat},${hotel.location.lng}` : `${hotel.location.neighborhood}, ${hotel.location.city}, ${hotel.location.country}`;
   const mapHref = hasExactLocation ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery)}` : propertyMapUrl(hotel.location.neighborhood, hotel.location.city);
+  const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.trim();
 
   return (
     <main className={palette}>
@@ -54,6 +55,11 @@ export default async function HotelProfilePage({ params }: { params: Promise<{ h
         <p className="eyebrow">{hotel.category} · {hotel.template} collection</p>
         <h1 className="mt-3 max-w-4xl break-words font-serif text-4xl font-semibold text-[var(--ink)] sm:text-6xl">{hotel.name}</h1>
         <p className="mt-4 flex items-start gap-2 text-sm text-[var(--muted)]"><MapPin size={16} className="mt-0.5 shrink-0 text-[var(--gold-deep)]" />{hotel.location.address}, {hotel.location.city}, {hotel.location.country}</p>
+        <div className="mt-4 flex flex-wrap gap-2 text-[11px] font-semibold text-[var(--ink)]">
+          <span className="inline-flex min-h-9 items-center gap-2 rounded-full border border-[var(--line)] bg-white px-3"><CreditCard size={14} className="text-[var(--gold-deep)]" /> No payment now</span>
+          <span className="inline-flex min-h-9 items-center gap-2 rounded-full border border-[var(--line)] bg-white px-3"><ShieldCheck size={14} className="text-[var(--gold-deep)]" /> Tracked booking request</span>
+          <span className="inline-flex min-h-9 items-center gap-2 rounded-full border border-[var(--line)] bg-white px-3"><Images size={14} className="text-[var(--gold-deep)]" /> {hotel.gallery.length} property photos</span>
+        </div>
         <div className="mt-6 grid h-72 gap-2 overflow-hidden rounded-[var(--radius-panel)] sm:h-96 md:mt-8 md:h-[520px] md:grid-cols-2">
           <div className="relative">{hotel.gallery[0] && <Image src={hotel.gallery[0]} alt={hotel.name} fill priority className="object-cover" sizes="50vw" />}</div>
           <div className="hidden grid-cols-2 gap-2 md:grid">{hotel.gallery.slice(1, 5).map((image, index) => <div className="relative" key={image}><Image src={image} alt={`${hotel.name} view ${index + 2}`} fill className="object-cover" sizes="25vw" /></div>)}</div>
@@ -75,10 +81,10 @@ export default async function HotelProfilePage({ params }: { params: Promise<{ h
                 <div className="flex flex-wrap items-center gap-2">
                   <strong className="text-sm font-semibold text-[var(--ink)]">StayRwanda Partner</strong>
                   <span className="bg-[#d4edda] text-[#1a4731] text-[8px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded">
-                    Verified Host
+                    Published listing
                   </span>
                 </div>
-                <p className="text-xs text-[var(--muted)] mt-0.5">Professional hospitality partner</p>
+                <p className="text-xs text-[var(--muted)] mt-0.5">Property information supplied by a StayRwanda hospitality partner</p>
               </div>
             </div>
           </section>
@@ -156,7 +162,7 @@ export default async function HotelProfilePage({ params }: { params: Promise<{ h
             </div>
           </section>
         </div>
-        <HotelBookingPanel hotel={hotel} unit={unit} />
+        <HotelBookingPanel hotel={hotel} unit={unit} whatsappNumber={whatsappNumber} />
       </div>
       <SiteFooter />
     </main>

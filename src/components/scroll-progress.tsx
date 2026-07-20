@@ -18,6 +18,8 @@ export function ScrollProgress() {
     });
   }, [scrollYProgress]);
 
+  const hotelProfile = pathname?.startsWith("/hotels/");
+
   if (pathname?.startsWith("/admin")) return null;
 
   return (
@@ -28,7 +30,7 @@ export function ScrollProgress() {
         className="page-progress"
       />
       <AnimatePresence>
-        {showTop && (
+        {showTop && !hotelProfile && (
           <motion.button
             initial={{ opacity: 0, y: 20, scale: 0.8 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}

@@ -29,6 +29,7 @@ function AccountMenu({ light, signedIn, userName, userEmail, onSignOut }: Accoun
       aria-haspopup="dialog"
     >
       <span className="grid size-9 place-items-center md:size-auto"><UserCircle2 size={18} className="shrink-0 opacity-90 md:size-4" /></span>
+      <span className="text-[8px] font-bold uppercase leading-none tracking-[0.06em] md:hidden">Account</span>
       <span className="hidden text-[11px] font-semibold leading-none tracking-wide md:block">Account</span>
       <span className={`hidden text-[9px] font-medium uppercase leading-none tracking-[0.12em] md:block ${light ? "text-white/55" : "text-[var(--muted)]"}`}>
         {signedIn ? "Profile" : "Sign in"}

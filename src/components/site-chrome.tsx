@@ -217,7 +217,7 @@ export function SiteHeader({
               ref={menuButtonRef}
               type="button"
               onClick={() => setOpen(true)}
-              className={`ml-0.5 grid size-11 shrink-0 place-items-center rounded-lg lg:hidden ${
+              className={`ml-0.5 flex size-11 shrink-0 flex-col items-center justify-center gap-0.5 rounded-lg lg:hidden ${
                 onLight ? "text-white hover:bg-white/10" : "text-[var(--ink)] hover:bg-[var(--parchment)]"
               }`}
               aria-label="Open menu"
@@ -225,6 +225,7 @@ export function SiteHeader({
               aria-expanded={open}
             >
               <Menu size={22} />
+              <span className="text-[8px] font-bold uppercase leading-none tracking-[0.06em]">Menu</span>
             </button>
           </div>
         </div>

@@ -54,6 +54,7 @@ export function LanguageControl({ light = false }: { light?: boolean }) {
           <span className="grid size-9 place-items-center md:size-auto">
             <CountryFlag code="GB" />
           </span>
+          <span className="text-[8px] font-bold uppercase leading-none tracking-[0.08em] md:hidden">EN</span>
           <span className="hidden text-[11px] font-semibold leading-none tracking-wide md:block">EN</span>
           <span className={`hidden text-[9px] font-medium uppercase leading-none tracking-[0.12em] md:block ${light ? "text-white/55" : "text-[var(--muted)]"}`}>
             Language

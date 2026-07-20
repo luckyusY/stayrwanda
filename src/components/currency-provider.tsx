@@ -133,6 +133,7 @@ export function CurrencyControl({ light = false }: { light?: boolean }) {
           <span className="relative grid size-9 place-items-center md:size-auto">
             <CountryFlag code={activeCountry.flagCode} />
           </span>
+          <span className="text-[8px] font-bold uppercase leading-none tracking-[0.08em] md:hidden">{currency}</span>
           <span className="hidden items-center gap-0.5 text-[11px] font-semibold leading-none tracking-wide md:inline-flex">
             {currency}
             <ChevronDown

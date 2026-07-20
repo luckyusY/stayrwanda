@@ -3,6 +3,7 @@ import { currentIdentity, requireIdentity } from "@/lib/auth";
 import { createInventoryBackedBooking } from "@/lib/booking-service";
 import { getDb } from "@/lib/mongodb";
 import { ZodError } from "zod";
+import { sendBookingRequestEmails } from "@/lib/booking-notifications";
 
 export async function GET() {
   const identity = await requireIdentity();
@@ -17,7 +18,16 @@ export async function POST(request: Request) {
   try {
     const key = request.headers.get("idempotency-key") || "";
     const booking = await createInventoryBackedBooking(await request.json(), key, await currentIdentity());
-    return NextResponse.json({ booking }, { status: booking && "replayed" in booking ? 200 : 201 });
+    const replayed = Boolean(booking && "replayed" in booking);
+    if (!replayed) {
+      await sendBookingRequestEmails(booking).catch((error) => {
+        console.error("Booking notification failed", error instanceof Error ? error.name : "Unknown error");
+      });
+    }
+    if (!booking) throw new Error("BOOKING_PERSISTENCE_FAILED");
+    const { publicAccessTokenHash: _privateTokenHash, ...safeBooking } = booking;
+    void _privateTokenHash;
+    return NextResponse.json({ booking: safeBooking }, { status: replayed ? 200 : 201 });
   } catch (error) {
     const rawCode = error instanceof Error ? error.message : "UNKNOWN";
     const databaseUnavailable = rawCode.includes("MONGODB_URI") || rawCode === "BOOKING_PERSISTENCE_FAILED" || (error instanceof Error && error.name.startsWith("Mongo"));

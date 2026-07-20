@@ -1,5 +1,11 @@
 import { z } from "zod";
 
+const optionalEmail = z.preprocess((value) => value === "" ? undefined : value, z.string().email().optional());
+const optionalPhone = z.preprocess(
+  (value) => value === "" ? undefined : value,
+  z.string().regex(/^\+?[0-9]{8,15}$/).optional(),
+);
+
 const serverSchema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
   MONGODB_URI: z.string().min(1).optional(),
@@ -11,9 +17,11 @@ const serverSchema = z.object({
   CLOUDINARY_API_SECRET: z.string().min(1).optional(),
   RESEND_API_KEY: z.string().min(1).optional(),
   EMAIL_FROM: z.string().default("StayRwanda <bookings@stayrwanda.com>"),
+  BOOKING_NOTIFICATION_EMAIL: optionalEmail,
   CRON_SECRET: z.string().min(24).optional(),
   PLATFORM_ADMIN_EMAILS: z.string().default(""),
   ALLOW_DEMO_AUTH: z.enum(["true", "false"]).default("false"),
+  NEXT_PUBLIC_WHATSAPP_NUMBER: optionalPhone,
 });
 
 export const env = serverSchema.parse(process.env);
