@@ -88,9 +88,10 @@ export function MobileBottomNav({ clerkEnabled = false }: { clerkEnabled?: boole
       >
         <div className="mobile-bottom-nav-3d__shell mx-2 mb-[max(0.35rem,env(safe-area-inset-bottom,0px))] flex min-h-[var(--mobile-nav-height)] items-stretch overflow-hidden rounded-2xl border border-[var(--line)]">
           {tabs.map(({ Icon, label, href }) => {
+            const accountEntryActive = href === "/account" && pathname.startsWith("/sign-in");
             const active =
               href === "/" || href === "/account"
-                ? pathname === href
+                ? pathname === href || accountEntryActive
                 : href === "/sign-in"
                   ? false
                   : pathname.startsWith(href);

@@ -6,11 +6,11 @@ describe("getMobileNavigationMode", () => {
     expect(getMobileNavigationMode(pathname)).toBe("account");
   });
 
-  it.each(["/", "/search", "/hotels/kigali-house"])("uses marketplace tabs on %s", (pathname) => {
+  it.each(["/", "/search", "/hotels/kigali-house", "/sign-in", "/sign-in/factor-one"])("uses marketplace tabs on %s", (pathname) => {
     expect(getMobileNavigationMode(pathname)).toBe("public");
   });
 
-  it.each(["/host", "/host/calendar", "/admin", "/sign-in", "/register", "/booking/reference"])(
+  it.each(["/host", "/host/calendar", "/admin", "/register", "/booking/reference"])(
     "hides the shared bar on %s",
     (pathname) => expect(getMobileNavigationMode(pathname)).toBe("hidden"),
   );
