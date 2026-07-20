@@ -13,7 +13,7 @@ export function HotelCard({ hotel, onQuickView }: { hotel: Hotel; onQuickView?: 
       <span className="absolute left-4 top-4 z-10 bg-white/95 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[.16em] text-[var(--ink)]">{hotel.category}</span>
       <PropertyPriceTag amountRwf={hotel.startingPriceRwf} className="absolute bottom-4 left-0 z-20" />
       
-      <div className="absolute right-4 top-4 z-10 flex flex-col gap-2">
+      <div className="absolute right-3 top-3 z-30 flex flex-row-reverse gap-2 sm:right-4 sm:top-4 sm:flex-col">
         <FavoriteButton hotelSlug={hotel.slug} className="grid size-9 place-items-center rounded-full bg-white/90 text-[var(--ink)] shadow-md backdrop-blur-sm transition-colors hover:bg-white hover:text-[var(--gold-deep)]" />
         <button 
           onClick={onQuickView}

@@ -157,7 +157,7 @@ export function SearchResults({
                     aspect="aspect-[16/10] sm:aspect-[4/3]"
                   />
                   <PropertyPriceTag amountRwf={property.price} className="absolute bottom-3 left-0 z-30" />
-                  <div className="absolute right-3 top-3 z-30 flex flex-col gap-2">
+                  <div className="absolute right-3 top-3 z-30 flex flex-row-reverse gap-2 sm:flex-col">
                     <FavoriteButton
                       hotelSlug={property.slug}
                       className="grid size-11 sm:size-9 place-items-center rounded-full bg-white/90 text-[var(--ink)] shadow transition-transform duration-200 hover:scale-110"
