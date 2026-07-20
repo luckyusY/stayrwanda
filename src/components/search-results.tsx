@@ -7,8 +7,8 @@ import { FavoriteButton } from "@/components/favorite-button";
 import { FilterDialog, FilterGroup } from "@/components/filter-dialog";
 import { PropertyImageSlider } from "@/components/property-image-slider";
 import { PropertyQuickView } from "@/components/property-quick-view";
-import { PriceDisplay } from "@/components/price-display";
 import { PropertyFacts } from "@/components/property-facts";
+import { PropertyPriceTag } from "@/components/property-price-tag";
 import { AmenityPills } from "@/components/amenity-icon";
 import { Reveal, RevealGroup } from "@/components/reveal";
 import type { Property } from "@/lib/properties";
@@ -156,6 +156,7 @@ export function SearchResults({
                     sizes="(max-width: 639px) calc(100vw - 32px), 240px"
                     aspect="aspect-[16/10] sm:aspect-[4/3]"
                   />
+                  <PropertyPriceTag amountRwf={property.price} className="absolute bottom-3 left-0 z-30" />
                   <div className="absolute right-3 top-3 z-30 flex flex-col gap-2">
                     <FavoriteButton
                       hotelSlug={property.slug}
@@ -172,13 +173,13 @@ export function SearchResults({
                 </div>
                 <div className="flex min-w-0 flex-col p-4 sm:flex-row sm:justify-between sm:gap-6 sm:p-0">
                   <div className="min-w-0 flex-1">
-                    <PropertyFacts neighborhood={property.neighborhood} guests={property.guests} bedrooms={property.bedrooms} beds={property.beds} baths={property.baths} compact />
                     <Link
                       href={`/stays/${property.slug}`}
-                      className="mt-2 block font-serif text-lg sm:text-2xl font-semibold text-[var(--ink)] transition group-hover:text-[var(--gold-deep)]"
+                      className="block font-serif text-xl font-semibold leading-tight text-[var(--ink)] transition group-hover:text-[var(--gold-deep)] sm:text-2xl"
                     >
                       {property.title}
                     </Link>
+                    <PropertyFacts neighborhood={property.neighborhood} guests={property.guests} bedrooms={property.bedrooms} beds={property.beds} baths={property.baths} variant="card" />
                     <p className="mt-2 text-sm font-medium text-[var(--ink)]">{property.type}</p>
                     <AmenityPills amenities={property.amenities} className="mt-2" />
                     <div className="mt-4 flex flex-wrap items-center gap-1.5 sm:gap-2">
@@ -193,8 +194,6 @@ export function SearchResults({
                       </span>
                     </div>
                     <div className="text-right">
-                      <span className="block text-xs text-[var(--muted)]">Indicative nightly rate</span>
-                      <PriceDisplay amountRwf={property.price} className="mt-1 block font-serif text-xl font-semibold text-[var(--ink)]" />
                       <Link
                         href={`/stays/${property.slug}`}
                         className="button-3d group/cta mt-3 inline-flex items-center gap-1.5 bg-[var(--ink)] px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.16em] text-white hover:bg-[var(--ink-2)]"

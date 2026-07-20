@@ -26,9 +26,9 @@ import { TiltCard } from "@/components/tilt-card";
 import { Popout } from "@/components/popout";
 import { SlotCounter } from "@/components/slot-counter";
 import { CountUp } from "@/components/count-up";
-import { PriceDisplay } from "@/components/price-display";
 import { PropertyImageSlider } from "@/components/property-image-slider";
 import { PropertyFacts } from "@/components/property-facts";
+import { PropertyPriceTag } from "@/components/property-price-tag";
 import { HeroSlideshow } from "@/components/hero-slideshow";
 import { AmenityPills } from "@/components/amenity-icon";
 import type { Property } from "@/lib/properties";
@@ -327,6 +327,7 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
                     <span className="pointer-events-none absolute left-4 top-4 z-20 bg-white/90 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-[var(--ink)]">
                       {property.type}
                     </span>
+                    <PropertyPriceTag amountRwf={property.price} className="absolute bottom-4 left-0 z-20" />
                     <button
                       type="button"
                       onClick={(e) => {
@@ -346,18 +347,17 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
                   </div>
                   <div className="p-5 flex flex-col justify-between flex-1">
                     <div>
-                      <PropertyFacts neighborhood={property.neighborhood} guests={property.guests} bedrooms={property.bedrooms} beds={property.beds} baths={property.baths} compact />
                       <Link
                         href={`/stays/${property.slug}`}
-                        className="mt-2 block font-serif text-xl font-semibold text-[var(--ink)] transition group-hover:text-[var(--gold-deep)] line-clamp-1"
+                        className="block font-serif text-xl font-semibold leading-tight text-[var(--ink)] transition group-hover:text-[var(--gold-deep)] line-clamp-2"
                       >
                         {property.title}
                       </Link>
+                      <PropertyFacts neighborhood={property.neighborhood} guests={property.guests} bedrooms={property.bedrooms} beds={property.beds} baths={property.baths} variant="card" />
                       <AmenityPills amenities={property.amenities} className="mt-2" />
                     </div>
                     <div className="mt-4 pt-4 border-t border-[var(--line)]">
-                      <div className="flex items-center justify-between mb-4">
-                        <PriceDisplay amountRwf={property.price} className="font-serif text-lg font-semibold text-[var(--ink)]" />
+                      <div className="mb-4 flex items-center justify-end">
                         <span className="text-[10px] uppercase tracking-[0.16em] text-[var(--muted)]">
                           {property.photoCount} photos
                         </span>
