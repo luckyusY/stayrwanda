@@ -44,7 +44,8 @@ function usePreferInstantReveal() {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     // Coarse pointers (phones) — skip scroll-reveal so content never stays opacity:0
     const coarse = window.matchMedia("(pointer: coarse)").matches;
-    setInstant(reduce || coarse);
+    const frame = requestAnimationFrame(() => setInstant(reduce || coarse));
+    return () => cancelAnimationFrame(frame);
   }, []);
   return instant;
 }
