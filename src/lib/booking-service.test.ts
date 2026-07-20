@@ -23,6 +23,9 @@ describe("public booking contract", () => {
   it("rejects invalid email and excessive guests", () => {
     expect(bookingRequestSchema.safeParse({ ...valid, email: "bad", guests: 100 }).success).toBe(false);
   });
+  it.each(["RWF", "USD", "EUR", "GBP", "KES", "UGX", "TZS"])("accepts the displayed %s currency", (currency) => {
+    expect(bookingRequestSchema.safeParse({ ...valid, currency }).success).toBe(true);
+  });
 });
 
 describe("hotel publishing guardrails", () => {

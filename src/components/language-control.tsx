@@ -1,13 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { Check, Languages } from "lucide-react";
+import { Check } from "lucide-react";
 import { Popout } from "@/components/popout";
+import { CountryFlag } from "@/components/country-flag";
 
 const LANGUAGES = [
-  { code: "en", label: "English", nativeLabel: "English" },
-  { code: "fr", label: "French", nativeLabel: "Français" },
-  { code: "rw", label: "Kinyarwanda", nativeLabel: "Ikinyarwanda" },
+  { code: "en", label: "English", nativeLabel: "English", flagCode: "GB" as const },
+  { code: "fr", label: "French", nativeLabel: "Français", flagCode: "FR" as const },
+  { code: "rw", label: "Kinyarwanda", nativeLabel: "Ikinyarwanda", flagCode: "RW" as const },
 ] as const;
 
 export function buildGoogleTranslateUrl(pageUrl: string, language: string) {
@@ -51,7 +52,7 @@ export function LanguageControl({ light = false }: { light?: boolean }) {
           }`}
         >
           <span className="grid size-9 place-items-center md:size-auto">
-            <Languages size={18} className="shrink-0 opacity-90 md:size-4" />
+            <CountryFlag code="GB" />
           </span>
           <span className="hidden text-[11px] font-semibold leading-none tracking-wide md:block">EN</span>
           <span className={`hidden text-[9px] font-medium uppercase leading-none tracking-[0.12em] md:block ${light ? "text-white/55" : "text-[var(--muted)]"}`}>
@@ -76,11 +77,14 @@ export function LanguageControl({ light = false }: { light?: boolean }) {
                 language.code === "en" ? "bg-[var(--gold-pale)] text-[var(--gold-deep)]" : "text-[var(--ink)]"
               }`}
             >
-              <span>
+              <span className="flex items-center gap-3">
+                <CountryFlag code={language.flagCode} />
+                <span>
                 <span className="block text-sm font-semibold">{language.nativeLabel}</span>
                 {language.nativeLabel !== language.label && (
                   <span className="block text-[11px] text-[var(--muted)]">{language.label}</span>
                 )}
+                </span>
               </span>
               {language.code === "en" && <Check size={17} aria-hidden />}
             </button>

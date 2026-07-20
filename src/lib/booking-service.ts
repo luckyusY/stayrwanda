@@ -67,9 +67,9 @@ export async function createInventoryBackedBooking(raw: unknown, idempotencyKey:
     try {
       const result = await db.collection("bookings").insertOne(record);
       return { ...record, _id: String(result.insertedId), publicToken };
-    } catch (err) {
-      console.warn("Could not save seed booking to MongoDB:", err);
-      return { ...record, _id: reference, publicToken };
+    } catch (error) {
+      console.error("Seed booking persistence failed", error instanceof Error ? error.name : "Unknown error");
+      throw new Error("BOOKING_PERSISTENCE_FAILED");
     }
   }
 
