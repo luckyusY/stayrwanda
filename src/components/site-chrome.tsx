@@ -10,6 +10,7 @@ import { EASE, softSpring } from "@/lib/motion";
 import { CurrencyControl } from "@/components/currency-provider";
 import { AccountPopout } from "@/components/account-popout";
 import { NotificationPopout } from "@/components/notification-popout";
+import { LanguageControl } from "@/components/language-control";
 import { useOverlayLayer } from "@/components/overlay-stack";
 
 /** Brand social glyphs (lucide no longer ships Facebook/Instagram/Twitter). */
@@ -155,11 +156,11 @@ export function SiteHeader({
       )}
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div
-          className={`flex items-center justify-between gap-4 transition-[height] duration-300 ${
+          className={`flex items-center justify-between gap-2 transition-[height] duration-300 sm:gap-4 ${
             compact ? "h-16" : "h-20"
           }`}
         >
-          <Wordmark light={onLight} imgClass={compact ? "h-12" : "h-16"} />
+          <Wordmark light={onLight} imgClass={compact ? "h-12" : "h-10 min-[360px]:h-12 sm:h-16"} />
 
           {/* Text-only nav — no icons so labels stay crisp over photography */}
           <nav
@@ -206,6 +207,7 @@ export function SiteHeader({
           {/* Always visible: currency · alerts · account (compact icons on mobile) */}
           <div className="flex items-center gap-1 sm:gap-2">
             <CurrencyControl light={onLight} />
+            <LanguageControl light={onLight} />
             <div className="mx-0.5 hidden h-5 w-px bg-current opacity-20 sm:block" />
             <div className="hidden sm:block">
               <NotificationPopout light={onLight} />
