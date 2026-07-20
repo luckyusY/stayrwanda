@@ -2,6 +2,7 @@ import type { Db } from "mongodb";
 import { getDb } from "@/lib/mongodb";
 import { featuredProperties, type Property } from "@/lib/properties";
 import { seededNightlyRateRwf } from "@/lib/pricing";
+import { getPublicCatalogue } from "@/lib/public-catalogue";
 
 export type PropertyStatus = "active" | "pending" | "inactive" | "rejected";
 
@@ -137,12 +138,8 @@ export async function listProperties(): Promise<StoredProperty[]> {
 
 /** Public view: only listings that are live. */
 export async function listPublicProperties(): Promise<StoredProperty[]> {
-  const all = await listProperties();
-  const live = all.filter((property) => property.status === "active");
-  return live.length ? live : seedProperties().map((p) => ({
-    ...p,
-    price: seededNightlyRateRwf(p.slug) || p.price,
-  }));
+  const { properties } = await getPublicCatalogue();
+  return properties.map((property) => ({ ...property, status: "active", featured: true }));
 }
 
 export async function getPropertyBySlug(slug: string): Promise<StoredProperty | null> {

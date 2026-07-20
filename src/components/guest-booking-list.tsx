@@ -51,12 +51,12 @@ export function GuestBookingList({ bookings }: { bookings: GuestBooking[] }) {
   return (
     <div className="space-y-5">
       {/* Pill tab bar */}
-      <div className="flex flex-wrap gap-2">
+      <div className="flex snap-x gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {(["upcoming", "past", "requests"] as Tab[]).map((t) => (
           <button
             key={t}
             onClick={() => setTab(t)}
-            className={`relative flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-all ${
+            className={`relative flex min-h-11 shrink-0 snap-start items-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold transition-all sm:px-5 ${
               tab === t
                 ? "bg-[var(--ink)] text-white shadow-sm"
                 : "bg-white border border-[var(--line)] text-[var(--muted)] hover:border-[var(--gold)] hover:text-[var(--ink)]"

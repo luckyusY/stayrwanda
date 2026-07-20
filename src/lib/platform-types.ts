@@ -31,6 +31,13 @@ export const HOTEL_TEMPLATES = ["classic", "editorial", "modern"] as const;
 export type HotelTemplate = (typeof HOTEL_TEMPLATES)[number];
 export type HotelStatus = "draft" | "pending" | "published" | "rejected" | "suspended";
 
+export type UnitSummary = {
+  maxGuests: number;
+  bedrooms: number;
+  beds: number;
+  baths: number;
+};
+
 export type Hotel = {
   id: string;
   organizationId: string;
@@ -46,6 +53,8 @@ export type Hotel = {
   description: string;
   /** Computed from the cheapest published unit, or the seeded catalogue fallback. */
   startingPriceRwf?: number;
+  /** Public capacity summary from the cheapest published unit. */
+  unitSummary?: UnitSummary;
   publishedVersionId?: string;
   draftVersionId?: string;
   legacySlug?: string;

@@ -2,8 +2,9 @@
 
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { Popout } from "./popout";
-import { ChevronDown, Globe2, Search } from "lucide-react";
+import { ChevronDown, Search } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-is-mobile";
+import { CountryFlag } from "@/components/country-flag";
 
 export const CURRENCIES = [
   { code: "RWF", name: "Rwandan Franc", flag: "🇷🇼", rate: 1 },
@@ -18,14 +19,14 @@ export const CURRENCIES = [
 export type CurrencyCode = (typeof CURRENCIES)[number]["code"];
 
 // Unicode escapes keep the country flags intact regardless of source-file encoding.
-const CURRENCY_COUNTRIES: Record<CurrencyCode, { country: string; flag: string }> = {
-  RWF: { country: "Rwanda", flag: "\u{1F1F7}\u{1F1FC}" },
-  USD: { country: "United States", flag: "\u{1F1FA}\u{1F1F8}" },
-  EUR: { country: "European Union", flag: "\u{1F1EA}\u{1F1FA}" },
-  GBP: { country: "United Kingdom", flag: "\u{1F1EC}\u{1F1E7}" },
-  KES: { country: "Kenya", flag: "\u{1F1F0}\u{1F1EA}" },
-  UGX: { country: "Uganda", flag: "\u{1F1FA}\u{1F1EC}" },
-  TZS: { country: "Tanzania", flag: "\u{1F1F9}\u{1F1FF}" },
+const CURRENCY_COUNTRIES: Record<CurrencyCode, { country: string; flagCode: "RW" | "US" | "EU" | "GB" | "KE" | "UG" | "TZ" }> = {
+  RWF: { country: "Rwanda", flagCode: "RW" },
+  USD: { country: "United States", flagCode: "US" },
+  EUR: { country: "European Union", flagCode: "EU" },
+  GBP: { country: "United Kingdom", flagCode: "GB" },
+  KES: { country: "Kenya", flagCode: "KE" },
+  UGX: { country: "Uganda", flagCode: "UG" },
+  TZS: { country: "Tanzania", flagCode: "TZ" },
 };
 
 type Value = {
@@ -130,10 +131,11 @@ export function CurrencyControl({ light = false }: { light?: boolean }) {
           aria-haspopup="listbox"
         >
           <span className="relative grid size-9 place-items-center md:size-auto">
-            <Globe2 size={18} className="shrink-0 opacity-90 md:size-4" />
+            <CountryFlag code={activeCountry.flagCode} />
           </span>
+          <span className="text-[8px] font-bold uppercase leading-none tracking-[0.08em] md:hidden">{currency}</span>
           <span className="hidden items-center gap-0.5 text-[11px] font-semibold leading-none tracking-wide md:inline-flex">
-            {activeCountry.flag} {currency}
+            {currency}
             <ChevronDown
               size={11}
               className={`opacity-70 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
@@ -190,7 +192,7 @@ export function CurrencyControl({ light = false }: { light?: boolean }) {
                   }`}
                 >
                   <span className="flex min-w-0 items-center gap-2.5">
-                    <span className="text-xl leading-none" aria-hidden>{CURRENCY_COUNTRIES[c.code].flag}</span>
+                    <CountryFlag code={CURRENCY_COUNTRIES[c.code].flagCode} />
                     <span className="flex min-w-0 flex-col">
                       <span>{c.name}</span>
                       <span className="text-[11px] font-normal text-[var(--muted)]">{CURRENCY_COUNTRIES[c.code].country}</span>

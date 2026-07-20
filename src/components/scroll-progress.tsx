@@ -18,6 +18,8 @@ export function ScrollProgress() {
     });
   }, [scrollYProgress]);
 
+  const hotelProfile = pathname?.startsWith("/hotels/");
+
   if (pathname?.startsWith("/admin")) return null;
 
   return (
@@ -28,13 +30,13 @@ export function ScrollProgress() {
         className="page-progress"
       />
       <AnimatePresence>
-        {showTop && (
+        {showTop && !hotelProfile && (
           <motion.button
             initial={{ opacity: 0, y: 20, scale: 0.8 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.8 }}
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="fixed bottom-6 right-6 z-40 grid size-12 place-items-center rounded-full bg-[var(--ink)] text-[var(--gold)] shadow-[0_10px_30px_rgba(20,34,58,0.2)] transition-colors hover:bg-[var(--ink-2)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--gold)]"
+            className="back-to-top fixed bottom-[calc(var(--mobile-nav-height)+env(safe-area-inset-bottom,0px)+2rem)] right-3 z-[34] grid size-11 place-items-center rounded-full bg-[var(--ink)] text-[var(--gold)] shadow-[0_10px_30px_rgba(20,34,58,0.2)] transition-colors hover:bg-[var(--ink-2)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--gold)] md:bottom-6 md:right-6 md:z-40 md:size-12"
             aria-label="Back to top"
           >
             <ArrowUp size={20} />

@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { BarChart3, BedDouble, Building2, CalendarDays, ClipboardList, History, Menu, Settings, Tags, UserRound, Users, X } from "lucide-react";
 import { motion } from "framer-motion";
+import { useOverlayLayer } from "@/components/overlay-stack";
 
 const nav = [
   ["/host", "Overview", BarChart3],
@@ -22,17 +23,18 @@ const nav = [
 export function HostShell({ children, organizationName = "Hospitality workspace" }: { children: React.ReactNode; organizationName?: string }) {
   const path = usePathname();
   const [open, setOpen] = useState(false);
+  const drawerLayer = useOverlayLayer(open);
   return (
     <div className="workspace-3d min-h-screen bg-[#f6f5f1] md:grid md:grid-cols-[260px_1fr]">
       <aside className={`${open ? "block" : "hidden"} fixed inset-0 z-50 md:static md:block`}>
-        <div onClick={() => setOpen(false)} className="absolute inset-0 bg-black/40 md:hidden" />
-        <div className="surface-3d-dark relative flex h-full w-[280px] flex-col !rounded-none border-y-0 border-l-0 p-4 text-white md:sticky md:top-0 md:h-screen md:w-auto">
+        <div onClick={() => drawerLayer.isTop() && setOpen(false)} className="absolute inset-0 bg-black/40 md:hidden" />
+        <div className="surface-3d-dark mobile-scroll-region relative flex h-[100dvh] w-[280px] max-w-[86vw] flex-col !rounded-none border-y-0 border-l-0 p-4 text-white md:sticky md:top-0 md:h-screen md:w-auto md:max-w-none md:overflow-visible">
           <div className="flex items-center justify-between border-b border-white/10 px-2 pb-5">
             <Link href="/host" className="font-serif text-2xl">StayRwanda <small className="block font-sans text-[9px] uppercase tracking-[.18em] text-[var(--gold)]">Host CRM</small></Link>
-            <button onClick={() => setOpen(false)} className="md:hidden"><X /></button>
+            <button onClick={() => setOpen(false)} className="grid size-11 place-items-center md:hidden" aria-label="Close host menu"><X /></button>
           </div>
           <p className="px-2 py-5 text-xs text-white/60">{organizationName}</p>
-          <nav className="space-y-1">
+          <nav className="space-y-1 pb-5">
             {nav.map(([href, label, Icon]) => {
               const active = path === href || (href !== "/host" && path.startsWith(`${href}/`));
 
@@ -64,9 +66,9 @@ export function HostShell({ children, organizationName = "Hospitality workspace"
       </aside>
       <div>
         <header className="sticky top-0 z-30 flex h-16 items-center border-b border-[#e1ded5] bg-white px-5 shadow-[0_5px_18px_rgba(20,34,58,.06)]">
-          <button onClick={() => setOpen(true)} className="interactive-3d mr-3 grid size-9 place-items-center md:hidden"><Menu /></button>
-          <strong className="text-sm text-[var(--ink)]">{organizationName}</strong>
-          <Link href="/host/onboarding" className="button-3d shimmer-gold ml-auto bg-[var(--gold)] px-4 py-2 text-xs font-semibold uppercase tracking-wider text-white">Add property</Link>
+          <button onClick={() => setOpen(true)} className="interactive-3d mr-2 grid size-11 place-items-center md:hidden" aria-label="Open host menu"><Menu /></button>
+          <strong className="min-w-0 truncate text-sm text-[var(--ink)]">{organizationName}</strong>
+          <Link href="/host/onboarding" className="button-3d shimmer-gold ml-auto shrink-0 bg-[var(--gold)] px-3 py-2 text-xs font-semibold uppercase tracking-wider text-white sm:px-4"><span className="sm:hidden">Add</span><span className="hidden sm:inline">Add property</span></Link>
         </header>
         <main className="p-4 sm:p-7">{children}</main>
       </div>

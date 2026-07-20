@@ -6,6 +6,7 @@ import {
   updatePropertyStatus,
   type PropertyStatus,
 } from "@/lib/data";
+import { invalidatePublicCatalogue } from "@/lib/public-catalogue";
 
 const STATUSES: PropertyStatus[] = ["active", "pending", "inactive", "rejected"];
 
@@ -30,6 +31,7 @@ export async function PATCH(request: Request, ctx: { params: Promise<{ slug: str
   }
   const ok = await updatePropertyStatus(slug, status as PropertyStatus);
   if (!ok) return NextResponse.json({ error: "Not found or database unavailable." }, { status: 404 });
+  invalidatePublicCatalogue();
   return NextResponse.json({ ok: true, status });
 }
 
@@ -38,5 +40,6 @@ export async function DELETE(_request: Request, ctx: { params: Promise<{ slug: s
   const { slug } = await ctx.params;
   const ok = await deletePropertyBySlug(slug);
   if (!ok) return NextResponse.json({ error: "Not found or database unavailable." }, { status: 404 });
+  invalidatePublicCatalogue();
   return NextResponse.json({ ok: true });
 }

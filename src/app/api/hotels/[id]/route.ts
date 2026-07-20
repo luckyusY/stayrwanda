@@ -4,6 +4,7 @@ import { getDb } from "@/lib/mongodb";
 import { currentIdentity, requireMembership } from "@/lib/auth";
 import { recordAudit } from "@/lib/audit";
 import { revalidatePath } from "next/cache";
+import { invalidatePublicCatalogue } from "@/lib/public-catalogue";
 
 type Context = { params: Promise<{ id: string }> };
 
@@ -26,6 +27,7 @@ export async function PATCH(request: Request, context: Context) {
     if (allowed.name.length < 3 || allowed.description.length < 40) return NextResponse.json({ error: "Name and a complete description are required." }, { status: 400 });
     await db.collection("hotels").updateOne({ _id: hotel._id }, { $set: allowed });
     await recordAudit({ actor: identity, organizationId: hotel.organizationId, action: "hotel.update", recordType: "hotel", recordId: id, before: { name: hotel.name, description: hotel.description, template: hotel.template }, after: allowed });
+    invalidatePublicCatalogue();
     return NextResponse.json({ ok: true });
   } catch (error) {
     const code = error instanceof Error ? error.message : "";
@@ -49,6 +51,7 @@ export async function POST(request: Request, context: Context) {
       const result = await db.collection("hotelProfileVersions").insertOne(snapshot);
       await db.collection("hotels").updateOne({ _id: hotel._id }, { $set: { status: "published", publishedVersionId: String(result.insertedId), publishedAt: new Date(), updatedAt: new Date() } });
       await recordAudit({ actor: identity, organizationId: hotel.organizationId, action: "hotel.publish", recordType: "hotel", recordId: id, after: { version } });
+      invalidatePublicCatalogue();
       revalidatePath("/hotels"); revalidatePath(`/hotels/${hotel.slug}`); revalidatePath("/stays"); revalidatePath("/residences");
       return NextResponse.json({ ok: true, status: "published" });
     }

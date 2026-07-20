@@ -44,6 +44,10 @@ function propertyFromGallery(
 ): Property {
   const images = galleryImages(gallery);
   return {
+    guests: 4,
+    bedrooms: 2,
+    beds: 2,
+    baths: 2,
     ...details,
     image: images[0],
     images,

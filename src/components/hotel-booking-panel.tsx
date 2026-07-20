@@ -2,13 +2,15 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   CalendarCheck,
   CalendarX,
   Check,
   CreditCard,
+  MapPin,
+  MessageCircle,
   Minus,
   Plus,
   ShieldCheck,
@@ -21,6 +23,7 @@ import { CalendarPopout } from "@/components/calendar-popout";
 import { Button } from "@/components/ui/button";
 import { Popout } from "@/components/popout";
 import { EASE } from "@/lib/motion";
+import { trackConversionEvent } from "@/lib/conversion-events";
 
 const STEPS = [
   { id: "dates", label: "Dates" },
@@ -40,7 +43,7 @@ function prettyDate(value: string) {
   });
 }
 
-export function HotelBookingPanel({ hotel, unit }: { hotel: Hotel; unit: UnitType | null }) {
+export function HotelBookingPanel({ hotel, unit, whatsappNumber }: { hotel: Hotel; unit: UnitType | null; whatsappNumber?: string }) {
   const { currency, format } = useCurrency();
   const { toast } = useToast();
   const [wizardOpen, setWizardOpen] = useState(false);
@@ -65,6 +68,16 @@ export function HotelBookingPanel({ hotel, unit }: { hotel: Hotel; unit: UnitTyp
 
   const stepIndex = STEPS.findIndex((s) => s.id === step);
   const progress = ((stepIndex + 1) / STEPS.length) * 100;
+  const nightlyRwf = unit?.basePriceRwf || hotel.startingPriceRwf || 0;
+  const subtotalRwf = nights * nightlyRwf;
+  const totalRwf = subtotalRwf;
+  const whatsappHref = whatsappNumber
+    ? `https://wa.me/${whatsappNumber.replace(/\D/g, "")}?text=${encodeURIComponent(`Hello StayRwanda, I am interested in ${hotel.name}${form.checkIn && form.checkOut ? ` from ${form.checkIn} to ${form.checkOut}` : ""}.`)}`
+    : null;
+
+  useEffect(() => {
+    trackConversionEvent("property_viewed", { hotelSlug: hotel.slug, category: hotel.category });
+  }, [hotel.category, hotel.slug]);
 
   function validate(): string | null {
     if (step === "dates") {
@@ -74,6 +87,7 @@ export function HotelBookingPanel({ hotel, unit }: { hotel: Hotel; unit: UnitTyp
     if (step === "guests" && Number(form.guests) < 1) return "At least one guest is required.";
     if (step === "details") {
       if (!form.guestName.trim() || !form.email.trim()) return "Please add your name and email.";
+      if (!/^\S+@\S+\.\S+$/.test(form.email)) return "Please enter a valid email address.";
     }
     return null;
   }
@@ -85,6 +99,7 @@ export function HotelBookingPanel({ hotel, unit }: { hotel: Hotel; unit: UnitTyp
       return;
     }
     setState({});
+    trackConversionEvent("booking_step_completed", { hotelSlug: hotel.slug, step });
     if (step === "dates") setStep("guests");
     else if (step === "guests") setStep("details");
     else if (step === "details") setStep("review");
@@ -100,6 +115,7 @@ export function HotelBookingPanel({ hotel, unit }: { hotel: Hotel; unit: UnitTyp
   async function submit() {
     if (!unit) return;
     setState({ loading: true });
+    trackConversionEvent("booking_submitted", { hotelSlug: hotel.slug, nights, guests: Number(form.guests), currency });
     const idempotencyKey = crypto.randomUUID();
     const response = await fetch("/api/bookings", {
       method: "POST",
@@ -120,10 +136,12 @@ export function HotelBookingPanel({ hotel, unit }: { hotel: Hotel; unit: UnitTyp
     const data = await response.json().catch(() => ({}));
     if (!response.ok) {
       const errMsg = data.error || "Unable to send your request.";
+      trackConversionEvent("booking_failed", { hotelSlug: hotel.slug, code: data.code || response.status });
       toast.error("Request Failed", errMsg);
       return setState({ error: errMsg });
     }
     toast.success("Request Received", `Reference: ${data.booking.reference}`);
+    trackConversionEvent("booking_succeeded", { hotelSlug: hotel.slug, nights, currency });
     setState({ reference: data.booking.reference, token: data.booking.publicToken });
   }
 
@@ -131,6 +149,7 @@ export function HotelBookingPanel({ hotel, unit }: { hotel: Hotel; unit: UnitTyp
     setStep("dates");
     setState({});
     setWizardOpen(true);
+    trackConversionEvent("booking_started", { hotelSlug: hotel.slug, nightlyRwf, currency });
   }
 
   if (state.reference) {
@@ -168,8 +187,8 @@ export function HotelBookingPanel({ hotel, unit }: { hotel: Hotel; unit: UnitTyp
           />
           <p className="eyebrow m-0 flex flex-1 items-center justify-between">
             <span>Request to book</span>
-            <span className="flex items-center gap-1 text-[var(--rwanda-green)]" title="Verified Host">
-              <ShieldCheck size={14} /> Verified
+            <span className="flex items-center gap-1 text-[var(--rwanda-green)]" title="Published StayRwanda listing">
+              <ShieldCheck size={14} /> Published
             </span>
           </p>
         </div>
@@ -180,6 +199,10 @@ export function HotelBookingPanel({ hotel, unit }: { hotel: Hotel; unit: UnitTyp
           <CreditCard size={13} className="text-[var(--gold-mid)]" />
           {unit ? "per night · no payment collected now" : hotel.startingPriceRwf ? "indicative nightly rate · contact the property for availability" : "Contact the property for current availability"}
         </p>
+        <div className="mt-4 grid grid-cols-2 gap-2 text-[11px] text-[var(--ink)]">
+          <span className="flex items-center gap-2 rounded-lg bg-[var(--parchment)] px-3 py-2"><ShieldCheck size={14} className="shrink-0 text-[var(--gold-deep)]" /> Tracked request</span>
+          <span className="flex items-center gap-2 rounded-lg bg-[var(--parchment)] px-3 py-2"><MapPin size={14} className="shrink-0 text-[var(--gold-deep)]" /> Kigali listing</span>
+        </div>
         <button
           type="button"
           disabled={!unit}
@@ -189,9 +212,35 @@ export function HotelBookingPanel({ hotel, unit }: { hotel: Hotel; unit: UnitTyp
           {unit ? "Start booking request" : "Inventory coming soon"}
         </button>
         <p className="mt-3 text-center text-[11px] text-[var(--muted)]">
-          Multi-step request · soft hold · host confirmation
+          No payment now · dates held while the host reviews
         </p>
+        {whatsappHref && (
+          <a
+            href={whatsappHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => trackConversionEvent("concierge_opened", { hotelSlug: hotel.slug })}
+            className="mt-3 flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border border-[var(--line)] text-xs font-semibold text-[var(--ink)] hover:border-[var(--gold)] hover:text-[var(--gold-deep)]"
+          >
+            <MessageCircle size={16} /> Ask StayRwanda on WhatsApp
+          </a>
+        )}
       </aside>
+
+      {unit && !wizardOpen && (
+        <div className="fixed inset-x-3 z-[34] lg:hidden bottom-[calc(var(--mobile-nav-height)+env(safe-area-inset-bottom,0px)+.65rem)]">
+          <div className="surface-3d-floating flex items-center justify-between gap-3 rounded-2xl border border-[var(--line)] bg-white p-2.5 pl-4 shadow-[0_12px_34px_rgba(20,34,58,.24)]">
+            <div className="min-w-0">
+              <span className="block text-[9px] font-semibold uppercase tracking-[.13em] text-[var(--muted)]">From</span>
+              <strong className="block truncate font-serif text-lg leading-tight text-[var(--ink)]">{format(nightlyRwf)}</strong>
+              <span className="block text-[9px] text-[var(--muted)]">per night · no payment now</span>
+            </div>
+            <button type="button" onClick={openWizard} className="button-3d min-h-12 shrink-0 bg-[var(--ink)] px-4 text-[10px] font-semibold uppercase tracking-[.12em] text-white">
+              Check dates
+            </button>
+          </div>
+        </div>
+      )}
 
       <Popout
         variant="dialog"
@@ -205,8 +254,8 @@ export function HotelBookingPanel({ hotel, unit }: { hotel: Hotel; unit: UnitTyp
           <p className="text-[0.65rem] uppercase tracking-[0.14em] text-[var(--gold-deep)]">{hotel.category}</p>
           <h3 className="font-serif text-lg font-semibold text-[var(--ink)]">{hotel.name}</h3>
           {nights > 0 && unit && (
-            <p className="text-xs text-[var(--muted)]">
-              {nights} night{nights === 1 ? "" : "s"} · est. {format(nights * unit.basePriceRwf)}
+            <p className="text-xs font-medium text-[var(--muted)]">
+              {nights} night{nights === 1 ? "" : "s"} · {format(totalRwf)} total · no payment now
             </p>
           )}
         </div>
@@ -388,8 +437,18 @@ export function HotelBookingPanel({ hotel, unit }: { hotel: Hotel; unit: UnitTyp
                       </div>
                     ))}
                   </dl>
-                  <p className="text-xs text-[var(--muted)]">
-                    No payment now. Inventory is soft-held while the host reviews.
+                  <div className="rounded-xl bg-[var(--parchment)] p-4">
+                    <div className="flex justify-between gap-3 text-sm text-[var(--ink)]">
+                      <span>{format(nightlyRwf)} × {nights} night{nights === 1 ? "" : "s"}</span>
+                      <strong>{format(subtotalRwf)}</strong>
+                    </div>
+                    <div className="mt-2 flex justify-between gap-3 text-sm text-[var(--muted)]"><span>StayRwanda service fee</span><span>{format(0)}</span></div>
+                    <div className="mt-2 flex justify-between gap-3 text-sm text-[var(--muted)]"><span>Payment due now</span><span>{format(0)}</span></div>
+                    <div className="mt-3 flex justify-between gap-3 border-t border-[var(--line)] pt-3 text-base text-[var(--ink)]"><strong>Total</strong><strong>{format(totalRwf)}</strong></div>
+                  </div>
+                  <p className="flex items-start gap-2 text-xs leading-relaxed text-[var(--muted)]">
+                    <ShieldCheck size={15} className="mt-0.5 shrink-0 text-[var(--gold-deep)]" />
+                    No payment now. Your dates are held while the host reviews the request. You receive a reference immediately.
                   </p>
                 </>
               )}
@@ -403,7 +462,7 @@ export function HotelBookingPanel({ hotel, unit }: { hotel: Hotel; unit: UnitTyp
           )}
         </div>
 
-        <div className="flex items-center justify-between gap-3 border-t border-[var(--line)] px-5 py-4">
+        <div className="sticky bottom-0 z-10 flex items-center justify-between gap-3 border-t border-[var(--line)] bg-white px-4 py-3 pb-[calc(.75rem+env(safe-area-inset-bottom,0px))] sm:px-5 sm:py-4">
           <Button
             type="button"
             variant="ghost"
@@ -414,7 +473,7 @@ export function HotelBookingPanel({ hotel, unit }: { hotel: Hotel; unit: UnitTyp
           </Button>
           {step === "review" ? (
             <Button type="button" variant="primary" loading={!!state.loading} onClick={submit}>
-              Submit request
+              Send booking request
             </Button>
           ) : (
             <Button type="button" variant="primary" onClick={goNext}>

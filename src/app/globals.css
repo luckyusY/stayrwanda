@@ -72,6 +72,8 @@
   --z-overlay:   40;
   --z-modal:     50;
   --z-toast:     60;
+  --z-mobile-nav: 35;
+  --mobile-nav-height: 4rem;
 
   /* Dimensional interaction system */
   --depth-soft: 0 1px 2px rgba(20, 34, 58, .06), 0 12px 32px rgba(20, 34, 58, .08);
@@ -926,12 +928,56 @@ header a[aria-label="StayRwanda home"] img {
 
 /* iOS safe area utils */
 .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); }
+
+/* ── Mobile 3D bottom dock ─────────────────────────────── */
+.mobile-bottom-nav-3d {
+  pointer-events: none;
+}
+.mobile-bottom-nav-3d__shell {
+  pointer-events: auto;
+  background: linear-gradient(180deg, #ffffff 0%, var(--parchment) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 2px 0 rgba(9, 18, 33, 0.06),
+    0 -8px 28px rgba(20, 34, 58, 0.12),
+    0 12px 32px rgba(20, 34, 58, 0.14);
+}
+.mobile-nav-tab:active {
+  transform: translateY(1px);
+}
+
+/* Prevent iOS Safari horizontal bounce on search */
+@media (max-width: 767px) {
+  .search-mobile-stack {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+  .search-mobile-stack > * {
+    min-width: 0;
+    border-radius: var(--radius-control);
+    border: 1px solid var(--line);
+  }
+}
 .pt-safe { padding-top: env(safe-area-inset-top, 0px); }
 .pl-safe { padding-left: env(safe-area-inset-left, 0px); }
 .pr-safe { padding-right: env(safe-area-inset-right, 0px); }
 
 /* Disable 3D perspective form-card on mobile */
 @media (max-width: 767px) {
+  html,
+  body {
+    max-width: 100%;
+    overflow-x: clip;
+  }
+
+  .mobile-scroll-region {
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
   .form-card-3d {
     transform: none !important;
     box-shadow: var(--depth-soft) !important;
@@ -967,7 +1013,7 @@ header a[aria-label="StayRwanda home"] img {
 }
 
 /* On mobile viewports, Popout dialogs slide up as bottom sheets */
-@media (max-width: 639px) {
+@media (max-width: 767px) {
   /* Switch grid → flex so justify-content actually works */
   .popout-dialog {
     display: flex !important;
@@ -977,17 +1023,29 @@ header a[aria-label="StayRwanda home"] img {
   }
   .popout-panel {
     border-radius: var(--radius-lg) var(--radius-lg) 0 0 !important;
-    max-height: 90dvh !important;
+    max-height: 92dvh !important;
     width: 100% !important;
     max-width: 100% !important;
     margin: 0 !important;
     padding-bottom: env(safe-area-inset-bottom, 16px) !important;
-    overflow-y: auto !important;
+    overflow: hidden !important;
   }
   /* Also cap dropdown height in case it falls back on mobile */
   .popout-dropdown {
     max-height: calc(100dvh - 5rem) !important;
     overflow-y: auto !important;
+  }
+}
+
+body[data-overlay-open="true"] .back-to-top {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .workspace-3d .overflow-x-auto {
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
   }
 }
 

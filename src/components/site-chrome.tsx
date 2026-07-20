@@ -3,12 +3,15 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { CalendarDays, ChevronDown, MapPin, Menu, Search, Users, X } from "lucide-react";
 import { EASE, softSpring } from "@/lib/motion";
 import { CurrencyControl } from "@/components/currency-provider";
 import { AccountPopout } from "@/components/account-popout";
 import { NotificationPopout } from "@/components/notification-popout";
+import { LanguageControl } from "@/components/language-control";
+import { useOverlayLayer } from "@/components/overlay-stack";
 
 /** Brand social glyphs (lucide no longer ships Facebook/Instagram/Twitter). */
 function IconInstagram({ size = 18 }: { size?: number }) {
@@ -82,12 +85,14 @@ export function SiteHeader({
   variant = "solid",
 }: {
   compact?: boolean;
-  variant?: "solid" | "transparent";
+  variant?: "solid" | "transparent" | "white";
 }) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-  const drawerScrollY = useRef(0);
+  const drawerLayer = useOverlayLayer(open);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const drawerRef = useRef<HTMLElement>(null);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -104,25 +109,20 @@ export function SiteHeader({
       .catch(() => {});
   }, []);
 
-  // Keep the page fixed while the drawer itself handles touch scrolling.
   useEffect(() => {
     if (!open) return;
-
-    const body = document.body;
-    drawerScrollY.current = window.scrollY;
-    body.style.position = "fixed";
-    body.style.top = `-${drawerScrollY.current}px`;
-    body.style.width = "100%";
-    body.style.overflow = "hidden";
-
-    return () => {
-      body.style.position = "";
-      body.style.top = "";
-      body.style.width = "";
-      body.style.overflow = "";
-      window.scrollTo(0, drawerScrollY.current);
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && drawerLayer.isTop()) setOpen(false);
     };
-  }, [open]);
+    document.addEventListener("keydown", closeOnEscape);
+    requestAnimationFrame(() => drawerRef.current?.focus({ preventScroll: true }));
+    return () => document.removeEventListener("keydown", closeOnEscape);
+  }, [drawerLayer, open]);
+
+  const closeMenu = () => {
+    setOpen(false);
+    requestAnimationFrame(() => menuButtonRef.current?.focus({ preventScroll: true }));
+  };
 
   const onLight = variant === "transparent" && !scrolled; // white logo/text over the hero image
   // Only the home (transparent) header shrinks — inner pages keep a fixed
@@ -137,7 +137,9 @@ export function SiteHeader({
       className={
         variant === "transparent"
           ? `${scrolled ? "fixed header-frost shadow-[0_8px_30px_rgba(20,34,58,0.06)]" : "absolute"} inset-x-0 top-0 z-50`
-          : "sticky top-0 z-50 header-frost"
+          : variant === "white"
+            ? "sticky top-0 z-50 border-b border-[var(--line)] bg-white shadow-[0_5px_18px_rgba(20,34,58,.05)]"
+            : "sticky top-0 z-50 header-frost"
       }
     >
       {isAdmin && (
@@ -154,11 +156,11 @@ export function SiteHeader({
       )}
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div
-          className={`flex items-center justify-between gap-4 transition-[height] duration-300 ${
+          className={`flex items-center justify-between gap-2 transition-[height] duration-300 sm:gap-4 ${
             compact ? "h-16" : "h-20"
           }`}
         >
-          <Wordmark light={onLight} imgClass={compact ? "h-12" : "h-16"} />
+          <Wordmark light={onLight} imgClass={compact ? "h-12" : "h-10 min-[360px]:h-12 sm:h-16"} />
 
           {/* Text-only nav — no icons so labels stay crisp over photography */}
           <nav
@@ -205,35 +207,47 @@ export function SiteHeader({
           {/* Always visible: currency · alerts · account (compact icons on mobile) */}
           <div className="flex items-center gap-1 sm:gap-2">
             <CurrencyControl light={onLight} />
+            <LanguageControl light={onLight} />
             <div className="mx-0.5 hidden h-5 w-px bg-current opacity-20 sm:block" />
-            <NotificationPopout light={onLight} />
+            <div className="hidden sm:block">
+              <NotificationPopout light={onLight} />
+            </div>
             <AccountPopout light={onLight} />
             <button
+              ref={menuButtonRef}
+              type="button"
               onClick={() => setOpen(true)}
-              className={`ml-1 grid size-11 place-items-center rounded-lg lg:hidden ${
+              className={`ml-0.5 flex size-11 shrink-0 flex-col items-center justify-center gap-0.5 rounded-lg lg:hidden ${
                 onLight ? "text-white hover:bg-white/10" : "text-[var(--ink)] hover:bg-[var(--parchment)]"
               }`}
               aria-label="Open menu"
+              aria-controls="mobile-main-menu"
+              aria-expanded={open}
             >
               <Menu size={22} />
+              <span className="text-[8px] font-bold uppercase leading-none tracking-[0.06em]">Menu</span>
             </button>
           </div>
         </div>
       </div>
 
-      {/* Mobile drawer */}
-      <AnimatePresence>
-        {open && (
+      {/* Mobile drawer is portalled so sticky/fixed header geometry cannot clip it. */}
+      {typeof document !== "undefined" && createPortal(
+        <AnimatePresence>
+          {open && (
           <motion.div
-            className="fixed inset-0 z-50 lg:hidden"
+            className="fixed inset-0 z-[var(--z-toast)] lg:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3, ease: EASE }}
           >
-            <div className="absolute inset-0 bg-[var(--ink)]/50 backdrop-blur-sm" onClick={() => setOpen(false)} />
+            <div className="absolute inset-0 bg-[var(--ink)]/50 backdrop-blur-sm" onClick={() => drawerLayer.isTop() && closeMenu()} />
             <motion.nav
-              className="surface-3d-floating absolute right-0 top-0 flex h-[100dvh] max-h-[100dvh] w-80 max-w-[85%] touch-pan-y flex-col overflow-y-auto overscroll-contain !rounded-none border-y-0 border-r-0 p-6 [-webkit-overflow-scrolling:touch]"
+              ref={drawerRef}
+              id="mobile-main-menu"
+              tabIndex={-1}
+              className="surface-3d-floating absolute inset-y-0 right-0 flex h-[100dvh] max-h-[100dvh] w-80 max-w-[88vw] touch-pan-y flex-col overflow-y-auto overscroll-contain !rounded-none border-y-0 border-r-0 px-5 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-[max(1.25rem,env(safe-area-inset-top))] outline-none [-webkit-overflow-scrolling:touch]"
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
@@ -245,7 +259,8 @@ export function SiteHeader({
               <div className="mb-6 flex items-center justify-between">
                 <Wordmark imgClass="h-12" />
                 <button
-                  onClick={() => setOpen(false)}
+                  type="button"
+                  onClick={closeMenu}
                   className="grid size-11 place-items-center text-[var(--ink)]"
                   aria-label="Close menu"
                 >
@@ -257,14 +272,14 @@ export function SiteHeader({
               <div className="mb-6 grid grid-cols-2 gap-2">
                 <Link
                   href="/sign-in"
-                  onClick={() => setOpen(false)}
+                  onClick={closeMenu}
                   className="button-3d flex items-center justify-center bg-[var(--ink)] px-3 py-3 text-center text-[11px] font-semibold uppercase tracking-[0.14em] text-white"
                 >
                   Sign in
                 </Link>
                 <Link
                   href="/register"
-                  onClick={() => setOpen(false)}
+                  onClick={closeMenu}
                   className="interactive-3d flex items-center justify-center px-3 py-3 text-center text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--ink)]"
                 >
                   Register
@@ -290,7 +305,7 @@ export function SiteHeader({
                   >
                     <Link
                       href={item.href}
-                      onClick={() => setOpen(false)}
+                      onClick={closeMenu}
                       className="block border-b border-[var(--line)] py-4 font-serif text-2xl font-medium tracking-tight text-[var(--ink)] transition-colors hover:text-[var(--gold-deep)]"
                     >
                       {item.label}
@@ -302,14 +317,14 @@ export function SiteHeader({
               <div className="mt-auto space-y-2 border-t border-[var(--line)] pt-5">
                 <Link
                   href="/account/bookings"
-                  onClick={() => setOpen(false)}
+                  onClick={closeMenu}
                   className="block text-sm font-medium text-[var(--ink)] hover:text-[var(--gold-deep)]"
                 >
                   My bookings
                 </Link>
                 <Link
                   href="/help"
-                  onClick={() => setOpen(false)}
+                  onClick={closeMenu}
                   className="block text-sm font-medium text-[var(--ink)] hover:text-[var(--gold-deep)]"
                 >
                   Help centre
@@ -317,8 +332,10 @@ export function SiteHeader({
               </div>
             </motion.nav>
           </motion.div>
-        )}
-      </AnimatePresence>
+          )}
+        </AnimatePresence>,
+        document.body,
+      )}
     </header>
   );
 }
@@ -326,10 +343,10 @@ export function SiteHeader({
 export function CompactSearch({ destination = "Kigali" }: { destination?: string }) {
   const [place, setPlace] = useState(destination);
   return (
-    <div className="bg-[var(--cream)] py-6">
+    <div className="bg-[var(--cream)] py-4 sm:py-6">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <div className="surface-3d-floating grid grid-cols-[minmax(0,1fr)] gap-px overflow-hidden bg-[var(--line)] md:grid-cols-[1.3fr_1.1fr_1fr_auto]">
-          <label className="flex min-h-15 min-w-0 cursor-text items-center gap-3 bg-white px-4 transition-colors focus-within:bg-[var(--parchment)]">
+        <div className="surface-3d-floating search-mobile-stack grid grid-cols-1 gap-2 overflow-hidden p-2 md:grid-cols-[1.3fr_1.1fr_1fr_auto] md:gap-px md:bg-[var(--line)] md:p-0">
+          <label className="flex min-h-14 min-w-0 cursor-text items-center gap-3 bg-white px-3 py-2 transition-colors focus-within:bg-[var(--parchment)] sm:min-h-15 sm:px-4 md:rounded-none">
             <MapPin size={20} className="shrink-0 text-[var(--gold-deep)]" />
             <span className="min-w-0 flex-1">
               <span className="block text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
@@ -339,26 +356,55 @@ export function CompactSearch({ destination = "Kigali" }: { destination?: string
                 <input
                   value={place}
                   onChange={(event) => setPlace(event.target.value)}
-                  className="search-field-input min-h-[1.35rem]"
+                  className="search-field-input min-h-[1.35rem] text-base sm:text-sm"
                   placeholder="Type a city or area…"
                   autoComplete="off"
+                  enterKeyHint="search"
                 />
               </span>
             </span>
           </label>
-          <div className="flex min-h-15 min-w-0 items-center gap-2 bg-white px-4">
-            <CalendarDays size={20} className="shrink-0 text-[var(--gold-deep)]" />
-            <input type="date" className="w-[110px] min-w-0 text-xs outline-none" />
-            <span className="text-[var(--muted)]">—</span>
-            <input type="date" className="w-[110px] min-w-0 text-xs outline-none" />
+          <div className="flex min-h-14 min-w-0 flex-col gap-2 bg-white px-3 py-2 sm:min-h-15 sm:flex-row sm:items-center sm:gap-2 sm:px-4 md:rounded-none">
+            <div className="flex min-w-0 flex-1 items-center gap-2">
+              <CalendarDays size={20} className="shrink-0 text-[var(--gold-deep)]" />
+              <span className="min-w-0 flex-1">
+                <span className="block text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
+                  Check-in
+                </span>
+                <input
+                  type="date"
+                  className="search-field-input mt-0.5 w-full min-w-0 text-base sm:text-xs"
+                />
+              </span>
+            </div>
+            <div className="flex min-w-0 flex-1 items-center gap-2 sm:border-l sm:border-[var(--line)] sm:pl-2">
+              <span className="min-w-0 flex-1 sm:pl-1">
+                <span className="block text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
+                  Check-out
+                </span>
+                <input
+                  type="date"
+                  className="search-field-input mt-0.5 w-full min-w-0 text-base sm:text-xs"
+                />
+              </span>
+            </div>
           </div>
-          <button className="flex min-h-15 items-center gap-3 bg-white px-4 text-sm text-[var(--ink)]">
-            <Users size={20} className="text-[var(--gold-deep)]" /> 2 guests · 1 room
-            <ChevronDown size={15} className="ml-auto" />
+          <button
+            type="button"
+            className="flex min-h-14 items-center gap-3 bg-white px-3 py-2 text-left text-sm text-[var(--ink)] sm:min-h-15 sm:px-4 md:rounded-none"
+          >
+            <Users size={20} className="shrink-0 text-[var(--gold-deep)]" />
+            <span className="min-w-0 flex-1">
+              <span className="block text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
+                Guests
+              </span>
+              <span className="mt-0.5 block font-medium">2 guests · 1 room</span>
+            </span>
+            <ChevronDown size={15} className="text-[var(--muted)]" />
           </button>
           <Link
             href={`/search?destination=${encodeURIComponent(place)}`}
-            className="button-3d flex min-h-15 items-center justify-center gap-2 !rounded-none bg-[var(--ink)] px-8 text-xs font-semibold uppercase tracking-[0.2em] text-white hover:bg-[var(--ink-2)]"
+            className="button-3d flex min-h-12 items-center justify-center gap-2 bg-[var(--ink)] px-6 text-xs font-semibold uppercase tracking-[0.2em] text-white hover:bg-[var(--ink-2)] sm:min-h-15 md:!rounded-none"
           >
             <Search size={17} /> Search
           </Link>

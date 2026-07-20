@@ -48,7 +48,7 @@ export function AuthExperience({
         <Wordmark imgClass="h-12" />
       </header>
 
-      <section className="flex flex-1 items-center justify-center px-4 py-10 sm:py-16">
+      <section className="flex flex-1 items-start justify-center px-4 py-8 sm:items-center sm:py-16">
         <div className="w-full max-w-md">
           {/* Short, clean title above the form */}
           <div className="mb-6 text-center">
@@ -63,35 +63,37 @@ export function AuthExperience({
           </div>
 
           {/* Clerk form — has its own 3D card, no extra wrapper needed */}
-          {clerkEnabled ? (
-            signingIn ? (
-              <SignIn
-                path="/sign-in"
-                routing="path"
-                signUpUrl="/register"
-                fallbackRedirectUrl="/account"
-                appearance={appearance}
-              />
+          <div className="auth-card-shell surface-3d-floating min-h-44 overflow-hidden bg-white p-1">
+            {clerkEnabled ? (
+              signingIn ? (
+                <SignIn
+                  path="/sign-in"
+                  routing="path"
+                  signUpUrl="/register"
+                  fallbackRedirectUrl="/account"
+                  appearance={appearance}
+                />
+              ) : (
+                <SignUp
+                  path="/register"
+                  routing="path"
+                  signInUrl="/sign-in"
+                  fallbackRedirectUrl="/account"
+                  appearance={appearance}
+                />
+              )
             ) : (
-              <SignUp
-                path="/register"
-                routing="path"
-                signInUrl="/sign-in"
-                fallbackRedirectUrl="/account"
-                appearance={appearance}
-              />
-            )
-          ) : (
-            <div className="rounded-xl border border-[var(--line)] bg-white p-10 text-center shadow-sm">
-              <UserCircle2 size={44} className="mx-auto text-[var(--gold)] mb-4" />
-              <h2 className="font-serif text-xl text-[var(--ink)]">
-                Accounts temporarily unavailable
-              </h2>
-              <p className="mt-2 text-sm leading-relaxed text-[var(--muted)]">
-                Authentication has not been configured for this deployment.
-              </p>
-            </div>
-          )}
+              <div className="p-5 text-center sm:p-9">
+                <UserCircle2 size={44} className="mx-auto text-[var(--gold)] mb-4" />
+                <h2 className="font-serif text-xl text-[var(--ink)]">
+                  Accounts temporarily unavailable
+                </h2>
+                <p className="mt-2 text-sm leading-relaxed text-[var(--muted)]">
+                  Authentication has not been configured for this deployment.
+                </p>
+              </div>
+            )}
+          </div>
         </div>
       </section>
     </main>

@@ -6,6 +6,8 @@ import { PropertyImageSlider } from "./property-image-slider";
 import { CheckCircle2, MapPin, ShieldCheck } from "lucide-react";
 import type { Property } from "@/lib/properties";
 import { PriceDisplay } from "@/components/price-display";
+import { PropertyFacts } from "@/components/property-facts";
+import { AmenityPills } from "@/components/amenity-icon";
 
 export function PropertyQuickView({
   slug,
@@ -28,7 +30,7 @@ export function PropertyQuickView({
     >
       {property && (
         <div className="flex flex-col h-full overflow-hidden relative">
-          <div className="flex-1 overflow-y-auto pb-24">
+          <div className="flex-1 overflow-y-auto pb-40 sm:pb-24">
             <div className="aspect-[4/3] w-full relative bg-black/5">
               <PropertyImageSlider 
                  images={property.images?.length ? property.images : [property.image]}
@@ -38,12 +40,13 @@ export function PropertyQuickView({
               />
             </div>
             
-            <div className="p-6 space-y-6">
+            <div className="space-y-6 p-4 sm:p-6">
               <div>
                 <span className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--gold-deep)]">
                   <MapPin size={12} /> {property.neighborhood}, {property.location}
                 </span>
                 <h3 className="mt-2 font-serif text-3xl font-semibold text-[var(--ink)] leading-tight">{property.title}</h3>
+                <div className="mt-3"><PropertyFacts neighborhood={property.neighborhood} guests={property.guests} bedrooms={property.bedrooms} beds={property.beds} baths={property.baths} compact /></div>
                 <p className="mt-2 text-sm text-[var(--muted)]">{property.type} · Up to {property.guests || 2} guests</p>
               </div>
 
@@ -61,13 +64,7 @@ export function PropertyQuickView({
 
               <div>
                 <h4 className="text-xs font-semibold uppercase tracking-wider text-[var(--muted)] mb-3">Amenities</h4>
-                <div className="flex flex-wrap gap-2">
-                  {property.amenities.map(am => (
-                    <span key={am} className="amenity-pill bg-white border border-[var(--line)] text-[var(--ink)] rounded-full px-3 py-1.5 text-[11px] font-medium shadow-sm transition-colors hover:bg-[var(--parchment)]">
-                      {am}
-                    </span>
-                  ))}
-                </div>
+                <AmenityPills amenities={property.amenities} limit={property.amenities.length} />
               </div>
 
               <div className="bg-[var(--parchment)] p-5 rounded-xl border border-[var(--line)] shadow-sm space-y-3">
@@ -84,13 +81,13 @@ export function PropertyQuickView({
             </div>
           </div>
           
-          <div className="absolute bottom-0 inset-x-0 shrink-0 border-t border-[var(--line)] bg-white/95 backdrop-blur-md p-5 shadow-[0_-10px_30px_rgba(0,0,0,0.06)] flex items-center justify-between z-20">
+          <div className="absolute inset-x-0 bottom-0 z-20 flex shrink-0 flex-col gap-3 border-t border-[var(--line)] bg-white/95 p-4 shadow-[0_-10px_30px_rgba(0,0,0,0.06)] backdrop-blur-md sm:flex-row sm:items-center sm:justify-between sm:p-5">
             <div>
               <PriceDisplay amountRwf={property.price} className="font-serif text-2xl font-semibold text-[var(--ink)]" />
             </div>
             <Link 
               href={`/stays/${property.slug}`} 
-              className="button-3d bg-[var(--ink)] px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.16em] text-white hover:bg-[var(--ink-2)] shadow-md transition-colors"
+              className="button-3d flex min-h-12 w-full items-center justify-center bg-[var(--ink)] px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.16em] text-white shadow-md transition-colors hover:bg-[var(--ink-2)] sm:w-auto"
             >
               View full details
             </Link>

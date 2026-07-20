@@ -10,6 +10,7 @@ import { ChevronLeft, ChevronRight, X, ZoomIn } from "lucide-react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/zoom";
+import { useOverlayLayer } from "@/components/overlay-stack";
 
 type Props = {
   images: string[];
@@ -24,25 +25,23 @@ export function Lightbox({ images, open, index, alt, onClose }: Props) {
   const swiperRef = useRef<SwiperClass | null>(null);
   const [active, setActive] = useState(index);
   const [mounted, setMounted] = useState(false);
+  const layer = useOverlayLayer(open);
 
   useEffect(() => setMounted(true), []);
 
-  // Lock background scroll and wire Escape while open.
+  // The shared overlay stack owns scroll locking across nested layers.
   useEffect(() => {
     if (!open) return;
     setActive(index);
     swiperRef.current?.slideTo(index, 0);
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onClose();
+      if (event.key === "Escape" && layer.isTop()) onClose();
     };
     window.addEventListener("keydown", onKey);
     return () => {
-      document.body.style.overflow = prevOverflow;
       window.removeEventListener("keydown", onKey);
     };
-  }, [open, index, onClose]);
+  }, [open, index, onClose, layer]);
 
   if (!mounted || !open) return null;
 

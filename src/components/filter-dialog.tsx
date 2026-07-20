@@ -44,11 +44,19 @@ export function FilterGroup({
 export function FilterDialog({
   selectedTypes,
   toggleType,
+  selectedAmenities,
+  toggleAmenity,
+  selectedNeighborhoods,
+  toggleNeighborhood,
   onClear,
   resultCount,
 }: {
   selectedTypes: string[];
   toggleType: (type: string) => void;
+  selectedAmenities: string[];
+  toggleAmenity: (amenity: string) => void;
+  selectedNeighborhoods: string[];
+  toggleNeighborhood: (neighborhood: string) => void;
   onClear: () => void;
   resultCount: number;
 }) {
@@ -60,9 +68,9 @@ export function FilterDialog({
       className="interactive-3d flex items-center gap-2 !border-[var(--gold)] px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--gold-deep)] lg:hidden shadow-sm bg-white"
     >
       <SlidersHorizontal size={16} /> Filters
-      {selectedTypes.length > 0 && (
+      {selectedTypes.length + selectedAmenities.length + selectedNeighborhoods.length > 0 && (
         <span className="ml-1 flex size-5 items-center justify-center rounded-full bg-[var(--gold)] text-[10px] text-white">
-          {selectedTypes.length}
+          {selectedTypes.length + selectedAmenities.length + selectedNeighborhoods.length}
         </span>
       )}
     </button>
@@ -104,15 +112,15 @@ export function FilterDialog({
         />
         <FilterGroup
           title="Amenities"
-          options={["Fully furnished", "Private parking", "Kitchen", "Balcony"]}
-          selected={[]}
-          toggle={() => {}}
+          options={["Fully furnished", "Kitchen", "Parking", "Balcony"]}
+          selected={selectedAmenities}
+          toggle={toggleAmenity}
         />
         <FilterGroup
           title="Neighbourhood"
           options={["Kibagabaga", "Kimironko", "Kagarama", "Kigali"]}
-          selected={[]}
-          toggle={() => {}}
+          selected={selectedNeighborhoods}
+          toggle={toggleNeighborhood}
         />
       </div>
     </Popout>

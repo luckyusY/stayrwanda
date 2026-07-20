@@ -12,7 +12,7 @@ export default function OffersPage() {
     <main className="bg-[var(--parchment)] min-h-screen">
       <SiteHeader />
       
-      <section className="bg-[var(--ink)] text-white px-4 py-20 text-center relative overflow-hidden">
+      <section className="relative overflow-hidden bg-[var(--ink)] px-4 py-14 text-center text-white sm:py-20">
         {/* Decorative backdrop */}
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{
           backgroundImage: "repeating-linear-gradient(45deg, var(--gold) 0, var(--gold) 1px, transparent 0, transparent 50%)",
@@ -22,7 +22,7 @@ export default function OffersPage() {
         <div className="relative z-10 max-w-3xl mx-auto">
           <Tag className="mx-auto text-[var(--gold)] size-8" />
           <p className="eyebrow mt-4 !text-[var(--gold)]">Seasonal value</p>
-          <h1 className="mt-3 font-serif text-5xl sm:text-6xl font-light leading-tight">
+          <h1 className="mt-3 font-serif text-4xl font-light leading-tight sm:text-6xl">
             Offers <span className="italic text-gradient-gold font-normal">worth staying</span> for
           </h1>
           <p className="mx-auto mt-5 max-w-xl text-white/70 text-sm sm:text-base leading-relaxed">
@@ -31,7 +31,7 @@ export default function OffersPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+      <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-16">
         <RevealGroup className="grid gap-6 sm:grid-cols-3">
           {offers.map((offer) => {
             const front = (

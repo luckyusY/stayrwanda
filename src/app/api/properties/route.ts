@@ -5,6 +5,7 @@ import { requireMembership } from "@/lib/auth";
 import { propertyCompatibilitySchema } from "@/lib/schemas";
 import { recordAudit } from "@/lib/audit";
 import { revalidatePath } from "next/cache";
+import { invalidatePublicCatalogue } from "@/lib/public-catalogue";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -50,6 +51,7 @@ export async function POST(request: Request) {
       amenities: body.amenities, images: body.images, createdAt: now, updatedAt: now,
     });
     await recordAudit({ actor: identity, organizationId: body.organizationId, action: "hotel.create", recordType: "hotel", recordId: hotelId, after: hotel });
+    invalidatePublicCatalogue();
     revalidatePath("/host/hotels"); revalidatePath("/admin/properties");
     return NextResponse.json({ property: { ...hotel, _id: result.insertedId } }, { status: 201 });
   } catch (error) {

@@ -1,12 +1,14 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import Image from "next/image";
 import Link from "next/link";
-import { Heart, MapPin, ArrowRight, Undo2, Bed } from "lucide-react";
+import { Heart, ArrowRight, Undo2, Bed } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { PriceDisplay } from "@/components/price-display";
 import type { GuestFavorite } from "@/lib/guest-account";
+import { PropertyImageSlider } from "@/components/property-image-slider";
+import { PropertyFacts } from "@/components/property-facts";
+import { AmenityPills } from "@/components/amenity-icon";
+import { PropertyPriceTag } from "@/components/property-price-tag";
 
 export function GuestFavoriteCard({ favorite }: { favorite: GuestFavorite }) {
   const router = useRouter();
@@ -47,54 +49,33 @@ export function GuestFavoriteCard({ favorite }: { favorite: GuestFavorite }) {
       }`}
     >
       {/* Image */}
-      <Link href={`/hotels/${favorite.slug}`} className="relative block aspect-[16/9] overflow-hidden bg-[var(--cream)]">
-        {favorite.heroImage ? (
-          <Image
-            src={favorite.heroImage}
-            alt={favorite.name}
-            fill
-            className="object-cover transition-transform duration-500 hover:scale-105"
-            sizes="(max-width: 640px) 100vw, 50vw"
-          />
-        ) : (
-          <div className="flex h-full items-center justify-center text-[var(--gold-deep)]">
-            <Bed size={36} strokeWidth={1} />
-          </div>
-        )}
+      <div className="relative block aspect-[16/9] overflow-hidden bg-[var(--cream)]">
+        {favorite.heroImage ? <PropertyImageSlider images={favorite.gallery.length ? favorite.gallery : [favorite.heroImage]} alt={favorite.name} href={`/hotels/${favorite.slug}`} aspect="aspect-[16/9]" sizes="(max-width: 640px) 100vw, 50vw" /> : <div className="flex h-full items-center justify-center text-[var(--gold-deep)]"><Bed size={36} strokeWidth={1} /></div>}
         {/* Saved badge */}
         <span className="absolute right-3 top-3 flex items-center gap-1 rounded-full bg-white/90 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[var(--gold-deep)] shadow-sm backdrop-blur-sm">
           <Heart size={11} fill="currentColor" /> Saved
         </span>
-      </Link>
+        <PropertyPriceTag amountRwf={favorite.startingPriceRwf} className="absolute bottom-3 left-0 z-20" />
+      </div>
 
       {/* Content */}
       <div className="p-5">
-        <p className="flex items-center gap-1.5 text-xs uppercase tracking-[0.14em] text-[var(--muted)]">
-          <MapPin size={12} className="text-[var(--gold-deep)]" />
-          {favorite.neighborhood}, {favorite.city}
-        </p>
-
         <Link
           href={`/hotels/${favorite.slug}`}
-          className="mt-2 block font-serif text-xl font-bold leading-snug text-[var(--ink)] transition hover:text-[var(--gold-deep)] line-clamp-1"
+          className="block font-serif text-xl font-bold leading-snug text-[var(--ink)] transition hover:text-[var(--gold-deep)] line-clamp-2"
         >
           {favorite.name}
         </Link>
 
+        <PropertyFacts neighborhood={favorite.neighborhood} city={favorite.city} guests={favorite.maxGuests} bedrooms={favorite.bedrooms} beds={favorite.beds} baths={favorite.baths} variant="card" />
+
         {favorite.amenities.length > 0 && (
-          <p className="mt-1.5 line-clamp-1 text-xs text-[var(--muted)]">
-            {favorite.amenities.slice(0, 3).join(" · ")}
-          </p>
+          <AmenityPills amenities={favorite.amenities} className="mt-2" />
         )}
 
-        {/* Price + CTA */}
+        {/* Actions */}
         <div className="mt-4 border-t border-[var(--line)] pt-4">
-          <PriceDisplay
-            amountRwf={favorite.startingPriceRwf}
-            className="font-serif text-lg font-semibold text-[var(--ink)]"
-          />
-
-          <div className="mt-3 grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-2">
             <Link
               href={`/hotels/${favorite.slug}`}
               className="flex items-center justify-center gap-1.5 rounded-xl bg-[var(--ink)] py-2.5 text-xs font-bold uppercase tracking-wider text-white transition hover:bg-[var(--ink-2)]"
