@@ -30,6 +30,7 @@ import { PriceDisplay } from "@/components/price-display";
 import { PropertyImageSlider } from "@/components/property-image-slider";
 import { PropertyFacts } from "@/components/property-facts";
 import { HeroSlideshow } from "@/components/hero-slideshow";
+import { AmenityPills } from "@/components/amenity-icon";
 import type { Property } from "@/lib/properties";
 
 const stayTypes = ["All stays", "Furnished apartment", "Serviced apartment", "Furnished home"];
@@ -352,9 +353,7 @@ export function HomeExperience({ properties }: { properties: Property[] }) {
                       >
                         {property.title}
                       </Link>
-                      <p className="mt-2 text-xs text-[var(--muted)] line-clamp-1">
-                        {property.amenities.slice(0, 3).join(" · ")}
-                      </p>
+                      <AmenityPills amenities={property.amenities} className="mt-2" />
                     </div>
                     <div className="mt-4 pt-4 border-t border-[var(--line)]">
                       <div className="flex items-center justify-between mb-4">

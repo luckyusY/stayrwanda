@@ -8,6 +8,7 @@ import { PriceDisplay } from "@/components/price-display";
 import type { GuestFavorite } from "@/lib/guest-account";
 import { PropertyImageSlider } from "@/components/property-image-slider";
 import { PropertyFacts } from "@/components/property-facts";
+import { AmenityPills } from "@/components/amenity-icon";
 
 export function GuestFavoriteCard({ favorite }: { favorite: GuestFavorite }) {
   const router = useRouter();
@@ -68,9 +69,7 @@ export function GuestFavoriteCard({ favorite }: { favorite: GuestFavorite }) {
         </Link>
 
         {favorite.amenities.length > 0 && (
-          <p className="mt-1.5 line-clamp-1 text-xs text-[var(--muted)]">
-            {favorite.amenities.slice(0, 3).join(" · ")}
-          </p>
+          <AmenityPills amenities={favorite.amenities} className="mt-2" />
         )}
 
         {/* Price + CTA */}

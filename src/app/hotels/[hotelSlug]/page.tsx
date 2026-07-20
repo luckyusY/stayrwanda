@@ -2,12 +2,13 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Check, ChevronRight, MapPin } from "lucide-react";
+import { ChevronRight, MapPin } from "lucide-react";
 import { HotelBookingPanel } from "@/components/hotel-booking-panel";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { getPublishedHotel, getUnitForHotel } from "@/lib/platform-data";
 import { PriceDisplay } from "@/components/price-display";
 import { PropertyFacts, propertyMapUrl } from "@/components/property-facts";
+import { AmenityIcon } from "@/components/amenity-icon";
 
 export const revalidate = 300;
 
@@ -109,16 +110,16 @@ export default async function HotelProfilePage({ params }: { params: Promise<{ h
 
           <section id="amenities" className="mt-14 border-t border-[var(--line)] pt-12">
             <p className="eyebrow">Amenities</p>
-            <div className="mt-6 grid gap-4 sm:grid-cols-2">
+            <ul className="mt-6 grid gap-3 sm:grid-cols-2" aria-label="Property amenities">
               {hotel.amenities.map((item) => (
-                <span key={item} className="flex gap-3 text-[var(--muted)] text-sm items-center">
-                  <span className="grid size-6 place-items-center rounded-full bg-[var(--cream)] text-[var(--gold-deep)]">
-                    <Check size={13} />
+                <li key={item} className="surface-3d flex min-h-16 items-center gap-3 px-4 py-3 text-sm font-medium text-[var(--ink)]">
+                  <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-[var(--gold-pale)] text-[var(--gold-deep)] shadow-[inset_0_1px_0_rgba(255,255,255,.9)]">
+                    <AmenityIcon name={item} size={20} />
                   </span>
                   {item}
-                </span>
+                </li>
               ))}
-            </div>
+            </ul>
           </section>
 
           <section id="location" className="mt-14 border-t border-[var(--line)] pt-12">

@@ -9,6 +9,7 @@ import { PropertyImageSlider } from "@/components/property-image-slider";
 import { PropertyQuickView } from "@/components/property-quick-view";
 import { PriceDisplay } from "@/components/price-display";
 import { PropertyFacts } from "@/components/property-facts";
+import { AmenityPills } from "@/components/amenity-icon";
 import { Reveal, RevealGroup } from "@/components/reveal";
 import type { Property } from "@/lib/properties";
 
@@ -179,9 +180,7 @@ export function SearchResults({
                       {property.title}
                     </Link>
                     <p className="mt-2 text-sm font-medium text-[var(--ink)]">{property.type}</p>
-                    <p className="mt-1 line-clamp-1 text-sm text-[var(--muted)] sm:line-clamp-none">
-                      {property.amenities.slice(0, 3).join(" · ")}
-                    </p>
+                    <AmenityPills amenities={property.amenities} className="mt-2" />
                     <div className="mt-4 flex flex-wrap items-center gap-1.5 sm:gap-2">
                       <span className="flex items-center gap-1.5 rounded-full border border-[var(--line)] bg-[var(--parchment)] px-2.5 py-1 text-[11px] font-medium text-[var(--ink)]"><CheckCircle2 size={12} className="text-[var(--gold-deep)]" /> Free booking request</span>
                       <span className="flex items-center gap-1.5 rounded-full border border-[var(--line)] bg-[var(--parchment)] px-2.5 py-1 text-[11px] font-medium text-[var(--ink)]"><ShieldCheck size={12} className="text-[var(--gold-deep)]" /> No prepayment</span>

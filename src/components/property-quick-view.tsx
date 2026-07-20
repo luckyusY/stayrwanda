@@ -7,6 +7,7 @@ import { CheckCircle2, MapPin, ShieldCheck } from "lucide-react";
 import type { Property } from "@/lib/properties";
 import { PriceDisplay } from "@/components/price-display";
 import { PropertyFacts } from "@/components/property-facts";
+import { AmenityPills } from "@/components/amenity-icon";
 
 export function PropertyQuickView({
   slug,
@@ -63,13 +64,7 @@ export function PropertyQuickView({
 
               <div>
                 <h4 className="text-xs font-semibold uppercase tracking-wider text-[var(--muted)] mb-3">Amenities</h4>
-                <div className="flex flex-wrap gap-2">
-                  {property.amenities.map(am => (
-                    <span key={am} className="amenity-pill bg-white border border-[var(--line)] text-[var(--ink)] rounded-full px-3 py-1.5 text-[11px] font-medium shadow-sm transition-colors hover:bg-[var(--parchment)]">
-                      {am}
-                    </span>
-                  ))}
-                </div>
+                <AmenityPills amenities={property.amenities} limit={property.amenities.length} />
               </div>
 
               <div className="bg-[var(--parchment)] p-5 rounded-xl border border-[var(--line)] shadow-sm space-y-3">
